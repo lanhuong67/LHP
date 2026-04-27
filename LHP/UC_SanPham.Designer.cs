@@ -1,4 +1,4 @@
-﻿namespace LHP
+﻿namespace GUI
 {
     partial class UC_SanPham
     {

@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GUI
+namespace LHP
 {
-    public partial class UC_DoanhThu : UserControl
+    public partial class FormDangNhap : Form
     {
-        public UC_DoanhThu()
+        public FormDangNhap()
         {
             InitializeComponent();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

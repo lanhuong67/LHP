@@ -1,4 +1,4 @@
-﻿namespace LHP
+﻿namespace GUI
 {
     partial class UC_ChamSocKH
     {
@@ -96,10 +96,17 @@
             tabPage3 = new TabPage();
             panel9 = new Panel();
             btnTimLoHang = new Button();
-            comboBox2 = new ComboBox();
             comboBox1 = new ComboBox();
             textBox1 = new TextBox();
             label1 = new Label();
+            button4 = new Button();
+            dataGridView2 = new DataGridView();
+            colMaKhCS = new DataGridViewTextBoxColumn();
+            colTenKhCs = new DataGridViewTextBoxColumn();
+            colLoaiCs = new DataGridViewTextBoxColumn();
+            colNoiDungGhiCHu = new DataGridViewTextBoxColumn();
+            colNgayLienHe = new DataGridViewTextBoxColumn();
+            colNhanVien = new DataGridViewTextBoxColumn();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -119,6 +126,7 @@
             panel5.SuspendLayout();
             tabPage3.SuspendLayout();
             panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -800,6 +808,7 @@
             // 
             tabPage3.BackColor = Color.LightSteelBlue;
             tabPage3.BorderStyle = BorderStyle.FixedSingle;
+            tabPage3.Controls.Add(dataGridView2);
             tabPage3.Controls.Add(panel9);
             tabPage3.Location = new Point(4, 44);
             tabPage3.Name = "tabPage3";
@@ -811,53 +820,44 @@
             // panel9
             // 
             panel9.BackColor = Color.White;
+            panel9.Controls.Add(button4);
             panel9.Controls.Add(btnTimLoHang);
-            panel9.Controls.Add(comboBox2);
             panel9.Controls.Add(comboBox1);
             panel9.Controls.Add(textBox1);
             panel9.Location = new Point(7, 7);
             panel9.Name = "panel9";
-            panel9.Size = new Size(1163, 99);
+            panel9.Size = new Size(1163, 87);
             panel9.TabIndex = 0;
             // 
             // btnTimLoHang
             // 
             btnTimLoHang.BackColor = SystemColors.HotTrack;
             btnTimLoHang.FlatStyle = FlatStyle.Flat;
-            btnTimLoHang.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            btnTimLoHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
             btnTimLoHang.ForeColor = Color.White;
-            btnTimLoHang.Location = new Point(989, 29);
+            btnTimLoHang.Location = new Point(795, 20);
             btnTimLoHang.Name = "btnTimLoHang";
             btnTimLoHang.Size = new Size(128, 38);
             btnTimLoHang.TabIndex = 9;
             btnTimLoHang.Text = "Tìm";
             btnTimLoHang.UseVisualStyleBackColor = false;
             // 
-            // comboBox2
-            // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(647, 29);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(282, 33);
-            comboBox2.TabIndex = 2;
-            comboBox2.Text = "--Tất cả trạng thái--";
-            // 
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(322, 29);
+            comboBox1.Location = new Point(459, 23);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(282, 33);
             comboBox1.TabIndex = 1;
-            comboBox1.Text = "--Tất cả sản phẩm--";
+            comboBox1.Text = "--Tất cả loại--";
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(20, 29);
+            textBox1.Location = new Point(36, 25);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(282, 31);
+            textBox1.Size = new Size(377, 31);
             textBox1.TabIndex = 0;
-            textBox1.Text = "Tìm mã...";
+            textBox1.Text = "Tìm tên KH, SĐT......";
             // 
             // label1
             // 
@@ -868,6 +868,68 @@
             label1.Size = new Size(268, 35);
             label1.TabIndex = 5;
             label1.Text = "Chăm sóc khách hàng";
+            // 
+            // button4
+            // 
+            button4.BackColor = Color.Gainsboro;
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            button4.ForeColor = Color.Black;
+            button4.Location = new Point(991, 21);
+            button4.Name = "button4";
+            button4.Size = new Size(128, 38);
+            button4.TabIndex = 10;
+            button4.Text = "Làm trống";
+            button4.UseVisualStyleBackColor = false;
+            // 
+            // dataGridView2
+            // 
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView2.BackgroundColor = Color.White;
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { colMaKhCS, colTenKhCs, colLoaiCs, colNoiDungGhiCHu, colNgayLienHe, colNhanVien });
+            dataGridView2.Location = new Point(7, 100);
+            dataGridView2.Name = "dataGridView2";
+            dataGridView2.RowHeadersWidth = 51;
+            dataGridView2.RowTemplate.Height = 29;
+            dataGridView2.Size = new Size(1163, 849);
+            dataGridView2.TabIndex = 1;
+            // 
+            // colMaKhCS
+            // 
+            colMaKhCS.HeaderText = "Mã KH";
+            colMaKhCS.MinimumWidth = 6;
+            colMaKhCS.Name = "colMaKhCS";
+            // 
+            // colTenKhCs
+            // 
+            colTenKhCs.HeaderText = "Tên KH";
+            colTenKhCs.MinimumWidth = 6;
+            colTenKhCs.Name = "colTenKhCs";
+            // 
+            // colLoaiCs
+            // 
+            colLoaiCs.HeaderText = "Loại chăm sóc";
+            colLoaiCs.MinimumWidth = 6;
+            colLoaiCs.Name = "colLoaiCs";
+            // 
+            // colNoiDungGhiCHu
+            // 
+            colNoiDungGhiCHu.HeaderText = "Nội dung ghi chú";
+            colNoiDungGhiCHu.MinimumWidth = 6;
+            colNoiDungGhiCHu.Name = "colNoiDungGhiCHu";
+            // 
+            // colNgayLienHe
+            // 
+            colNgayLienHe.HeaderText = "Ngày liên hệ";
+            colNgayLienHe.MinimumWidth = 6;
+            colNgayLienHe.Name = "colNgayLienHe";
+            // 
+            // colNhanVien
+            // 
+            colNhanVien.HeaderText = "Nhân viên";
+            colNhanVien.MinimumWidth = 6;
+            colNhanVien.Name = "colNhanVien";
             // 
             // UC_ChamSocKH
             // 
@@ -910,6 +972,7 @@
             tabPage3.ResumeLayout(false);
             panel9.ResumeLayout(false);
             panel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -922,7 +985,6 @@
         private TabPage tabPage3;
         private Panel panel9;
         private Button btnTimLoHang;
-        private ComboBox comboBox2;
         private ComboBox comboBox1;
         private TextBox textBox1;
         private Label label1;
@@ -988,5 +1050,13 @@
         private Label label21;
         private Label label22;
         private Label label23;
+        private DataGridView dataGridView2;
+        private Button button4;
+        private DataGridViewTextBoxColumn colMaKhCS;
+        private DataGridViewTextBoxColumn colTenKhCs;
+        private DataGridViewTextBoxColumn colLoaiCs;
+        private DataGridViewTextBoxColumn colNoiDungGhiCHu;
+        private DataGridViewTextBoxColumn colNgayLienHe;
+        private DataGridViewTextBoxColumn colNhanVien;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace GUI
+﻿namespace LHP
 {
     partial class FormDangNhap
     {
@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            pictureBox1 = new PictureBox();
             label1 = new Label();
             label2 = new Label();
-            pictureBox1 = new PictureBox();
             label3 = new Label();
             label4 = new Label();
-            lblError = new Label();
-            txtTenDangNhap = new TextBox();
+            lblThongBao = new Label();
+            txtTaiKhoan = new TextBox();
             txtMatKhau = new TextBox();
             btnDangNhap = new Button();
             panel1.SuspendLayout();
@@ -53,10 +53,20 @@
             panel1.Size = new Size(466, 232);
             panel1.TabIndex = 0;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = Properties.Resources.image_removebg_preview;
+            pictureBox1.Location = new Point(145, 13);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(178, 90);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
             label1.ForeColor = Color.White;
             label1.Location = new Point(62, 120);
             label1.Name = "label1";
@@ -69,7 +79,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F);
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = SystemColors.GradientActiveCaption;
             label2.Location = new Point(90, 170);
             label2.Name = "label2";
@@ -78,20 +88,10 @@
             label2.Text = "Vui lòng đăng nhập để tiếp tục";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = Properties.Resources.image_removebg_preview;
-            pictureBox1.Location = new Point(145, 13);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(178, 90);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
-            // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F);
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label3.Location = new Point(35, 275);
             label3.Name = "label3";
             label3.Size = new Size(94, 28);
@@ -102,36 +102,36 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 12F);
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label4.Location = new Point(35, 373);
             label4.Name = "label4";
             label4.Size = new Size(94, 28);
             label4.TabIndex = 4;
             label4.Text = "Mật khẩu";
             // 
-            // lblError
+            // lblThongBao
             // 
-            lblError.AutoSize = true;
-            lblError.Font = new Font("Segoe UI", 12F);
-            lblError.ForeColor = Color.Red;
-            lblError.Location = new Point(61, 541);
-            lblError.Name = "lblError";
-            lblError.Size = new Size(339, 28);
-            lblError.TabIndex = 5;
-            lblError.Text = "Tài khoản hoặc mật khẩu không đúng";
+            lblThongBao.AutoSize = true;
+            lblThongBao.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblThongBao.ForeColor = Color.Red;
+            lblThongBao.Location = new Point(61, 541);
+            lblThongBao.Name = "lblThongBao";
+            lblThongBao.Size = new Size(339, 28);
+            lblThongBao.TabIndex = 5;
+            lblThongBao.Text = "Tài khoản hoặc mật khẩu không đúng";
             // 
-            // txtTenDangNhap
+            // txtTaiKhoan
             // 
-            txtTenDangNhap.Font = new Font("Segoe UI", 12F);
-            txtTenDangNhap.Location = new Point(45, 306);
-            txtTenDangNhap.Name = "txtTenDangNhap";
-            txtTenDangNhap.Size = new Size(372, 34);
-            txtTenDangNhap.TabIndex = 6;
-            txtTenDangNhap.Text = "Nhập tên đăng nhập...";
+            txtTaiKhoan.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtTaiKhoan.Location = new Point(45, 306);
+            txtTaiKhoan.Name = "txtTaiKhoan";
+            txtTaiKhoan.Size = new Size(372, 34);
+            txtTaiKhoan.TabIndex = 6;
+            txtTaiKhoan.Text = "Nhập tên đăng nhập...";
             // 
             // txtMatKhau
             // 
-            txtMatKhau.Font = new Font("Segoe UI", 12F);
+            txtMatKhau.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtMatKhau.Location = new Point(45, 405);
             txtMatKhau.Name = "txtMatKhau";
             txtMatKhau.Size = new Size(372, 34);
@@ -141,7 +141,7 @@
             // btnDangNhap
             // 
             btnDangNhap.BackColor = SystemColors.HotTrack;
-            btnDangNhap.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnDangNhap.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnDangNhap.ForeColor = Color.White;
             btnDangNhap.Location = new Point(78, 471);
             btnDangNhap.Name = "btnDangNhap";
@@ -149,7 +149,6 @@
             btnDangNhap.TabIndex = 8;
             btnDangNhap.Text = "Đăng nhập";
             btnDangNhap.UseVisualStyleBackColor = false;
-            btnDangNhap.Click += btnDangNhap_Click_1;
             // 
             // FormDangNhap
             // 
@@ -159,16 +158,13 @@
             ClientSize = new Size(465, 612);
             Controls.Add(btnDangNhap);
             Controls.Add(txtMatKhau);
-            Controls.Add(txtTenDangNhap);
-            Controls.Add(lblError);
+            Controls.Add(txtTaiKhoan);
+            Controls.Add(lblThongBao);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(panel1);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
-            MinimizeBox = false;
+            FormBorderStyle = FormBorderStyle.None;
             Name = "FormDangNhap";
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "FormDangNhap";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -185,8 +181,8 @@
         private PictureBox pictureBox1;
         private Label label3;
         private Label label4;
-        private Label lblError;
-        private TextBox txtTenDangNhap;
+        private Label lblThongBao;
+        private TextBox txtTaiKhoan;
         private TextBox txtMatKhau;
         private Button btnDangNhap;
     }
