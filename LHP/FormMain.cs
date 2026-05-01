@@ -34,15 +34,52 @@ namespace GUI
 
         private void PhanQuyenHeThong()
         {
-            if (_vaiTro == "Staff")
+            // Nếu người đăng nhập KHÔNG PHẢI là Admin (tức là Staff/Nhân viên bình thường)
+            if (_vaiTro != "Admin")
             {
-                // Giả sử Staff không được xem các mục Quản lý (nếu bạn có sau này)
-                // Hiện tại Staff có thể thấy Dashboard và Bán hàng
-                // Nếu bạn có thêm mục "Cấu hình" hay "Nhân viên", hãy ẩn ở đây:
-                // lblNhanVien.Visible = false;
-                // picNhanVien.Visible = false;
+                // ==========================================
+                // 1. ẨN NHÓM TÍNH NĂNG KHO HÀNG CHUYÊN SÂU
+                // ==========================================
+                // Ẩn menu "Nhập hàng / lô"
+                picNhapHang.Visible = false;
+                lblNhapHang.Visible = false;
+
+                // Ẩn menu "Cảnh báo tồn kho"
+                lblCanhBaoTonKho.Visible = false;
+                picCanhBaoTonKho.Visible = false;
+
+                // ==========================================
+                // 2. ẨN TOÀN BỘ NHÓM "DANH MỤC"
+                // ==========================================
+                // Ẩn menu "Nhân viên"
+                lblNhanVien.Visible = false;
+                picNhanVien.Visible = false;
+
+                // Ẩn menu "Hãng sản xuất"
+                lblHangSanXuat.Visible = false;
+                picHangSanXuat.Visible = false;
+
+                // Ẩn menu "Chi nhánh"
+                lblChiNhanh.Visible = false;
+                picChiNhanh.Visible = false;
+
+                // (Tùy chọn) Ẩn luôn chữ tiêu đề "Danh mục" màu trắng nhạt trên menu
+                lblTitleDanhMuc.Visible = false; 
+
+                // ==========================================
+                // 3. ẨN TOÀN BỘ NHÓM "BÁO CÁO"
+                // ==========================================
+                // Ẩn menu "Doanh thu"
+                lblDoanhThu.Visible = false;
+                picDoanhThu.Visible = false;
+
+                // Ẩn menu "Top bán chạy"
+                lblTopBanChay.Visible = false;
+                picTopBanChay.Visible = false;
+
+                // (Tùy chọn) Ẩn luôn chữ tiêu đề "Báo cáo" màu trắng nhạt trên menu
+                lblTitleBaoCao.Visible = false; 
             }
-            // Admin mặc định thấy hết nên không cần xử lý thêm
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)
@@ -67,6 +104,30 @@ namespace GUI
                 // 5. Sau khi Form Đăng nhập đóng lại (nếu có), ta mới đóng hẳn FormMain
                 this.Close();
             }
+        }
+        private void AddUserControl(UserControl uc)
+        {
+            // Đặt UserControl lấp đầy vùng chứa
+            uc.Dock = DockStyle.Fill;
+
+            // Xóa các UserControl hiện đang hiển thị trước đó
+            pnlContainer.Controls.Clear();
+
+            // Thêm UserControl mới vào và đẩy lên mặt trước
+            pnlContainer.Controls.Add(uc);
+            uc.BringToFront();
+        }
+
+        private void picNhanVien_Click(object sender, EventArgs e)
+        {
+            // Gọi UC_NhanVien ra và đưa vào Panel chứa (pnlContainer)
+            UC_NhanVien ucNhanVien = new UC_NhanVien();
+            AddUserControl(ucNhanVien);
+        }
+
+        private void lblNhanVien_Click(object sender, EventArgs e)
+        {
+            picNhanVien_Click(sender, e);
         }
     }
 }

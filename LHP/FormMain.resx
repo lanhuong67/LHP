@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="picTop.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="picTopBanChay.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAXEAAAFOCAYAAABwqy3cAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAADVFJREFUeF7t3b2ubVd5xnHfBwUfN0HLHdBwAVyGGyR6ahTFjZsghSpKlRLZCrUL
@@ -2001,7 +2001,7 @@
         AADiYQoAACAepgAAAOJhCgAAIB6mAAAA4mEKAAAgFv8fh6gsceDe/MMAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="picHangSanXua.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="picHangSanXuat.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAkIAAAI7CAYAAAAAivQJAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAQvJJREFUeF7t3c2tNLtypWGZIlNkikzRvD3oyZ22Bz28o/ZA8wvIA1mgRtwD4uRh
@@ -2293,7 +2293,7 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="pictureBox5.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="picChiNhanh.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAScAAAEcCAYAAACF53IvAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAGglJREFUeF7tnQlwVtX5xistrvhn3FurIlpBpXVfccWqRa060CouoLhUEaWoOB0d
@@ -2595,7 +2595,7 @@
         ABBNFQAAABDl/wFAcoUFOMJ4UQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="pictureBox3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="picNhapHang.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAX8AAAEZCAYAAAB/6SUgAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAEeJJREFUeF7t3bGqJMcVxnG9gtADSKBAL6BIIFCiVE+gQM+haHOHdiDbGAUG22Bw
@@ -2883,7 +2883,7 @@
         SUVORK5CYII=
 </value>
   </data>
-  <data name="picCanhBao.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="picCanhBaoTonKho.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAa8AAAFKCAYAAACq4tAwAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         vAAADrwBlbxySQAAFD5JREFUeF7t3T2udclVBmAPwqEDhx6CAwIPwYEH4CF4CM6dEiAk1AnCZIiIDEck

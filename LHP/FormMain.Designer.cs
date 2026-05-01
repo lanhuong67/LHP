@@ -37,65 +37,64 @@ namespace GUI
             label1 = new Label();
             pictureBox1 = new PictureBox();
             pnlSidebar = new Panel();
-            label5 = new Label();
-            picTop = new PictureBox();
+            picTopBanChay = new PictureBox();
             picDoanhThu = new PictureBox();
             picKhachHang = new PictureBox();
-            label18 = new Label();
-            label19 = new Label();
-            label20 = new Label();
+            lblTitleBaoCao = new Label();
+            lblTopBanChay = new Label();
+            lblDoanhThu = new Label();
             label15 = new Label();
             pictureBox7 = new PictureBox();
             label16 = new Label();
             label17 = new Label();
-            label13 = new Label();
+            lblChiNhanh = new Label();
             picNhanVien = new PictureBox();
-            picHangSanXua = new PictureBox();
-            pictureBox5 = new PictureBox();
-            label14 = new Label();
+            picHangSanXuat = new PictureBox();
+            picChiNhanh = new PictureBox();
+            lblTitleDanhMuc = new Label();
             label12 = new Label();
             pictureBox4 = new PictureBox();
             label11 = new Label();
             label8 = new Label();
-            label7 = new Label();
-            pictureBox3 = new PictureBox();
+            lblNhapHang = new Label();
+            picNhapHang = new PictureBox();
             label10 = new Label();
             label2 = new Label();
             picSanPham = new PictureBox();
-            picCanhBao = new PictureBox();
+            picCanhBaoTonKho = new PictureBox();
             picTaoHoaDon = new PictureBox();
             picDanhSachHD = new PictureBox();
             pictureBox2 = new PictureBox();
             comboBox1 = new ComboBox();
             lblDanhSachHD = new Label();
             lblTaoHoaDon = new Label();
-            lblCanhBao = new Label();
+            lblCanhBaoTonKho = new Label();
             lblHangSanXuat = new Label();
             lblNhanVien = new Label();
             label6 = new Label();
             label4 = new Label();
             label3 = new Label();
-            lbldoanhThu = new Label();
+            lblDT = new Label();
             lblTop = new Label();
-            pnlContent = new Panel();
+            pnlContainer = new Panel();
             pnlTitlebar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             pnlSidebar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picTop).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picTopBanChay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picDoanhThu).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picKhachHang).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picNhanVien).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)picHangSanXua).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picHangSanXuat).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picChiNhanh).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picNhapHang).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picSanPham).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)picCanhBao).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picCanhBaoTonKho).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picTaoHoaDon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picDanhSachHD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            pnlContent.SuspendLayout();
+            pnlContainer.SuspendLayout();
             SuspendLayout();
             // 
             // pnlTitlebar
@@ -176,39 +175,38 @@ namespace GUI
             pnlSidebar.AutoScroll = true;
             pnlSidebar.BackColor = Color.DarkBlue;
             pnlSidebar.BorderStyle = BorderStyle.FixedSingle;
-            pnlSidebar.Controls.Add(label5);
-            pnlSidebar.Controls.Add(picTop);
+            pnlSidebar.Controls.Add(picTopBanChay);
             pnlSidebar.Controls.Add(picDoanhThu);
             pnlSidebar.Controls.Add(picKhachHang);
-            pnlSidebar.Controls.Add(label18);
-            pnlSidebar.Controls.Add(label19);
-            pnlSidebar.Controls.Add(label20);
+            pnlSidebar.Controls.Add(lblTitleBaoCao);
+            pnlSidebar.Controls.Add(lblTopBanChay);
+            pnlSidebar.Controls.Add(lblDoanhThu);
             pnlSidebar.Controls.Add(label15);
             pnlSidebar.Controls.Add(pictureBox7);
             pnlSidebar.Controls.Add(label16);
             pnlSidebar.Controls.Add(label17);
-            pnlSidebar.Controls.Add(label13);
+            pnlSidebar.Controls.Add(lblChiNhanh);
             pnlSidebar.Controls.Add(picNhanVien);
-            pnlSidebar.Controls.Add(picHangSanXua);
-            pnlSidebar.Controls.Add(pictureBox5);
-            pnlSidebar.Controls.Add(label14);
+            pnlSidebar.Controls.Add(picHangSanXuat);
+            pnlSidebar.Controls.Add(picChiNhanh);
+            pnlSidebar.Controls.Add(lblTitleDanhMuc);
             pnlSidebar.Controls.Add(label12);
             pnlSidebar.Controls.Add(pictureBox4);
             pnlSidebar.Controls.Add(label11);
             pnlSidebar.Controls.Add(label8);
-            pnlSidebar.Controls.Add(label7);
-            pnlSidebar.Controls.Add(pictureBox3);
+            pnlSidebar.Controls.Add(lblNhapHang);
+            pnlSidebar.Controls.Add(picNhapHang);
             pnlSidebar.Controls.Add(label10);
             pnlSidebar.Controls.Add(label2);
             pnlSidebar.Controls.Add(picSanPham);
-            pnlSidebar.Controls.Add(picCanhBao);
+            pnlSidebar.Controls.Add(picCanhBaoTonKho);
             pnlSidebar.Controls.Add(picTaoHoaDon);
             pnlSidebar.Controls.Add(picDanhSachHD);
             pnlSidebar.Controls.Add(pictureBox2);
             pnlSidebar.Controls.Add(comboBox1);
             pnlSidebar.Controls.Add(lblDanhSachHD);
             pnlSidebar.Controls.Add(lblTaoHoaDon);
-            pnlSidebar.Controls.Add(lblCanhBao);
+            pnlSidebar.Controls.Add(lblCanhBaoTonKho);
             pnlSidebar.Controls.Add(lblHangSanXuat);
             pnlSidebar.Controls.Add(lblNhanVien);
             pnlSidebar.Controls.Add(label6);
@@ -220,27 +218,15 @@ namespace GUI
             pnlSidebar.Size = new Size(338, 940);
             pnlSidebar.TabIndex = 1;
             // 
-            // label5
+            // picTopBanChay
             // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.Red;
-            label5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label5.ForeColor = Color.Black;
-            label5.Location = new Point(281, 420);
-            label5.Name = "label5";
-            label5.Size = new Size(20, 25);
-            label5.TabIndex = 27;
-            label5.Text = "/";
-            // 
-            // picTop
-            // 
-            picTop.Image = (Image)resources.GetObject("picTop.Image");
-            picTop.Location = new Point(13, 904);
-            picTop.Name = "picTop";
-            picTop.Size = new Size(76, 42);
-            picTop.SizeMode = PictureBoxSizeMode.Zoom;
-            picTop.TabIndex = 7;
-            picTop.TabStop = false;
+            picTopBanChay.Image = (Image)resources.GetObject("picTopBanChay.Image");
+            picTopBanChay.Location = new Point(13, 904);
+            picTopBanChay.Name = "picTopBanChay";
+            picTopBanChay.Size = new Size(76, 42);
+            picTopBanChay.SizeMode = PictureBoxSizeMode.Zoom;
+            picTopBanChay.TabIndex = 7;
+            picTopBanChay.TabStop = false;
             // 
             // picDoanhThu
             // 
@@ -262,38 +248,38 @@ namespace GUI
             picKhachHang.TabIndex = 2;
             picKhachHang.TabStop = false;
             // 
-            // label18
+            // lblTitleBaoCao
             // 
-            label18.AutoSize = true;
-            label18.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            label18.ForeColor = SystemColors.InactiveCaption;
-            label18.Location = new Point(20, 826);
-            label18.Name = "label18";
-            label18.Size = new Size(87, 28);
-            label18.TabIndex = 45;
-            label18.Text = "Báo cáo";
+            lblTitleBaoCao.AutoSize = true;
+            lblTitleBaoCao.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTitleBaoCao.ForeColor = SystemColors.InactiveCaption;
+            lblTitleBaoCao.Location = new Point(20, 826);
+            lblTitleBaoCao.Name = "lblTitleBaoCao";
+            lblTitleBaoCao.Size = new Size(87, 28);
+            lblTitleBaoCao.TabIndex = 45;
+            lblTitleBaoCao.Text = "Báo cáo";
             // 
-            // label19
+            // lblTopBanChay
             // 
-            label19.AutoSize = true;
-            label19.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label19.ForeColor = Color.White;
-            label19.Location = new Point(104, 915);
-            label19.Name = "label19";
-            label19.Size = new Size(125, 25);
-            label19.TabIndex = 44;
-            label19.Text = "Top bán chạy";
+            lblTopBanChay.AutoSize = true;
+            lblTopBanChay.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblTopBanChay.ForeColor = Color.White;
+            lblTopBanChay.Location = new Point(104, 915);
+            lblTopBanChay.Name = "lblTopBanChay";
+            lblTopBanChay.Size = new Size(125, 25);
+            lblTopBanChay.TabIndex = 44;
+            lblTopBanChay.Text = "Top bán chạy";
             // 
-            // label20
+            // lblDoanhThu
             // 
-            label20.AutoSize = true;
-            label20.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label20.ForeColor = Color.White;
-            label20.Location = new Point(105, 866);
-            label20.Name = "label20";
-            label20.Size = new Size(102, 25);
-            label20.TabIndex = 43;
-            label20.Text = "Doanh thu";
+            lblDoanhThu.AutoSize = true;
+            lblDoanhThu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblDoanhThu.ForeColor = Color.White;
+            lblDoanhThu.Location = new Point(105, 866);
+            lblDoanhThu.Name = "lblDoanhThu";
+            lblDoanhThu.Size = new Size(102, 25);
+            lblDoanhThu.TabIndex = 43;
+            lblDoanhThu.Text = "Doanh thu";
             // 
             // label15
             // 
@@ -338,19 +324,20 @@ namespace GUI
             label17.TabIndex = 38;
             label17.Text = "Danh sách khách hàng";
             // 
-            // label13
+            // lblChiNhanh
             // 
-            label13.AutoSize = true;
-            label13.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label13.ForeColor = Color.White;
-            label13.Location = new Point(104, 791);
-            label13.Name = "label13";
-            label13.Size = new Size(98, 25);
-            label13.TabIndex = 35;
-            label13.Text = "Chi nhánh";
+            lblChiNhanh.AutoSize = true;
+            lblChiNhanh.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblChiNhanh.ForeColor = Color.White;
+            lblChiNhanh.Location = new Point(104, 791);
+            lblChiNhanh.Name = "lblChiNhanh";
+            lblChiNhanh.Size = new Size(98, 25);
+            lblChiNhanh.TabIndex = 35;
+            lblChiNhanh.Text = "Chi nhánh";
             // 
             // picNhanVien
             // 
+            picNhanVien.Cursor = Cursors.Hand;
             picNhanVien.Image = (Image)resources.GetObject("picNhanVien.Image");
             picNhanVien.Location = new Point(12, 685);
             picNhanVien.Name = "picNhanVien";
@@ -358,37 +345,38 @@ namespace GUI
             picNhanVien.SizeMode = PictureBoxSizeMode.Zoom;
             picNhanVien.TabIndex = 1;
             picNhanVien.TabStop = false;
+            picNhanVien.Click += picNhanVien_Click;
             // 
-            // picHangSanXua
+            // picHangSanXuat
             // 
-            picHangSanXua.Image = (Image)resources.GetObject("picHangSanXua.Image");
-            picHangSanXua.Location = new Point(12, 733);
-            picHangSanXua.Name = "picHangSanXua";
-            picHangSanXua.Size = new Size(76, 42);
-            picHangSanXua.SizeMode = PictureBoxSizeMode.Zoom;
-            picHangSanXua.TabIndex = 3;
-            picHangSanXua.TabStop = false;
+            picHangSanXuat.Image = (Image)resources.GetObject("picHangSanXuat.Image");
+            picHangSanXuat.Location = new Point(12, 733);
+            picHangSanXuat.Name = "picHangSanXuat";
+            picHangSanXuat.Size = new Size(76, 42);
+            picHangSanXuat.SizeMode = PictureBoxSizeMode.Zoom;
+            picHangSanXuat.TabIndex = 3;
+            picHangSanXuat.TabStop = false;
             // 
-            // pictureBox5
+            // picChiNhanh
             // 
-            pictureBox5.Image = (Image)resources.GetObject("pictureBox5.Image");
-            pictureBox5.Location = new Point(12, 781);
-            pictureBox5.Name = "pictureBox5";
-            pictureBox5.Size = new Size(78, 42);
-            pictureBox5.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox5.TabIndex = 34;
-            pictureBox5.TabStop = false;
+            picChiNhanh.Image = (Image)resources.GetObject("picChiNhanh.Image");
+            picChiNhanh.Location = new Point(12, 781);
+            picChiNhanh.Name = "picChiNhanh";
+            picChiNhanh.Size = new Size(78, 42);
+            picChiNhanh.SizeMode = PictureBoxSizeMode.Zoom;
+            picChiNhanh.TabIndex = 34;
+            picChiNhanh.TabStop = false;
             // 
-            // label14
+            // lblTitleDanhMuc
             // 
-            label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            label14.ForeColor = SystemColors.InactiveCaption;
-            label14.Location = new Point(20, 655);
-            label14.Name = "label14";
-            label14.Size = new Size(108, 28);
-            label14.TabIndex = 33;
-            label14.Text = "Danh mục";
+            lblTitleDanhMuc.AutoSize = true;
+            lblTitleDanhMuc.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTitleDanhMuc.ForeColor = SystemColors.InactiveCaption;
+            lblTitleDanhMuc.Location = new Point(20, 655);
+            lblTitleDanhMuc.Name = "lblTitleDanhMuc";
+            lblTitleDanhMuc.Size = new Size(108, 28);
+            lblTitleDanhMuc.TabIndex = 33;
+            lblTitleDanhMuc.Text = "Danh mục";
             // 
             // label12
             // 
@@ -433,26 +421,26 @@ namespace GUI
             label8.TabIndex = 29;
             label8.Text = "Sản phẩm";
             // 
-            // label7
+            // lblNhapHang
             // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label7.ForeColor = Color.White;
-            label7.Location = new Point(104, 370);
-            label7.Name = "label7";
-            label7.Size = new Size(140, 25);
-            label7.TabIndex = 28;
-            label7.Text = "Nhập hàng / lô";
+            lblNhapHang.AutoSize = true;
+            lblNhapHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblNhapHang.ForeColor = Color.White;
+            lblNhapHang.Location = new Point(104, 370);
+            lblNhapHang.Name = "lblNhapHang";
+            lblNhapHang.Size = new Size(140, 25);
+            lblNhapHang.TabIndex = 28;
+            lblNhapHang.Text = "Nhập hàng / lô";
             // 
-            // pictureBox3
+            // picNhapHang
             // 
-            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(12, 361);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(78, 42);
-            pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox3.TabIndex = 27;
-            pictureBox3.TabStop = false;
+            picNhapHang.Image = (Image)resources.GetObject("picNhapHang.Image");
+            picNhapHang.Location = new Point(12, 361);
+            picNhapHang.Name = "picNhapHang";
+            picNhapHang.Size = new Size(78, 42);
+            picNhapHang.SizeMode = PictureBoxSizeMode.Zoom;
+            picNhapHang.TabIndex = 27;
+            picNhapHang.TabStop = false;
             // 
             // label10
             // 
@@ -486,15 +474,15 @@ namespace GUI
             picSanPham.TabIndex = 4;
             picSanPham.TabStop = false;
             // 
-            // picCanhBao
+            // picCanhBaoTonKho
             // 
-            picCanhBao.Image = (Image)resources.GetObject("picCanhBao.Image");
-            picCanhBao.Location = new Point(12, 409);
-            picCanhBao.Name = "picCanhBao";
-            picCanhBao.Size = new Size(78, 42);
-            picCanhBao.SizeMode = PictureBoxSizeMode.Zoom;
-            picCanhBao.TabIndex = 5;
-            picCanhBao.TabStop = false;
+            picCanhBaoTonKho.Image = (Image)resources.GetObject("picCanhBaoTonKho.Image");
+            picCanhBaoTonKho.Location = new Point(12, 409);
+            picCanhBaoTonKho.Name = "picCanhBaoTonKho";
+            picCanhBaoTonKho.Size = new Size(78, 42);
+            picCanhBaoTonKho.SizeMode = PictureBoxSizeMode.Zoom;
+            picCanhBaoTonKho.TabIndex = 5;
+            picCanhBaoTonKho.TabStop = false;
             // 
             // picTaoHoaDon
             // 
@@ -557,16 +545,16 @@ namespace GUI
             lblTaoHoaDon.TabIndex = 18;
             lblTaoHoaDon.Text = "Tạo hóa đơn";
             // 
-            // lblCanhBao
+            // lblCanhBaoTonKho
             // 
-            lblCanhBao.AutoSize = true;
-            lblCanhBao.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            lblCanhBao.ForeColor = Color.White;
-            lblCanhBao.Location = new Point(104, 420);
-            lblCanhBao.Name = "lblCanhBao";
-            lblCanhBao.Size = new Size(163, 25);
-            lblCanhBao.TabIndex = 17;
-            lblCanhBao.Text = "Cảnh báo tồn kho";
+            lblCanhBaoTonKho.AutoSize = true;
+            lblCanhBaoTonKho.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblCanhBaoTonKho.ForeColor = Color.White;
+            lblCanhBaoTonKho.Location = new Point(104, 420);
+            lblCanhBaoTonKho.Name = "lblCanhBaoTonKho";
+            lblCanhBaoTonKho.Size = new Size(163, 25);
+            lblCanhBaoTonKho.TabIndex = 17;
+            lblCanhBaoTonKho.Text = "Cảnh báo tồn kho";
             // 
             // lblHangSanXuat
             // 
@@ -582,6 +570,7 @@ namespace GUI
             // lblNhanVien
             // 
             lblNhanVien.AutoSize = true;
+            lblNhanVien.Cursor = Cursors.Hand;
             lblNhanVien.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblNhanVien.ForeColor = Color.White;
             lblNhanVien.Location = new Point(104, 697);
@@ -589,6 +578,7 @@ namespace GUI
             lblNhanVien.Size = new Size(99, 25);
             lblNhanVien.TabIndex = 13;
             lblNhanVien.Text = "Nhân viên";
+            lblNhanVien.Click += lblNhanVien_Click;
             // 
             // label6
             // 
@@ -623,16 +613,16 @@ namespace GUI
             label3.TabIndex = 0;
             label3.Text = "Chi nhánh";
             // 
-            // lbldoanhThu
+            // lblDT
             // 
-            lbldoanhThu.AutoSize = true;
-            lbldoanhThu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            lbldoanhThu.ForeColor = Color.White;
-            lbldoanhThu.Location = new Point(-43, 644);
-            lbldoanhThu.Name = "lbldoanhThu";
-            lbldoanhThu.Size = new Size(102, 25);
-            lbldoanhThu.TabIndex = 20;
-            lbldoanhThu.Text = "Doanh thu";
+            lblDT.AutoSize = true;
+            lblDT.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblDT.ForeColor = Color.White;
+            lblDT.Location = new Point(-43, 644);
+            lblDT.Name = "lblDT";
+            lblDT.Size = new Size(102, 25);
+            lblDT.TabIndex = 20;
+            lblDT.Text = "Doanh thu";
             // 
             // lblTop
             // 
@@ -645,15 +635,15 @@ namespace GUI
             lblTop.TabIndex = 21;
             lblTop.Text = "Top bán chạy";
             // 
-            // pnlContent
+            // pnlContainer
             // 
-            pnlContent.BorderStyle = BorderStyle.FixedSingle;
-            pnlContent.Controls.Add(lblTop);
-            pnlContent.Controls.Add(lbldoanhThu);
-            pnlContent.Location = new Point(347, 82);
-            pnlContent.Name = "pnlContent";
-            pnlContent.Size = new Size(1113, 938);
-            pnlContent.TabIndex = 2;
+            pnlContainer.BorderStyle = BorderStyle.FixedSingle;
+            pnlContainer.Controls.Add(lblTop);
+            pnlContainer.Controls.Add(lblDT);
+            pnlContainer.Location = new Point(347, 82);
+            pnlContainer.Name = "pnlContainer";
+            pnlContainer.Size = new Size(1113, 938);
+            pnlContainer.TabIndex = 2;
             // 
             // FormMain
             // 
@@ -661,7 +651,7 @@ namespace GUI
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1469, 1012);
-            Controls.Add(pnlContent);
+            Controls.Add(pnlContainer);
             Controls.Add(pnlSidebar);
             Controls.Add(pnlTitlebar);
             FormBorderStyle = FormBorderStyle.None;
@@ -675,22 +665,22 @@ namespace GUI
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             pnlSidebar.ResumeLayout(false);
             pnlSidebar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picTop).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picTopBanChay).EndInit();
             ((System.ComponentModel.ISupportInitialize)picDoanhThu).EndInit();
             ((System.ComponentModel.ISupportInitialize)picKhachHang).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
             ((System.ComponentModel.ISupportInitialize)picNhanVien).EndInit();
-            ((System.ComponentModel.ISupportInitialize)picHangSanXua).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picHangSanXuat).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picChiNhanh).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picNhapHang).EndInit();
             ((System.ComponentModel.ISupportInitialize)picSanPham).EndInit();
-            ((System.ComponentModel.ISupportInitialize)picCanhBao).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picCanhBaoTonKho).EndInit();
             ((System.ComponentModel.ISupportInitialize)picTaoHoaDon).EndInit();
             ((System.ComponentModel.ISupportInitialize)picDanhSachHD).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            pnlContent.ResumeLayout(false);
-            pnlContent.PerformLayout();
+            pnlContainer.ResumeLayout(false);
+            pnlContainer.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -700,15 +690,15 @@ namespace GUI
         private Panel pnlSidebar;
         private PictureBox pictureBox1;
         private PictureBox picNhanVien;
-        private PictureBox picHangSanXua;
+        private PictureBox picHangSanXuat;
         private PictureBox picKhachHang;
-        private PictureBox picTop;
+        private PictureBox picTopBanChay;
         private PictureBox picDoanhThu;
-        private PictureBox picCanhBao;
+        private PictureBox picCanhBaoTonKho;
         private PictureBox picSanPham;
         private Label label1;
         private Label lblTenNV;
-        private Panel pnlContent;
+        private Panel pnlContainer;
         private Label label3;
         private Label label4;
         private PictureBox picDanhSachHD;
@@ -717,32 +707,31 @@ namespace GUI
         private Label lblNhanVien;
         private Button btnDangXuat;
         private Label lblTop;
-        private Label lbldoanhThu;
+        private Label lblDT;
         private Label lblDanhSachHD;
         private Label lblTaoHoaDon;
-        private Label lblCanhBao;
+        private Label lblCanhBaoTonKho;
         private Label lblHangSanXuat;
         private PictureBox pictureBox2;
         private ComboBox comboBox1;
         private Label label2;
         private Label label9;
         private Label label10;
-        private Label label7;
-        private PictureBox pictureBox3;
+        private Label lblNhapHang;
+        private PictureBox picNhapHang;
         private Label label11;
         private Label label8;
         private PictureBox pictureBox4;
-        private Label label14;
+        private Label lblTitleDanhMuc;
         private Label label12;
-        private PictureBox pictureBox5;
-        private Label label13;
+        private PictureBox picChiNhanh;
+        private Label lblChiNhanh;
         private Label label15;
         private PictureBox pictureBox7;
         private Label label16;
         private Label label17;
-        private Label label18;
-        private Label label19;
-        private Label label20;
-        private Label label5;
+        private Label lblTitleBaoCao;
+        private Label lblTopBanChay;
+        private Label lblDoanhThu;
     }
 }
