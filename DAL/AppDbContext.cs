@@ -7,6 +7,7 @@ namespace DAL
     {
         // Khai báo bảng Tài Khoản
         public DbSet<NhanVien> NhanViens { get; set; }
+        public DbSet<KhachHang> KhachHangs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

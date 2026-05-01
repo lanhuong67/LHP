@@ -129,5 +129,20 @@ namespace GUI
         {
             picNhanVien_Click(sender, e);
         }
+
+        // Sự kiện khi click vào Icon/Hình ảnh của nút Danh sách khách hàng
+        private void picDanhSachKH_Click(object sender, EventArgs e)
+        {
+            // Gọi UC_KhachHang ra và đưa vào hàm AddUserControl bạn đã viết sẵn
+            UC_KhachHang ucKhachHang = new UC_KhachHang();
+            AddUserControl(ucKhachHang);
+        }
+
+        // Sự kiện khi click vào dòng chữ "Danh sách khách hàng"
+        private void lblDanhSachKH_Click(object sender, EventArgs e)
+        {
+            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
+            picDanhSachKH_Click(sender, e);
+        }
     }
 }

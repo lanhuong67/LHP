@@ -46,7 +46,7 @@ namespace GUI
             label15 = new Label();
             pictureBox7 = new PictureBox();
             label16 = new Label();
-            label17 = new Label();
+            lblKhachHang = new Label();
             lblChiNhanh = new Label();
             picNhanVien = new PictureBox();
             picHangSanXuat = new PictureBox();
@@ -184,7 +184,7 @@ namespace GUI
             pnlSidebar.Controls.Add(label15);
             pnlSidebar.Controls.Add(pictureBox7);
             pnlSidebar.Controls.Add(label16);
-            pnlSidebar.Controls.Add(label17);
+            pnlSidebar.Controls.Add(lblKhachHang);
             pnlSidebar.Controls.Add(lblChiNhanh);
             pnlSidebar.Controls.Add(picNhanVien);
             pnlSidebar.Controls.Add(picHangSanXuat);
@@ -240,6 +240,7 @@ namespace GUI
             // 
             // picKhachHang
             // 
+            picKhachHang.Cursor = Cursors.Hand;
             picKhachHang.Image = (Image)resources.GetObject("picKhachHang.Image");
             picKhachHang.Location = new Point(12, 563);
             picKhachHang.Name = "picKhachHang";
@@ -247,6 +248,7 @@ namespace GUI
             picKhachHang.SizeMode = PictureBoxSizeMode.Zoom;
             picKhachHang.TabIndex = 2;
             picKhachHang.TabStop = false;
+            picKhachHang.Click += picDanhSachKH_Click;
             // 
             // lblTitleBaoCao
             // 
@@ -313,16 +315,18 @@ namespace GUI
             label16.TabIndex = 39;
             label16.Text = "Chăm sóc khách hàng";
             // 
-            // label17
+            // lblKhachHang
             // 
-            label17.AutoSize = true;
-            label17.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label17.ForeColor = Color.White;
-            label17.Location = new Point(104, 571);
-            label17.Name = "label17";
-            label17.Size = new Size(204, 25);
-            label17.TabIndex = 38;
-            label17.Text = "Danh sách khách hàng";
+            lblKhachHang.AutoSize = true;
+            lblKhachHang.Cursor = Cursors.Hand;
+            lblKhachHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblKhachHang.ForeColor = Color.White;
+            lblKhachHang.Location = new Point(104, 571);
+            lblKhachHang.Name = "lblKhachHang";
+            lblKhachHang.Size = new Size(204, 25);
+            lblKhachHang.TabIndex = 38;
+            lblKhachHang.Text = "Danh sách khách hàng";
+            lblKhachHang.Click += lblDanhSachKH_Click;
             // 
             // lblChiNhanh
             // 
@@ -729,7 +733,7 @@ namespace GUI
         private Label label15;
         private PictureBox pictureBox7;
         private Label label16;
-        private Label label17;
+        private Label lblKhachHang;
         private Label lblTitleBaoCao;
         private Label lblTopBanChay;
         private Label lblDoanhThu;
