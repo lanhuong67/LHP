@@ -6,7 +6,7 @@ namespace DAL
     public class AppDbContext : DbContext
     {
         // Khai báo bảng Tài Khoản
-        public DbSet<TaiKhoan> TaiKhoans { get; set; }
+        public DbSet<NhanVien> NhanViens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

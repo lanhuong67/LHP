@@ -29,8 +29,8 @@ namespace GUI
                 return;
             }
 
-            TaiKhoanBUS bus = new TaiKhoanBUS();
-            TaiKhoan tk = bus.Login(txtTenDangNhap.Text, txtMatKhau.Text);
+            NhanVienBUS bus = new NhanVienBUS();
+            NhanVien tk = bus.Login(txtTenDangNhap.Text, txtMatKhau.Text);
 
             if (tk != null)
             {
@@ -62,8 +62,8 @@ namespace GUI
             string pass = txtMatKhau.Text.Trim();
 
             // Gọi lớp BUS để kiểm tra Database
-            TaiKhoanBUS bus = new TaiKhoanBUS();
-            TaiKhoan tk = bus.Login(user, pass);
+            NhanVienBUS bus = new NhanVienBUS();
+            NhanVien tk = bus.Login(user, pass);
 
             if (tk != null) // Đăng nhập thành công
             {
