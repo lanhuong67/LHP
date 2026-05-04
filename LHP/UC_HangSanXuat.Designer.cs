@@ -33,18 +33,20 @@
             btnSua = new Button();
             dgvHangSanXuat = new DataGridView();
             panel2 = new Panel();
-            txtMaKH = new TextBox();
+            txtMoTa = new TextBox();
+            txtQuocGia = new TextBox();
+            cboTrangThai = new ComboBox();
+            label5 = new Label();
+            txtMaHang = new TextBox();
             btnLamTrong = new Button();
             btnLuu = new Button();
-            this.txtMota = new TextBox();
             label8 = new Label();
-            this.txtQuocGia = new TextBox();
             label7 = new Label();
             txtTenHang = new TextBox();
             label6 = new Label();
             label4 = new Label();
             label3 = new Label();
-            btnHang = new Button();
+            btnThem = new Button();
             panel1 = new Panel();
             btnLamMoi = new Button();
             btnTimKiem = new Button();
@@ -54,8 +56,7 @@
             colTenHang = new DataGridViewTextBoxColumn();
             colQuocGia = new DataGridViewTextBoxColumn();
             colMota = new DataGridViewTextBoxColumn();
-            label5 = new Label();
-            cboTrangThai = new ComboBox();
+            Column1 = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvHangSanXuat).BeginInit();
             panel2.SuspendLayout();
             panel1.SuspendLayout();
@@ -83,6 +84,7 @@
             btnXoa.TabIndex = 30;
             btnXoa.Text = "✖ Xóa";
             btnXoa.UseVisualStyleBackColor = false;
+            btnXoa.Click += btnXoa_Click;
             // 
             // btnSua
             // 
@@ -96,31 +98,33 @@
             btnSua.TabIndex = 29;
             btnSua.Text = "✎ Sửa";
             btnSua.UseVisualStyleBackColor = false;
+            btnSua.Click += btnSua_Click;
             // 
             // dgvHangSanXuat
             // 
             dgvHangSanXuat.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvHangSanXuat.BackgroundColor = Color.White;
             dgvHangSanXuat.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvHangSanXuat.Columns.AddRange(new DataGridViewColumn[] { colMaHang, colTenHang, colQuocGia, colMota });
+            dgvHangSanXuat.Columns.AddRange(new DataGridViewColumn[] { colMaHang, colTenHang, colQuocGia, colMota, Column1 });
             dgvHangSanXuat.Location = new Point(29, 265);
             dgvHangSanXuat.Name = "dgvHangSanXuat";
             dgvHangSanXuat.RowHeadersWidth = 51;
             dgvHangSanXuat.Size = new Size(602, 638);
             dgvHangSanXuat.TabIndex = 28;
+            dgvHangSanXuat.CellClick += dgvHangSanXuat_CellClick;
             // 
             // panel2
             // 
             panel2.BackColor = Color.White;
             panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(txtMoTa);
+            panel2.Controls.Add(txtQuocGia);
             panel2.Controls.Add(cboTrangThai);
             panel2.Controls.Add(label5);
-            panel2.Controls.Add(txtMaKH);
+            panel2.Controls.Add(txtMaHang);
             panel2.Controls.Add(btnLamTrong);
             panel2.Controls.Add(btnLuu);
-            panel2.Controls.Add(this.txtMota);
             panel2.Controls.Add(label8);
-            panel2.Controls.Add(this.txtQuocGia);
             panel2.Controls.Add(label7);
             panel2.Controls.Add(txtTenHang);
             panel2.Controls.Add(label6);
@@ -131,13 +135,48 @@
             panel2.Size = new Size(428, 842);
             panel2.TabIndex = 27;
             // 
-            // txtMaKH
+            // txtMoTa
             // 
-            txtMaKH.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtMaKH.Location = new Point(186, 56);
-            txtMaKH.Name = "txtMaKH";
-            txtMaKH.Size = new Size(223, 31);
-            txtMaKH.TabIndex = 19;
+            txtMoTa.Font = new Font("Segoe UI", 10.8F);
+            txtMoTa.Location = new Point(19, 341);
+            txtMoTa.Multiline = true;
+            txtMoTa.Name = "txtMoTa";
+            txtMoTa.Size = new Size(390, 107);
+            txtMoTa.TabIndex = 23;
+            // 
+            // txtQuocGia
+            // 
+            txtQuocGia.Location = new Point(26, 255);
+            txtQuocGia.Name = "txtQuocGia";
+            txtQuocGia.Size = new Size(383, 27);
+            txtQuocGia.TabIndex = 22;
+            // 
+            // cboTrangThai
+            // 
+            cboTrangThai.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cboTrangThai.FormattingEnabled = true;
+            cboTrangThai.Location = new Point(19, 505);
+            cboTrangThai.Name = "cboTrangThai";
+            cboTrangThai.Size = new Size(390, 33);
+            cboTrangThai.TabIndex = 21;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 10.8F);
+            label5.Location = new Point(19, 477);
+            label5.Name = "label5";
+            label5.Size = new Size(89, 25);
+            label5.TabIndex = 20;
+            label5.Text = "Trạng thái";
+            // 
+            // txtMaHang
+            // 
+            txtMaHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtMaHang.Location = new Point(186, 56);
+            txtMaHang.Name = "txtMaHang";
+            txtMaHang.Size = new Size(223, 31);
+            txtMaHang.TabIndex = 19;
             // 
             // btnLamTrong
             // 
@@ -151,6 +190,7 @@
             btnLamTrong.TabIndex = 7;
             btnLamTrong.Text = "Làm trống";
             btnLamTrong.UseVisualStyleBackColor = false;
+            btnLamTrong.Click += btnLamTrong_Click;
             // 
             // btnLuu
             // 
@@ -164,15 +204,7 @@
             btnLuu.TabIndex = 8;
             btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = false;
-            // 
-            // txtMota
-            // 
-            this.txtMota.Font = new Font("Segoe UI", 10.8F);
-            this.txtMota.Location = new Point(19, 329);
-            this.txtMota.Multiline = true;
-            this.txtMota.Name = "txtMota";
-            this.txtMota.Size = new Size(390, 118);
-            this.txtMota.TabIndex = 17;
+            btnLuu.Click += btnLuu_Click;
             // 
             // label8
             // 
@@ -183,14 +215,6 @@
             label8.Size = new Size(59, 25);
             label8.TabIndex = 14;
             label8.Text = "Mô tả";
-            // 
-            // txtQuocGia
-            // 
-            this.txtQuocGia.Font = new Font("Segoe UI", 10.8F);
-            this.txtQuocGia.Location = new Point(19, 242);
-            this.txtQuocGia.Name = "txtQuocGia";
-            this.txtQuocGia.Size = new Size(390, 31);
-            this.txtQuocGia.TabIndex = 11;
             // 
             // label7
             // 
@@ -237,22 +261,23 @@
             label3.ForeColor = Color.MediumBlue;
             label3.Location = new Point(9, 6);
             label3.Name = "label3";
-            label3.Size = new Size(199, 25);
+            label3.Size = new Size(220, 25);
             label3.TabIndex = 7;
-            label3.Text = "Thông tin khách hàng";
+            label3.Text = "Thông tin hãng sản xuất";
             // 
-            // btnHang
+            // btnThem
             // 
-            btnHang.BackColor = SystemColors.HotTrack;
-            btnHang.FlatStyle = FlatStyle.Flat;
-            btnHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnHang.ForeColor = Color.White;
-            btnHang.Location = new Point(80, 194);
-            btnHang.Name = "btnHang";
-            btnHang.Size = new Size(132, 51);
-            btnHang.TabIndex = 26;
-            btnHang.Text = "➕ Thêm Hãng";
-            btnHang.UseVisualStyleBackColor = false;
+            btnThem.BackColor = SystemColors.HotTrack;
+            btnThem.FlatStyle = FlatStyle.Flat;
+            btnThem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            btnThem.ForeColor = Color.White;
+            btnThem.Location = new Point(69, 196);
+            btnThem.Name = "btnThem";
+            btnThem.Size = new Size(132, 49);
+            btnThem.TabIndex = 26;
+            btnThem.Text = "➕ Thêm Hãng";
+            btnThem.UseVisualStyleBackColor = false;
+            btnThem.Click += btnThem_Click;
             // 
             // panel1
             // 
@@ -279,6 +304,7 @@
             btnLamMoi.TabIndex = 5;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
+            btnLamMoi.Click += btnLamMoi_Click;
             // 
             // btnTimKiem
             // 
@@ -292,6 +318,7 @@
             btnTimKiem.TabIndex = 6;
             btnTimKiem.Text = "Tìm kiếm";
             btnTimKiem.UseVisualStyleBackColor = false;
+            btnTimKiem.Click += btnTimKiem_Click;
             // 
             // txtTimKiem
             // 
@@ -314,50 +341,38 @@
             // 
             // colMaHang
             // 
-            colMaHang.DataPropertyName = "MaKH";
+            colMaHang.DataPropertyName = "MaHang";
             colMaHang.HeaderText = "Mã hãng";
             colMaHang.MinimumWidth = 6;
             colMaHang.Name = "colMaHang";
             // 
             // colTenHang
             // 
-            colTenHang.DataPropertyName = "HoTen";
+            colTenHang.DataPropertyName = "TenHang";
             colTenHang.HeaderText = "Tên hãng";
             colTenHang.MinimumWidth = 6;
             colTenHang.Name = "colTenHang";
             // 
             // colQuocGia
             // 
-            colQuocGia.DataPropertyName = "SDT";
+            colQuocGia.DataPropertyName = "QuocGia";
             colQuocGia.HeaderText = "Quốc gia";
             colQuocGia.MinimumWidth = 6;
             colQuocGia.Name = "colQuocGia";
             // 
             // colMota
             // 
-            colMota.DataPropertyName = "DiaChi";
+            colMota.DataPropertyName = "MoTa";
             colMota.HeaderText = "Mô tả";
             colMota.MinimumWidth = 6;
             colMota.Name = "colMota";
             // 
-            // label5
+            // Column1
             // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 10.8F);
-            label5.Location = new Point(19, 477);
-            label5.Name = "label5";
-            label5.Size = new Size(89, 25);
-            label5.TabIndex = 20;
-            label5.Text = "Trạng thái";
-            // 
-            // cboTrangThai
-            // 
-            cboTrangThai.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cboTrangThai.FormattingEnabled = true;
-            cboTrangThai.Location = new Point(19, 505);
-            cboTrangThai.Name = "cboTrangThai";
-            cboTrangThai.Size = new Size(390, 33);
-            cboTrangThai.TabIndex = 21;
+            Column1.DataPropertyName = "TrangThai";
+            Column1.HeaderText = "Trạng Thái";
+            Column1.MinimumWidth = 6;
+            Column1.Name = "Column1";
             // 
             // UC_HangSanXuat
             // 
@@ -368,11 +383,12 @@
             Controls.Add(btnSua);
             Controls.Add(dgvHangSanXuat);
             Controls.Add(panel2);
-            Controls.Add(btnHang);
+            Controls.Add(btnThem);
             Controls.Add(panel1);
             Controls.Add(label1);
             Name = "UC_HangSanXuat";
             Size = new Size(1113, 938);
+            Load += UC_HangSanXuat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvHangSanXuat).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
@@ -388,39 +404,30 @@
         private Button btnXoa;
         private Button btnSua;
         private DataGridView dgvHangSanXuat;
-        private DataGridViewTextBoxColumn colMaKH;
-        private DataGridViewTextBoxColumn colHoTen;
-        private DataGridViewTextBoxColumn colSĐT;
-        private DataGridViewTextBoxColumn colDiaChi;
         private Panel panel2;
-        private TextBox txtMaKH;
-        private Panel panel3;
-        private Label lblTongChiTieu;
-        private Label lblSoLanMua;
-        private Label label11;
-        private Label label10;
-        private Label label9;
+        private TextBox txtMaHang;
         private Button btnLamTrong;
         private Button btnLuu;
-        private TextBox txtDiaChi;
+        private TextBox txtMoTa;
         private Label label8;
-        private TextBox txtSDT;
         private Label label7;
         private TextBox txtTenHang;
         private Label label6;
         private Label label4;
         private Label label3;
-        private Button btnHang;
+        private Button btnThem;
         private Panel panel1;
         private Button btnLamMoi;
         private Button btnTimKiem;
         private TextBox txtTimKiem;
         private Label label2;
+        private ComboBox cboTrangThai;
+        private Label label5;
+        private TextBox txtQuocGia;
         private DataGridViewTextBoxColumn colMaHang;
         private DataGridViewTextBoxColumn colTenHang;
         private DataGridViewTextBoxColumn colQuocGia;
         private DataGridViewTextBoxColumn colMota;
-        private ComboBox cboTrangThai;
-        private Label label5;
+        private DataGridViewTextBoxColumn Column1;
     }
 }

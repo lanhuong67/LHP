@@ -55,7 +55,7 @@ namespace GUI
             label12 = new Label();
             pictureBox4 = new PictureBox();
             label11 = new Label();
-            label8 = new Label();
+            lblSanPham = new Label();
             lblNhapHang = new Label();
             picNhapHang = new PictureBox();
             label10 = new Label();
@@ -193,7 +193,7 @@ namespace GUI
             pnlSidebar.Controls.Add(label12);
             pnlSidebar.Controls.Add(pictureBox4);
             pnlSidebar.Controls.Add(label11);
-            pnlSidebar.Controls.Add(label8);
+            pnlSidebar.Controls.Add(lblSanPham);
             pnlSidebar.Controls.Add(lblNhapHang);
             pnlSidebar.Controls.Add(picNhapHang);
             pnlSidebar.Controls.Add(label10);
@@ -353,6 +353,7 @@ namespace GUI
             // 
             // picHangSanXuat
             // 
+            picHangSanXuat.Cursor = Cursors.Hand;
             picHangSanXuat.Image = (Image)resources.GetObject("picHangSanXuat.Image");
             picHangSanXuat.Location = new Point(12, 733);
             picHangSanXuat.Name = "picHangSanXuat";
@@ -360,6 +361,7 @@ namespace GUI
             picHangSanXuat.SizeMode = PictureBoxSizeMode.Zoom;
             picHangSanXuat.TabIndex = 3;
             picHangSanXuat.TabStop = false;
+            picHangSanXuat.Click += picHangSanXuat_Click;
             // 
             // picChiNhanh
             // 
@@ -414,16 +416,18 @@ namespace GUI
             label11.TabIndex = 30;
             label11.Text = "Bảo hành";
             // 
-            // label8
+            // lblSanPham
             // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label8.ForeColor = Color.White;
-            label8.Location = new Point(104, 321);
-            label8.Name = "label8";
-            label8.Size = new Size(96, 25);
-            label8.TabIndex = 29;
-            label8.Text = "Sản phẩm";
+            lblSanPham.AutoSize = true;
+            lblSanPham.Cursor = Cursors.Hand;
+            lblSanPham.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            lblSanPham.ForeColor = Color.White;
+            lblSanPham.Location = new Point(104, 321);
+            lblSanPham.Name = "lblSanPham";
+            lblSanPham.Size = new Size(96, 25);
+            lblSanPham.TabIndex = 29;
+            lblSanPham.Text = "Sản phẩm";
+            lblSanPham.Click += lblSanPham_Click;
             // 
             // lblNhapHang
             // 
@@ -470,6 +474,7 @@ namespace GUI
             // 
             // picSanPham
             // 
+            picSanPham.Cursor = Cursors.Hand;
             picSanPham.Image = (Image)resources.GetObject("picSanPham.Image");
             picSanPham.Location = new Point(12, 313);
             picSanPham.Name = "picSanPham";
@@ -477,6 +482,7 @@ namespace GUI
             picSanPham.SizeMode = PictureBoxSizeMode.Zoom;
             picSanPham.TabIndex = 4;
             picSanPham.TabStop = false;
+            picSanPham.Click += picSanPham_Click;
             // 
             // picCanhBaoTonKho
             // 
@@ -563,6 +569,7 @@ namespace GUI
             // lblHangSanXuat
             // 
             lblHangSanXuat.AutoSize = true;
+            lblHangSanXuat.Cursor = Cursors.Hand;
             lblHangSanXuat.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblHangSanXuat.ForeColor = Color.White;
             lblHangSanXuat.Location = new Point(104, 743);
@@ -570,6 +577,7 @@ namespace GUI
             lblHangSanXuat.Size = new Size(135, 25);
             lblHangSanXuat.TabIndex = 15;
             lblHangSanXuat.Text = "Hãng sản xuất";
+            lblHangSanXuat.Click += lblHangSanXuat_Click;
             // 
             // lblNhanVien
             // 
@@ -724,7 +732,7 @@ namespace GUI
         private Label lblNhapHang;
         private PictureBox picNhapHang;
         private Label label11;
-        private Label label8;
+        private Label lblSanPham;
         private PictureBox pictureBox4;
         private Label lblTitleDanhMuc;
         private Label label12;

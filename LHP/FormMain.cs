@@ -144,5 +144,33 @@ namespace GUI
             // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picDanhSachKH_Click(sender, e);
         }
+
+        private void picHangSanXuat_Click(object sender, EventArgs e)
+        {
+            UC_HangSanXuat ucHangSanXuat = new UC_HangSanXuat();
+            AddUserControl(ucHangSanXuat);
+        }
+
+     
+        private void lblHangSanXuat_Click(object sender, EventArgs e)
+        {
+            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
+            picHangSanXuat_Click(sender, e);
+        }
+
+        private void picSanPham_Click(object sender, EventArgs e)
+        {
+            UC_SanPham ucSanPham = new UC_SanPham();
+            AddUserControl(ucSanPham);
+        }
+
+
+        private void lblSanPham_Click(object sender, EventArgs e)
+        {
+            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
+            picSanPham_Click(sender, e);
+        }
     }
+
+ 
 }

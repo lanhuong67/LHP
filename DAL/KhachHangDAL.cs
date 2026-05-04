@@ -1,7 +1,7 @@
 ﻿using DTO;
 using System.Collections.Generic;
 using System.Linq;
-
+using System;
 namespace DAL
 {
     public class KhachHangDAL
@@ -21,7 +21,11 @@ namespace DAL
                 _db.SaveChanges();
                 return true;
             }
-            catch { return false; }
+            catch (Exception ex)
+            {
+                // Thay vì MessageBox, ta NÉM lỗi này lên tầng GUI để GUI hiện thông báo
+                throw new Exception("Lỗi Database khi Thêm Khách Hàng: " + (ex.InnerException?.Message ?? ex.Message));
+            }
         }
 
         public bool Sua(KhachHang khUpdate)
