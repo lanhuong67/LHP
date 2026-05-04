@@ -432,6 +432,7 @@ namespace GUI
             // lblNhapHang
             // 
             lblNhapHang.AutoSize = true;
+            lblNhapHang.Cursor = Cursors.Hand;
             lblNhapHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblNhapHang.ForeColor = Color.White;
             lblNhapHang.Location = new Point(104, 370);
@@ -439,9 +440,11 @@ namespace GUI
             lblNhapHang.Size = new Size(140, 25);
             lblNhapHang.TabIndex = 28;
             lblNhapHang.Text = "Nhập hàng / lô";
+            lblNhapHang.Click += lblNhapHang_Click;
             // 
             // picNhapHang
             // 
+            picNhapHang.Cursor = Cursors.Hand;
             picNhapHang.Image = (Image)resources.GetObject("picNhapHang.Image");
             picNhapHang.Location = new Point(12, 361);
             picNhapHang.Name = "picNhapHang";
@@ -449,6 +452,7 @@ namespace GUI
             picNhapHang.SizeMode = PictureBoxSizeMode.Zoom;
             picNhapHang.TabIndex = 27;
             picNhapHang.TabStop = false;
+            picNhapHang.Click += picNhapHang_Click;
             // 
             // label10
             // 

@@ -170,6 +170,19 @@ namespace GUI
             // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picSanPham_Click(sender, e);
         }
+
+        private void picNhapHang_Click(object sender, EventArgs e)
+        {
+            UC_NhapHangLo ucNhapHangLo = new UC_NhapHangLo();
+            AddUserControl(ucNhapHangLo);
+        }
+
+
+        private void lblNhapHang_Click(object sender, EventArgs e)
+        {
+            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
+            picNhapHang_Click(sender, e);
+        }
     }
 
  

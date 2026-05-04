@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260504165006_TaoBangNhapHang")]
+    partial class TaoBangNhapHang
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,27 +24,6 @@ namespace DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DTO.ChiNhanh", b =>
-                {
-                    b.Property<string>("MaChiNhanh")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("DiaChi")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("TenChiNhanh")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("MaChiNhanh");
-
-                    b.ToTable("ChiNhanh");
-                });
 
             modelBuilder.Entity("DTO.ChiTietPhieuNhap", b =>
                 {
@@ -65,9 +47,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("SoLuong")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SoLuongDaBan")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ThanhTien")
@@ -221,17 +200,7 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MaChiNhanh")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("MaNCC")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("MaNV")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -254,11 +223,7 @@ namespace DAL.Migrations
 
                     b.HasKey("MaPN");
 
-                    b.HasIndex("MaChiNhanh");
-
                     b.HasIndex("MaNCC");
-
-                    b.HasIndex("MaNV");
 
                     b.ToTable("PhieuNhap");
                 });
@@ -324,29 +289,13 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DTO.PhieuNhap", b =>
                 {
-                    b.HasOne("DTO.ChiNhanh", "ChiNhanh")
-                        .WithMany("PhieuNhaps")
-                        .HasForeignKey("MaChiNhanh")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DTO.NhaCungCap", "NhaCungCap")
                         .WithMany("PhieuNhaps")
                         .HasForeignKey("MaNCC")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DTO.NhanVien", "NhanVien")
-                        .WithMany()
-                        .HasForeignKey("MaNV")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChiNhanh");
-
                     b.Navigation("NhaCungCap");
-
-                    b.Navigation("NhanVien");
                 });
 
             modelBuilder.Entity("DTO.SanPham", b =>
@@ -358,11 +307,6 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("HangSanXuat");
-                });
-
-            modelBuilder.Entity("DTO.ChiNhanh", b =>
-                {
-                    b.Navigation("PhieuNhaps");
                 });
 
             modelBuilder.Entity("DTO.HangSanXuat", b =>
