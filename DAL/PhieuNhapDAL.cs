@@ -19,7 +19,7 @@ namespace DAL
         {
             return _db.ChiNhanhs.ToList();
         }
-
+            
         public bool TaoPhieuNhap(PhieuNhap pn, List<ChiTietPhieuNhap> danhSachChiTiet)
         {
             using (var transaction = _db.Database.BeginTransaction())
@@ -61,6 +61,25 @@ namespace DAL
                     throw new Exception("Lỗi khi lưu Database: " + (ex.InnerException?.Message ?? ex.Message));
                 }
             }
+        }
+
+        public List<LichSuNhapViewModel> GetLichSuNhap()
+        {
+            // Kết nối 3 bảng: PhieuNhap, NhaCungCap, NhanVien để lấy ra Tên
+            var result = (from pn in _db.PhieuNhaps
+                          join ncc in _db.NhaCungCaps on pn.MaNCC equals ncc.MaNCC
+                          join nv in _db.NhanViens on pn.MaNV equals nv.MaNV
+                          select new LichSuNhapViewModel
+                          {
+                              MaPN = pn.MaPN,
+                              NgayNhap = pn.NgayNhap,
+                              TenNCC = ncc.TenNCC,
+                              TenNhanVien = nv.HoTen,
+                              SoSanPham = _db.ChiTietPhieuNhaps.Where(ct => ct.MaPN == pn.MaPN).Sum(ct => ct.SoLuong),
+                              TongTien = pn.TongTien,
+                              TrangThai = pn.TrangThai
+                          }).OrderByDescending(x => x.NgayNhap).ToList();
+            return result;
         }
     }
 }

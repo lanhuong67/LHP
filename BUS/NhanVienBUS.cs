@@ -23,6 +23,11 @@ namespace BUS
         {
             return _nhanVienDAL.ThemNhanVien(nv);
         }
+        public bool XoaNhanVien(string maNV)
+        {
+            // Gọi xuống tầng DAL để thực thi lệnh xóa
+            return _nhanVienDAL.XoaNhanVien(maNV);
+        }
         public bool SuaNhanVien(NhanVien nv)
         {
             // (Tùy chọn) Bạn có thể thêm các logic kiểm tra ở đây, ví dụ:

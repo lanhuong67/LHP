@@ -32,6 +32,29 @@ namespace DAL
                 return false;
             }
         }
+        public bool XoaNhanVien(string maNV)
+        {
+            try
+            {
+                // 1. Tìm nhân viên có mã tương ứng trong Database
+                var nv = _db.NhanViens.FirstOrDefault(n => n.MaNV == maNV);
+
+                // 2. Nếu tìm thấy thì tiến hành xóa
+                if (nv != null)
+                {
+                    _db.NhanViens.Remove(nv);
+                    _db.SaveChanges(); // Chốt lưu xuống SQL Server
+                    return true;
+                }
+                return false; // Không tìm thấy nhân viên
+            }
+            catch
+            {
+                // Nếu chạy vào đây (báo lỗi Exception) thường là do dính Khóa Ngoại.
+                // Tức là nhân viên này đã từng lập Phiếu nhập hoặc Hóa đơn, SQL Server sẽ chặn không cho xóa để bảo toàn lịch sử giao dịch.
+                return false;
+            }
+        }
         // 4. Nghiệp vụ Cập nhật nhân viên
         public bool SuaNhanVien(NhanVien nvUpdate)
         {

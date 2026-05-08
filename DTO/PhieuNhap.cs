@@ -47,4 +47,15 @@ namespace DTO
 
         public virtual ICollection<ChiTietPhieuNhap> ChiTietPhieuNhaps { get; set; } = new List<ChiTietPhieuNhap>();
     }
+
+    public class LichSuNhapViewModel
+    {
+        public string MaPN { get; set; }
+        public DateTime NgayNhap { get; set; }
+        public string TenNCC { get; set; }
+        public string TenNhanVien { get; set; }
+        public int SoSanPham { get; set; }
+        public decimal TongTien { get; set; }
+        public string TrangThai { get; set; }
+    }
 }

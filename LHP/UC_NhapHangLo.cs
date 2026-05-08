@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using BUS;
@@ -10,6 +11,7 @@ namespace GUI
 {
     public partial class UC_NhapHangLo : UserControl
     {
+        private NhanVienBUS _nhanVienBUS = new NhanVienBUS();
         private SanPhamBUS _spBus = new SanPhamBUS();
         private PhieuNhapBUS _pnBus = new PhieuNhapBUS();
 
@@ -27,6 +29,9 @@ namespace GUI
 
             SinhMaPhieu();
             LoadComboBoxes();
+
+            // Gọi hàm load lịch sử khi vừa mở form
+            LoadLichSuNhap();
         }
 
         private void SinhMaPhieu()
@@ -39,13 +44,13 @@ namespace GUI
         {
             try
             {
-                // 1. Load Chi Nhánh từ Database
+                // 1. Load Chi Nhánh
                 var dsChiNhanh = _pnBus.GetAllChiNhanh();
                 cboChiNhanh.DataSource = dsChiNhanh;
                 cboChiNhanh.DisplayMember = "TenChiNhanh";
                 cboChiNhanh.ValueMember = "MaChiNhanh";
 
-                // 2. Load Nhà Cung Cấp
+                // 2. Load Nhà Cung Cấp (Cho Tab Nhập hàng)
                 var dsNCC = _pnBus.GetAllNhaCungCap();
                 cboNhaCungCap.DataSource = dsNCC;
                 cboNhaCungCap.DisplayMember = "TenNCC";
@@ -56,10 +61,38 @@ namespace GUI
                 cboHangSX_Loc.DataSource = dsHang;
                 cboHangSX_Loc.DisplayMember = "TenHang";
                 cboHangSX_Loc.ValueMember = "MaHang";
+
+                // 4. Load Nhân Viên (Chỉ lấy Admin)
+                var dsAdmin = _nhanVienBUS.GetAllNhanVien().Where(nv => nv.VaiTro.ToLower() == "admin").ToList();
+                if (dsAdmin.Count > 0)
+                {
+                    cboNhanVien.DataSource = dsAdmin;
+                    cboNhanVien.DisplayMember = "HoTen";
+                    cboNhanVien.ValueMember = "MaNV";
+                }
+
+                // ==========================================
+                // NẠP DỮ LIỆU CHO 2 COMBOBOX LỌC Ở TAB LỊCH SỬ
+                // ==========================================
+                // 5. Load ComboBox Lọc Nhà Cung Cấp
+                var listNCC_Loc = new List<string>();
+                listNCC_Loc.Add("--Tất cả Nhà cung cấp--");
+                if (dsNCC != null)
+                {
+                    listNCC_Loc.AddRange(dsNCC.Select(ncc => ncc.TenNCC));
+                }
+                cboLocNCC.DataSource = listNCC_Loc;
+
+                // 6. Load ComboBox Lọc Trạng Thái (ĐÃ BỎ LƯU NHÁP)
+                cboLocTrangThai.Items.Clear();
+                cboLocTrangThai.Items.Add("--Tất cả trạng thái--");
+                cboLocTrangThai.Items.Add("Hoàn thành");
+                cboLocTrangThai.Items.Add("Đã hủy"); // Phòng hờ tính năng hủy
+                cboLocTrangThai.SelectedIndex = 0; // Chọn mặc định dòng đầu tiên
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng thêm dữ liệu Chi Nhánh và Nhà Cung Cấp vào Database trước!\nLỗi: " + ex.Message, "Thiếu dữ liệu gốc", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng kiểm tra lại dữ liệu gốc!\nLỗi: " + ex.Message, "Lỗi Tải Dữ Liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -126,7 +159,6 @@ namespace GUI
             lblTongTienNhap.Text = gioHang.Sum(x => x.ThanhTien).ToString("N0") + " đ";
         }
 
-        // TỰ ĐỘNG ĐÁNH STT THEO TÊN CỘT MỚI
         private void dgvChiTietNhap_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dgvChiTietNhap.Columns[e.ColumnIndex].Name == "colNhap_STT")
@@ -135,7 +167,6 @@ namespace GUI
             }
         }
 
-        // XÓA DÒNG THEO TÊN CỘT MỚI
         private void dgvChiTietNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvChiTietNhap.Columns[e.ColumnIndex].Name == "colNhap_Xoa" && e.RowIndex >= 0)
@@ -157,61 +188,12 @@ namespace GUI
             }
         }
 
-        private void btnLuuNhap_Click(object sender, EventArgs e)
-        {
-            if (gioHang.Count == 0) { MessageBox.Show("Chưa có sản phẩm nào để lưu nháp!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (cboNhaCungCap.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Nhà cung cấp!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-
-            // Kiểm tra cboChiNhanh nếu bạn bắt buộc phải có chi nhánh
-            if (cboChiNhanh.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Chi nhánh!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-
-            if (MessageBox.Show("Bạn muốn lưu nháp phiếu này?\nTồn kho sẽ KHÔNG bị thay đổi cho đến khi bạn xác nhận chính thức.", "Xác nhận Lưu nháp", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-            {
-                PhieuNhap pn = new PhieuNhap
-                {
-                    MaPN = txtMaPhieu.Text,
-                    NgayNhap = dtpNgayNhap.Value,
-                    MaNCC = cboNhaCungCap.SelectedValue.ToString(),
-                    MaChiNhanh = cboChiNhanh.SelectedValue.ToString(),
-                    MaNV = "NV01", // Tương lai sẽ lấy mã nhân viên đang đăng nhập
-                    SoHoaDonNCC = txtSoHoaDonNCC.Text,
-                    GhiChu = txtGhiChu.Text,
-                    TongTien = gioHang.Sum(x => x.ThanhTien),
-                    TrangThai = "Lưu nháp" // <--- DÒNG CỐT LÕI ĐỂ BÁO CHO DAL BIẾT
-                };
-
-                List<ChiTietPhieuNhap> dsChiTiet = gioHang.Select(item => new ChiTietPhieuNhap
-                {
-                    MaSP = item.MaSP,
-                    SoLuong = item.SoLuong,
-                    DonGiaNhap = item.GiaNhap,
-                    ThanhTien = item.ThanhTien
-                }).ToList();
-
-                try
-                {
-                    // Vẫn gọi hàm TaoPhieuNhap bình thường, DAL sẽ tự biết phân luồng nhờ cái TrangThai
-                    if (_pnBus.TaoPhieuNhap(pn, dsChiTiet))
-                    {
-                        MessageBox.Show("Đã lưu nháp thành công! Bạn có thể xem lại ở tab Lịch sử nhập hàng.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Dọn dẹp form đón phiếu mới
-                        gioHang.Clear();
-                        CapNhatTongKet();
-                        SinhMaPhieu();
-                        txtSoHoaDonNCC.Clear();
-                        txtGhiChu.Clear();
-                    }
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            }
-        }
-
         private void btnXacNhan_Click(object sender, EventArgs e)
         {
             if (gioHang.Count == 0) { MessageBox.Show("Chưa có sản phẩm nào để nhập!", "Cảnh báo"); return; }
             if (cboNhaCungCap.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Nhà cung cấp!", "Cảnh báo"); return; }
             if (cboChiNhanh.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Chi nhánh!", "Cảnh báo"); return; }
+            if (cboNhanVien.SelectedValue == null) { MessageBox.Show("Không có quyền Admin để lập phiếu nhập!", "Cảnh báo"); return; }
 
             if (MessageBox.Show("Xác nhận nhập lô hàng này? Tồn kho sẽ tăng ngay lập tức.", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
@@ -221,15 +203,13 @@ namespace GUI
                     NgayNhap = dtpNgayNhap.Value,
                     MaNCC = cboNhaCungCap.SelectedValue.ToString(),
                     MaChiNhanh = cboChiNhanh.SelectedValue.ToString(),
-                    // Tương lai khi có form đăng nhập, bạn lấy MaNV gắn vào đây. Hiện tại để tạm "NV01"
-                    MaNV = "NV01",
+                    MaNV = cboNhanVien.SelectedValue.ToString(),
                     SoHoaDonNCC = txtSoHoaDonNCC.Text,
                     GhiChu = txtGhiChu.Text,
                     TongTien = gioHang.Sum(x => x.ThanhTien),
                     TrangThai = "Hoàn thành"
                 };
 
-                // SoLuongDaBan mặc định là 0 đã được set ở DTO, không cần gán ở đây
                 List<ChiTietPhieuNhap> dsChiTiet = gioHang.Select(item => new ChiTietPhieuNhap
                 {
                     MaSP = item.MaSP,
@@ -249,9 +229,75 @@ namespace GUI
                         SinhMaPhieu();
                         txtSoHoaDonNCC.Clear();
                         txtGhiChu.Clear();
+
+                        // Gọi lại hàm này để Lịch sử tự làm mới ngay sau khi nhập xong
+                        LoadLichSuNhap();
                     }
                 }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            }
+        }
+
+        private void LoadLichSuNhap()
+        {
+            var dsLichSu = _pnBus.GetLichSuNhap();
+
+            dgvLichSuNhap.AutoGenerateColumns = false;
+            dgvLichSuNhap.DataSource = dsLichSu;
+
+            lblTongPhieuNhap.Text = dsLichSu.Count.ToString();
+            lblTongSPDaNhap.Text = dsLichSu.Sum(x => x.SoSanPham).ToString();
+            lblTongChi.Text = dsLichSu.Sum(x => x.TongTien).ToString("N0") + " đ";
+        }
+
+        private void btnLoc_Click(object sender, EventArgs e)
+        {
+            var dsLoc = _pnBus.GetLichSuNhap();
+
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
+            dsLoc = dsLoc.Where(x => x.NgayNhap.Date >= tuNgay && x.NgayNhap.Date <= denNgay).ToList();
+
+            string nccDaChon = cboLocNCC.Text.Trim();
+            if (!string.IsNullOrEmpty(nccDaChon) && nccDaChon != "--Tất cả Nhà cung cấp--")
+            {
+                dsLoc = dsLoc.Where(x => x.TenNCC != null && x.TenNCC.Contains(nccDaChon)).ToList();
+            }
+
+            string trangThai = cboLocTrangThai.Text.Trim();
+            if (!string.IsNullOrEmpty(trangThai) && trangThai != "--Tất cả trạng thái--")
+            {
+                dsLoc = dsLoc.Where(x => x.TrangThai == trangThai).ToList();
+            }
+
+            dgvLichSuNhap.DataSource = dsLoc;
+
+            lblTongPhieuNhap.Text = dsLoc.Count.ToString();
+            lblTongSPDaNhap.Text = dsLoc.Sum(x => x.SoSanPham).ToString();
+            lblTongChi.Text = dsLoc.Sum(x => x.TongTien).ToString("N0") + " đ";
+        }
+
+        private void btnLamMoi_Click(object sender, EventArgs e)
+        {
+            dtpTuNgay.Value = DateTime.Now;
+            dtpDenNgay.Value = DateTime.Now;
+            cboLocNCC.Text = "--Tất cả Nhà cung cấp--";
+            cboLocTrangThai.Text = "--Tất cả trạng thái--";
+
+            LoadLichSuNhap();
+        }
+
+        private void dgvLichSuNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Kiểm tra click đúng vào cột Chi tiết
+            if (e.RowIndex >= 0 && dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colChiTiet")
+            {
+                LichSuNhapViewModel phieuDuocChon = dgvLichSuNhap.Rows[e.RowIndex].DataBoundItem as LichSuNhapViewModel;
+
+                if (phieuDuocChon != null)
+                {
+                    MessageBox.Show($"Mã Phiếu: {phieuDuocChon.MaPN}\nNhà cung cấp: {phieuDuocChon.TenNCC}\nTổng tiền: {phieuDuocChon.TongTien:N0} đ\n\nForm xem chi tiết sẽ được phát triển ở giai đoạn sau.", "Thông tin phiếu nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
     }

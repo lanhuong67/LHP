@@ -88,6 +88,7 @@
             btnXoa.TabIndex = 18;
             btnXoa.Text = "✖ Xóa";
             btnXoa.UseVisualStyleBackColor = false;
+            btnXoa.Click += btnXoa_Click;
             // 
             // btnSua
             // 
@@ -347,7 +348,7 @@
             btnThemNV.FlatStyle = FlatStyle.Flat;
             btnThemNV.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnThemNV.ForeColor = Color.White;
-            btnThemNV.Location = new Point(36, 191);
+            btnThemNV.Location = new Point(36, 179);
             btnThemNV.Name = "btnThemNV";
             btnThemNV.Size = new Size(185, 51);
             btnThemNV.TabIndex = 14;

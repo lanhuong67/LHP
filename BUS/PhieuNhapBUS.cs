@@ -10,6 +10,11 @@ namespace BUS
 
         public List<NhaCungCap> GetAllNhaCungCap() => _dal.GetAllNhaCungCap();
         public List<ChiNhanh> GetAllChiNhanh() => _dal.GetAllChiNhanh();
+
         public bool TaoPhieuNhap(PhieuNhap pn, List<ChiTietPhieuNhap> ds) => _dal.TaoPhieuNhap(pn, ds);
+        public List<LichSuNhapViewModel> GetLichSuNhap()
+        {
+            return _dal.GetLichSuNhap();
+        }
     }
 }

@@ -60,9 +60,9 @@
             label1.ForeColor = Color.White;
             label1.Location = new Point(62, 120);
             label1.Name = "label1";
-            label1.Size = new Size(342, 35);
+            label1.Size = new Size(344, 35);
             label1.TabIndex = 1;
-            label1.Text = "Quản lý của hàng điện thoại";
+            label1.Text = "Quản lý cửa hàng điện thoại";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             label1.Click += label1_Click;
             // 

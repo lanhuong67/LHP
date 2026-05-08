@@ -152,12 +152,48 @@ namespace GUI
                 (nv.SDT != null && nv.SDT.Contains(keyword)) // Tìm theo SĐT
             ).ToList();
         }
+        // ==========================================
+        // SỰ KIỆN 5: XÓA NHÂN VIÊN
+        // ==========================================
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            // 1. Kiểm tra xem người dùng đã chọn nhân viên nào trên lưới chưa
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            {
+                MessageBox.Show("Vui lòng chọn một nhân viên từ danh sách để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            string maNV = txtMaNV.Text.Trim();
+            string hoTen = txtHoTen.Text.Trim();
+
+            // 2. Hiển thị cảnh báo xác nhận (Cực kỳ quan trọng để tránh xóa nhầm)
+            DialogResult result = MessageBox.Show($"Bạn có thực sự muốn xóa nhân viên [{hoTen}] không?\nDữ liệu đã xóa sẽ không thể khôi phục!", "Cảnh báo xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                // 3. Gọi tầng BUS thực hiện xóa 
+                if (_nhanVienBUS.XoaNhanVien(maNV))
+                {
+                    MessageBox.Show("Đã xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Xóa xong thì phải load lại lưới và dọn dẹp form
+                    LoadData();
+                    btnLamTrong_Click(sender, e);
+                }
+                else
+                {
+                    // Lỗi này thường do Khóa ngoại (Nhân viên này đã từng lập Hóa đơn hoặc Phiếu nhập)
+                    MessageBox.Show("Xóa thất bại! Nhân viên này có thể đã phát sinh giao dịch trong hệ thống (ràng buộc dữ liệu).", "Lỗi khóa ngoại", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTimKiem.Clear();
             LoadData();
         }
+
 
         private void btnSua_Click(object sender, EventArgs e)
         {
