@@ -58,7 +58,6 @@
             btnThemNV = new Button();
             panel1 = new Panel();
             btnLamMoi = new Button();
-            btnTimKiem = new Button();
             txtTimKiem = new TextBox();
             label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvNhanVien).BeginInit();
@@ -176,14 +175,14 @@
             panel2.Location = new Point(668, 58);
             panel2.Name = "panel2";
             panel2.Size = new Size(428, 852);
-            panel2.TabIndex = 15;
+            panel2.TabIndex = 1;
             // 
             // txtMaNV
             // 
             txtMaNV.Location = new Point(160, 42);
             txtMaNV.Name = "txtMaNV";
             txtMaNV.Size = new Size(132, 27);
-            txtMaNV.TabIndex = 24;
+            txtMaNV.TabIndex = 0;
             // 
             // txtMatKhau
             // 
@@ -191,7 +190,7 @@
             txtMatKhau.Location = new Point(19, 494);
             txtMatKhau.Name = "txtMatKhau";
             txtMatKhau.Size = new Size(390, 31);
-            txtMatKhau.TabIndex = 22;
+            txtMatKhau.TabIndex = 13;
             // 
             // label9
             // 
@@ -209,7 +208,7 @@
             txtTaiKhoan.Location = new Point(19, 418);
             txtTaiKhoan.Name = "txtTaiKhoan";
             txtTaiKhoan.Size = new Size(390, 31);
-            txtTaiKhoan.TabIndex = 21;
+            txtTaiKhoan.TabIndex = 12;
             // 
             // btnLamTrong
             // 
@@ -255,7 +254,7 @@
             txtVaiTro.Location = new Point(19, 342);
             txtVaiTro.Name = "txtVaiTro";
             txtVaiTro.Size = new Size(390, 31);
-            txtVaiTro.TabIndex = 17;
+            txtVaiTro.TabIndex = 11;
             // 
             // label10
             // 
@@ -273,7 +272,7 @@
             txtEmail.Location = new Point(19, 266);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(390, 31);
-            txtEmail.TabIndex = 13;
+            txtEmail.TabIndex = 10;
             // 
             // label8
             // 
@@ -291,7 +290,7 @@
             txtSDT.Location = new Point(19, 193);
             txtSDT.Name = "txtSDT";
             txtSDT.Size = new Size(390, 31);
-            txtSDT.TabIndex = 11;
+            txtSDT.TabIndex = 8;
             // 
             // label7
             // 
@@ -318,7 +317,7 @@
             label6.Location = new Point(19, 89);
             label6.Name = "label6";
             label6.Size = new Size(66, 25);
-            label6.TabIndex = 10;
+            label6.TabIndex = 5;
             label6.Text = "Họ tên";
             // 
             // label4
@@ -361,7 +360,6 @@
             panel1.BackColor = Color.White;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(btnLamMoi);
-            panel1.Controls.Add(btnTimKiem);
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
             panel1.Location = new Point(17, 58);
@@ -383,28 +381,17 @@
             btnLamMoi.UseVisualStyleBackColor = false;
             btnLamMoi.Click += btnLamMoi_Click;
             // 
-            // btnTimKiem
-            // 
-            btnTimKiem.BackColor = SystemColors.HotTrack;
-            btnTimKiem.FlatStyle = FlatStyle.Flat;
-            btnTimKiem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnTimKiem.ForeColor = Color.White;
-            btnTimKiem.Location = new Point(363, 48);
-            btnTimKiem.Name = "btnTimKiem";
-            btnTimKiem.Size = new Size(114, 39);
-            btnTimKiem.TabIndex = 6;
-            btnTimKiem.Text = "Tìm kiếm";
-            btnTimKiem.UseVisualStyleBackColor = false;
-            btnTimKiem.Click += btnTimKiem_Click;
-            // 
             // txtTimKiem
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
             txtTimKiem.Location = new Point(9, 52);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(348, 31);
+            txtTimKiem.Size = new Size(468, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tìm tên hoặc số điện thoại...";
+            txtTimKiem.TextChanged += txtTimKiem_TextChanged;
+            txtTimKiem.Enter += txtTimKiem_Enter;
+            txtTimKiem.Leave += txtTimKiem_Leave;
             // 
             // label2
             // 
@@ -463,7 +450,6 @@
         private Button btnThemNV;
         private Panel panel1;
         private Button btnLamMoi;
-        private Button btnTimKiem;
         private TextBox txtTimKiem;
         private Label label2;
         private TextBox txtMatKhau;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BUS;
 using DTO;
@@ -11,18 +12,90 @@ namespace GUI
         {
             InitializeComponent();
 
-            // LỖI 1: Mật khẩu không ẩn -> Dùng thuộc tính này để hiện dấu chấm tròn bảo mật
-            txtMatKhau.UseSystemPasswordChar = true;
-
-            // LỖI 2: Vẫn hiện lblError -> Ẩn nó đi ngay khi vừa mở Form
+            // Khởi tạo trạng thái ban đầu
             lblError.Visible = false;
+            SetPlaceholder();
+
+            // Kích hoạt tính năng hiện đại: Bấm Enter để đăng nhập
+            txtTenDangNhap.KeyDown += Txt_KeyDown;
+            txtMatKhau.KeyDown += Txt_KeyDown;
         }
 
+        // ==========================================
+        // 1. HIỆU ỨNG CHỮ MỜ (PLACEHOLDER)
+        // ==========================================
+        private void SetPlaceholder()
+        {
+            if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
+            {
+                txtTenDangNhap.Text = "Nhập tên đăng nhập...";
+                txtTenDangNhap.ForeColor = Color.Gray;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
+            {
+                txtMatKhau.Text = "Nhập mật khẩu...";
+                txtMatKhau.ForeColor = Color.Gray;
+                // Khi đang hiện chữ mờ thì TẮT dấu chấm tròn để đọc được chữ
+                txtMatKhau.UseSystemPasswordChar = false;
+            }
+        }
+
+        // Khi trỏ chuột VÀO ô Tài khoản
+        private void txtTenDangNhap_Enter(object sender, EventArgs e)
+        {
+            if (txtTenDangNhap.Text == "Nhập tên đăng nhập...")
+            {
+                txtTenDangNhap.Text = "";
+                txtTenDangNhap.ForeColor = Color.Black;
+            }
+        }
+
+        // Khi trỏ chuột RA KHỎI ô Tài khoản
+        private void txtTenDangNhap_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
+            {
+                txtTenDangNhap.Text = "Nhập tên đăng nhập...";
+                txtTenDangNhap.ForeColor = Color.Gray;
+            }
+        }
+
+        // Khi trỏ chuột VÀO ô Mật khẩu
+        private void txtMatKhau_Enter(object sender, EventArgs e)
+        {
+            if (txtMatKhau.Text == "Nhập mật khẩu...")
+            {
+                txtMatKhau.Text = "";
+                txtMatKhau.ForeColor = Color.Black;
+                // Bắt đầu gõ thì BẬT dấu chấm tròn bảo mật lên
+                txtMatKhau.UseSystemPasswordChar = true;
+            }
+        }
+
+        // Khi trỏ chuột RA KHỎI ô Mật khẩu
+        private void txtMatKhau_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
+            {
+                txtMatKhau.Text = "Nhập mật khẩu...";
+                txtMatKhau.ForeColor = Color.Gray;
+                // Không có text thì tắt dấu chấm để hiện chữ mờ
+                txtMatKhau.UseSystemPasswordChar = false;
+            }
+        }
+
+        // ==========================================
+        // 2. XỬ LÝ ĐĂNG NHẬP
+        // ==========================================
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
-            // LỖI 3: Không ấn đăng nhập không xảy ra gì -> 
-            // Bước 1: Kiểm tra xem ô nhập có bị trống không trước khi gọi xuống Database
-            if (string.IsNullOrEmpty(txtTenDangNhap.Text) || string.IsNullOrEmpty(txtMatKhau.Text))
+            string user = txtTenDangNhap.Text.Trim();
+            string pass = txtMatKhau.Text.Trim();
+
+            // Kiểm tra xem người dùng có lười chưa gõ gì mà để nguyên chữ mờ rồi bấm Đăng nhập không
+            if (string.IsNullOrEmpty(user) || user == "Nhập tên đăng nhập..." ||
+                string.IsNullOrEmpty(pass) || pass == "Nhập mật khẩu...")
             {
                 lblError.Text = "Vui lòng nhập đầy đủ thông tin!";
                 lblError.Visible = true;
@@ -30,13 +103,11 @@ namespace GUI
             }
 
             NhanVienBUS bus = new NhanVienBUS();
-            NhanVien tk = bus.Login(txtTenDangNhap.Text, txtMatKhau.Text);
+            NhanVien tk = bus.Login(user, pass);
 
             if (tk != null)
             {
                 lblError.Visible = false;
-
-                // Mở Form chính và truyền dữ liệu
                 FormMain frm = new FormMain(tk.VaiTro, tk.TenDangNhap);
                 this.Hide();
                 frm.ShowDialog();
@@ -44,42 +115,22 @@ namespace GUI
             }
             else
             {
-                // Hiển thị lỗi nếu sai tài khoản/mật khẩu
-                lblError.Text = "Tài khoản hoặc mật khẩu không đúng";
+                lblError.Text = "Tài khoản hoặc mật khẩu không đúng!";
                 lblError.Visible = true;
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        // ==========================================
+        // 3. TÍNH NĂNG BẤM ENTER TỰ ĐĂNG NHẬP
+        // ==========================================
+        private void Txt_KeyDown(object sender, KeyEventArgs e)
         {
-            // Để trống hoặc xóa nếu không dùng
-        }
-
-        private void btnDangNhap_Click_1(object sender, EventArgs e)
-        {
-            // Lấy thông tin người dùng nhập
-            string user = txtTenDangNhap.Text.Trim();
-            string pass = txtMatKhau.Text.Trim();
-
-            // Gọi lớp BUS để kiểm tra Database
-            NhanVienBUS bus = new NhanVienBUS();
-            NhanVien tk = bus.Login(user, pass);
-
-            if (tk != null) // Đăng nhập thành công
+            if (e.KeyCode == Keys.Enter)
             {
-                lblError.Visible = false; // Ẩn lỗi
-                
-
-                // Truyền 2 tham số: Vai trò và Tên đăng nhập sang FormMain
-                FormMain frm = new FormMain(tk.VaiTro, tk.TenDangNhap);
-                this.Hide();
-                frm.ShowDialog();
-                this.Close(); // Đóng hẳn khi thoát FormMain
-            }
-            else // Đăng nhập thất bại (Sai user hoặc pass)
-            {
-                lblError.Text = "Tài khoản hoặc mật khẩu không đúng!";
-                lblError.Visible = true; // Hiện dòng lỗi màu đỏ lên
+                // Ngăn chặn tiếng bíp (ding) mặc định của Windows
+                e.SuppressKeyPress = true;
+                // Gọi thẳng hàm click nút đăng nhập
+                btnDangNhap_Click(sender, e);
             }
         }
     }

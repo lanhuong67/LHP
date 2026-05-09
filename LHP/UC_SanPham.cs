@@ -32,6 +32,9 @@ namespace GUI
 
             LoadComboBoxHang();
             LoadData();
+
+            // Khởi tạo chữ mờ cho thanh tìm kiếm
+            SetPlaceholderTimKiem();
         }
 
         // Tải dữ liệu vào 2 ComboBox Hãng Sản Xuất
@@ -49,7 +52,7 @@ namespace GUI
                 // 2. Load cho ComboBox phần Tìm kiếm (Có thêm dòng "--Tất cả hãng--")
                 var dsHangTimKiem = new List<HangSanXuat>();
                 dsHangTimKiem.Add(new HangSanXuat { MaHang = "", TenHang = "--Tất cả hãng--" });
-                dsHangTimKiem.AddRange(dsHang); // Nối danh sách hãng thật vào sau
+                if (dsHang != null) dsHangTimKiem.AddRange(dsHang); // Nối danh sách hãng thật vào sau
 
                 cboTimKiemHang.DataSource = dsHangTimKiem;
                 cboTimKiemHang.DisplayMember = "TenHang";
@@ -231,44 +234,15 @@ namespace GUI
             }
         }
 
-        private void btnTimKiem_Click(object sender, EventArgs e)
-        {
-            string keyword = txtTimKiem.Text.Trim().ToLower();
-            string maHangLoc = cboTimKiemHang.SelectedValue?.ToString() ?? "";
-
-            try
-            {
-                var ds = _bus.GetAll();
-
-                // Lọc theo từ khóa (Mã hoặc Tên)
-                if (!string.IsNullOrEmpty(keyword))
-                {
-                    ds = ds.Where(s =>
-                        (s.TenSP != null && s.TenSP.ToLower().Contains(keyword)) ||
-                        (s.MaSP != null && s.MaSP.ToLower().Contains(keyword))
-                    ).ToList();
-                }
-
-                // Lọc theo Hãng Sản Xuất (nếu người dùng không chọn "--Tất cả hãng--")
-                if (!string.IsNullOrEmpty(maHangLoc))
-                {
-                    ds = ds.Where(s => s.MaHang == maHangLoc).ToList();
-                }
-
-                dgvSanPham.DataSource = ds;
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-        }
-
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTimKiem.Clear();
-            if (cboTimKiemHang.Items.Count > 0) cboTimKiemHang.SelectedIndex = 0;
+            SetPlaceholderTimKiem();
+            if (cboTimKiemHang.Items.Count > 0) cboTimKiemHang.SelectedIndex = 0; // Đưa bộ lọc hãng về "--Tất cả hãng--"
             LoadData();
             btnLamTrong_Click(sender, e);
         }
 
-        // Sự kiện cho nút Nhập kho (Tương lai bạn sẽ code gọi form Nhập lô ở đây)
         private void btnNhapKho_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtMaSP.Text))
@@ -277,6 +251,104 @@ namespace GUI
                 return;
             }
             MessageBox.Show($"Chức năng sẽ điều hướng sang Form Nhập hàng lô cho mã: {txtMaSP.Text}", "Đang phát triển", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // ==========================================
+        // CÁC HÀM XỬ LÝ THANH TÌM KIẾM MỚI (REAL-TIME)
+        // ==========================================
+
+        private void SetPlaceholderTimKiem()
+        {
+            if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
+            {
+                txtTimKiem.Text = "Tên sản phẩm...";
+                txtTimKiem.ForeColor = System.Drawing.Color.Gray;
+            }
+        }
+
+        private void txtTimKiem_Enter(object sender, EventArgs e)
+        {
+            if (txtTimKiem.Text == "Tên sản phẩm...")
+            {
+                txtTimKiem.Text = "";
+                txtTimKiem.ForeColor = System.Drawing.Color.Black;
+            }
+        }
+
+        private void txtTimKiem_Leave(object sender, EventArgs e)
+        {
+            SetPlaceholderTimKiem();
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "";
+
+            var normalizedString = text.Normalize(System.Text.NormalizationForm.FormD);
+            var stringBuilder = new System.Text.StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != System.Globalization.UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC)
+                                .Replace("đ", "d").Replace("Đ", "D");
+        }
+
+        // HÀM LỌC CHUNG CHO CẢ TEXTBOX VÀ COMBOBOX
+        private void ThucHienLocDuLieu()
+        {
+            // Tránh lỗi khi form chưa load xong dữ liệu
+            if (_bus == null) return;
+
+            string keyword = txtTimKiem.Text.Trim();
+            string maHangLoc = cboTimKiemHang.SelectedValue?.ToString() ?? "";
+
+            try
+            {
+                var ds = _bus.GetAll();
+
+                // 1. Lọc theo từ khóa (Mã, Tên, Cấu hình) - Có không dấu
+                if (!string.IsNullOrEmpty(keyword) && keyword != "Tên sản phẩm...")
+                {
+                    string keywordUnsign = RemoveDiacritics(keyword).ToLower();
+                    ds = ds.Where(s =>
+                        (s.TenSP != null && RemoveDiacritics(s.TenSP).ToLower().Contains(keywordUnsign)) ||
+                        (s.MaSP != null && RemoveDiacritics(s.MaSP).ToLower().Contains(keywordUnsign)) ||
+                        (s.CauHinh != null && RemoveDiacritics(s.CauHinh).ToLower().Contains(keywordUnsign))
+                    ).ToList();
+                }
+
+                // 2. Lọc theo Hãng Sản Xuất (Nếu người dùng không chọn "--Tất cả hãng--")
+                // Điều kiện cboTimKiemHang.SelectedIndex > 0 để bỏ qua dòng "--Tất cả hãng--" ở trên cùng
+                if (!string.IsNullOrEmpty(maHangLoc) && cboTimKiemHang.SelectedIndex > 0)
+                {
+                    ds = ds.Where(s => s.MaHang == maHangLoc).ToList();
+                }
+
+                dgvSanPham.DataSource = ds;
+            }
+            catch (Exception)
+            {
+                // Bỏ qua lỗi ngầm khi gõ quá nhanh
+            }
+        }
+
+        // Bắt sự kiện khi gõ chữ
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            ThucHienLocDuLieu();
+        }
+
+        // Bắt sự kiện khi chọn hãng
+        private void cboTimKiemHang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ThucHienLocDuLieu();
         }
     }
 }

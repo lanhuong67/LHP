@@ -3,107 +3,92 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using BUS; // Khai báo để dùng lớp Nghiệp vụ
-using DTO; // Khai báo để dùng lớp Dữ liệu NhanVien
+using BUS;
+using DTO;
 
 namespace GUI
 {
     public partial class UC_NhanVien : UserControl
     {
-        // Khai báo công cụ giao tiếp với Database
         private NhanVienBUS _nhanVienBUS = new NhanVienBUS();
-        private bool isAdding = false; // Biến đánh dấu xem đang Thêm hay Sửa
+        private bool isAdding = false;
 
         public UC_NhanVien()
         {
             InitializeComponent();
         }
 
-        // ==========================================
-        // SỰ KIỆN 1: KHI FORM VỪA MỞ LÊN
-        // ==========================================
         private void UC_NhanVien_Load(object sender, EventArgs e)
         {
-            dgvNhanVien.AutoGenerateColumns = false; // Tắt tự động sinh cột
-            LoadData(); // Gọi hàm load dữ liệu
+            dgvNhanVien.AutoGenerateColumns = false;
+            LoadData();
+
+            // Khởi tạo chữ mờ cho thanh tìm kiếm lúc vừa mở Form
+            SetPlaceholderTimKiem();
         }
 
-        // Hàm hỗ trợ Load dữ liệu lên Lưới (DataGridView)
         private void LoadData()
         {
             dgvNhanVien.DataSource = _nhanVienBUS.GetAllNhanVien();
 
-            // Ẩn cột Mật khẩu đi để bảo mật
             if (dgvNhanVien.Columns["MatKhau"] != null)
             {
                 dgvNhanVien.Columns["MatKhau"].Visible = false;
             }
         }
 
-        // ==========================================
-        // SỰ KIỆN 2: KHI CLICK VÀO 1 DÒNG TRÊN LƯỚI
-        // ==========================================
         private void dgvNhanVien_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Đảm bảo click đúng vào dòng có dữ liệu (không click vào tiêu đề)
             if (e.RowIndex >= 0)
             {
-                // "Tóm" lấy đối tượng NhanVien đang ẩn đằng sau dòng được click
                 NhanVien nv = dgvNhanVien.Rows[e.RowIndex].DataBoundItem as NhanVien;
 
-                // Nếu đối tượng tồn tại (không bị null)
                 if (nv != null)
                 {
-                    // Đổ trực tiếp dữ liệu từ Object vào TextBox
                     txtMaNV.Text = nv.MaNV;
                     txtHoTen.Text = nv.HoTen;
                     txtSDT.Text = nv.SDT;
                     txtEmail.Text = nv.Email;
                     txtVaiTro.Text = nv.VaiTro;
-
-                    // Lấy trực tiếp tên đăng nhập và mật khẩu từ Object, không cần quan tâm trên lưới có cột này hay không!
                     txtTaiKhoan.Text = nv.TenDangNhap;
                     txtMatKhau.Text = nv.MatKhau;
 
-                    isAdding = false; // Chuyển về trạng thái xem/sửa
-                    txtMaNV.ReadOnly = true; // Khóa Mã NV
+                    isAdding = false;
+                    txtMaNV.ReadOnly = true;
                 }
             }
         }
 
-        // ==========================================
-        // SỰ KIỆN 3: CÁC NÚT BẤM (THÊM, LƯU, LÀM TRỐNG)
-        // ==========================================
         private void btnThemNV_Click(object sender, EventArgs e)
         {
-            isAdding = true; // Bật chế độ thêm mới
-
-            // Xóa trắng các ô nhập
-            txtMaNV.Clear(); txtHoTen.Clear(); txtSDT.Clear();
-            txtEmail.Clear(); txtVaiTro.Clear(); txtTaiKhoan.Clear(); txtMatKhau.Clear();
-
-            txtMaNV.ReadOnly = false; // Mở khóa cho phép nhập Mã NV
-            txtMaNV.Focus(); // Đưa con trỏ nhấp nháy vào ô Mã NV
+            isAdding = true;
+            ClearForm();
+            txtMaNV.ReadOnly = false;
+            txtMaNV.Focus();
         }
 
         private void btnLamTrong_Click(object sender, EventArgs e)
         {
-            // Chỉ xóa trắng form, không bật chế độ thêm
+            ClearForm();
+            txtMaNV.ReadOnly = false;
+        }
+
+        // Hàm hỗ trợ xóa trắng các ô nhập liệu
+        private void ClearForm()
+        {
             txtMaNV.Clear(); txtHoTen.Clear(); txtSDT.Clear();
             txtEmail.Clear(); txtVaiTro.Clear(); txtTaiKhoan.Clear(); txtMatKhau.Clear();
-            txtMaNV.ReadOnly = false;
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            // Bắt lỗi: Không cho bỏ trống các trường quan trọng
             if (string.IsNullOrWhiteSpace(txtMaNV.Text) || string.IsNullOrWhiteSpace(txtHoTen.Text) || string.IsNullOrWhiteSpace(txtTaiKhoan.Text))
             {
                 MessageBox.Show("Vui lòng nhập Mã NV, Họ tên và Tài khoản!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (isAdding) // Nếu đang ở chế độ Thêm mới
+            if (isAdding)
             {
                 NhanVien nvMoi = new NhanVien
                 {
@@ -119,7 +104,7 @@ namespace GUI
                 if (_nhanVienBUS.ThemNhanVien(nvMoi))
                 {
                     MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadData(); // Load lại lưới để thấy nhân viên mới
+                    LoadData();
                     isAdding = false;
                 }
                 else
@@ -129,35 +114,44 @@ namespace GUI
             }
         }
 
-        // ==========================================
-        // SỰ KIỆN 4: TÌM KIẾM
-        // ==========================================
-        private void btnTimKiem_Click(object sender, EventArgs e)
+        private void btnSua_Click(object sender, EventArgs e)
         {
-            string keyword = txtTimKiem.Text.Trim().ToLower();
-
-            // Nếu để trống thì load lại toàn bộ
-            if (string.IsNullOrEmpty(keyword))
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
-                LoadData();
+                MessageBox.Show("Vui lòng chọn một nhân viên từ danh sách để sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var ds = _nhanVienBUS.GetAllNhanVien();
+            NhanVien nvCapNhat = new NhanVien
+            {
+                MaNV = txtMaNV.Text.Trim(),
+                HoTen = txtHoTen.Text.Trim(),
+                SDT = txtSDT.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                VaiTro = txtVaiTro.Text.Trim(),
+                TenDangNhap = txtTaiKhoan.Text.Trim(),
+                MatKhau = txtMatKhau.Text.Trim()
+            };
 
-            // Cập nhật: Thêm điều kiện tìm kiếm theo MaNV
-            dgvNhanVien.DataSource = ds.Where(nv =>
-                (nv.MaNV != null && nv.MaNV.ToLower().Contains(keyword)) || // Tìm theo Mã NV
-                (nv.HoTen != null && nv.HoTen.ToLower().Contains(keyword)) || // Tìm theo Tên
-                (nv.SDT != null && nv.SDT.Contains(keyword)) // Tìm theo SĐT
-            ).ToList();
+            DialogResult dialogResult = MessageBox.Show($"Bạn có chắc chắn muốn cập nhật thông tin cho nhân viên [{nvCapNhat.HoTen}] không?", "Xác nhận sửa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                if (_nhanVienBUS.SuaNhanVien(nvCapNhat))
+                {
+                    MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadData();
+                    btnLamTrong_Click(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Cập nhật thất bại. Vui lòng kiểm tra lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
-        // ==========================================
-        // SỰ KIỆN 5: XÓA NHÂN VIÊN
-        // ==========================================
+
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            // 1. Kiểm tra xem người dùng đã chọn nhân viên nào trên lưới chưa
             if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
                 MessageBox.Show("Vui lòng chọn một nhân viên từ danh sách để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -167,75 +161,106 @@ namespace GUI
             string maNV = txtMaNV.Text.Trim();
             string hoTen = txtHoTen.Text.Trim();
 
-            // 2. Hiển thị cảnh báo xác nhận (Cực kỳ quan trọng để tránh xóa nhầm)
             DialogResult result = MessageBox.Show($"Bạn có thực sự muốn xóa nhân viên [{hoTen}] không?\nDữ liệu đã xóa sẽ không thể khôi phục!", "Cảnh báo xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
-                // 3. Gọi tầng BUS thực hiện xóa 
                 if (_nhanVienBUS.XoaNhanVien(maNV))
                 {
                     MessageBox.Show("Đã xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Xóa xong thì phải load lại lưới và dọn dẹp form
                     LoadData();
                     btnLamTrong_Click(sender, e);
                 }
                 else
                 {
-                    // Lỗi này thường do Khóa ngoại (Nhân viên này đã từng lập Hóa đơn hoặc Phiếu nhập)
-                    MessageBox.Show("Xóa thất bại! Nhân viên này có thể đã phát sinh giao dịch trong hệ thống (ràng buộc dữ liệu).", "Lỗi khóa ngoại", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Xóa thất bại! Nhân viên này có thể đã phát sinh giao dịch trong hệ thống.", "Lỗi khóa ngoại", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
+
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTimKiem.Clear();
-            LoadData();
+            SetPlaceholderTimKiem(); // Trả lại chữ mờ
+            LoadData(); // Tải lại toàn bộ dữ liệu
         }
 
+        // ==========================================
+        // CÁC HÀM XỬ LÝ THANH TÌM KIẾM MỚI
+        // ==========================================
 
-        private void btnSua_Click(object sender, EventArgs e)
+        private void SetPlaceholderTimKiem()
         {
-            // 1. Kiểm tra xem người dùng đã chọn nhân viên nào trên lưới chưa
-            // Nếu ô txtMaNV đang trống nghĩa là chưa chọn
-            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
             {
-                MessageBox.Show("Vui lòng chọn một nhân viên từ danh sách để sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTimKiem.Text = "Tìm tên hoặc số điện thoại...";
+                txtTimKiem.ForeColor = System.Drawing.Color.Gray;
+            }
+        }
+
+        // 1. Khi click chuột VÀO ô tìm kiếm
+        private void txtTimKiem_Enter(object sender, EventArgs e)
+        {
+            if (txtTimKiem.Text == "Tìm tên hoặc số điện thoại...")
+            {
+                txtTimKiem.Text = "";
+                txtTimKiem.ForeColor = System.Drawing.Color.Black;
+            }
+        }
+
+        // 2. Khi click chuột RA KHỎI ô tìm kiếm
+        private void txtTimKiem_Leave(object sender, EventArgs e)
+        {
+            SetPlaceholderTimKiem();
+        }
+
+        // ==========================================
+        // HÀM HỖ TRỢ: LOẠI BỎ DẤU TIẾNG VIỆT
+        // ==========================================
+        private string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "";
+
+            var normalizedString = text.Normalize(System.Text.NormalizationForm.FormD);
+            var stringBuilder = new System.Text.StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != System.Globalization.UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            // Xử lý riêng chữ Đ (vì nó không phải là dấu)
+            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC)
+                                .Replace("đ", "d").Replace("Đ", "D");
+        }
+
+        // 3. Cơ chế: Tìm tới đâu, lọc tới đó (Đã update Không dấu & Tìm theo Vai trò)
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            string keyword = txtTimKiem.Text.Trim();
+
+            // Bỏ qua nếu đang là chữ mờ hoặc trống
+            if (string.IsNullOrEmpty(keyword) || keyword == "Tìm tên hoặc số điện thoại...")
+            {
+                LoadData();
                 return;
             }
 
-            // 2. Gom dữ liệu mới từ các TextBox vào đối tượng DTO
-            NhanVien nvCapNhat = new NhanVien
-            {
-                MaNV = txtMaNV.Text.Trim(), // Lấy MaNV cũ để làm mỏ neo tìm kiếm
-                HoTen = txtHoTen.Text.Trim(),
-                SDT = txtSDT.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
-                VaiTro = txtVaiTro.Text.Trim(),
-                TenDangNhap = txtTaiKhoan.Text.Trim(),
-                MatKhau = txtMatKhau.Text.Trim()
-            };
+            // Chuyển TỪ KHÓA về dạng: Không dấu + Chữ thường
+            string keywordUnsign = RemoveDiacritics(keyword).ToLower();
 
-            // 3. Hiển thị thông báo xác nhận trước khi sửa (Tránh bấm nhầm)
-            DialogResult dialogResult = MessageBox.Show($"Bạn có chắc chắn muốn cập nhật thông tin cho nhân viên [{nvCapNhat.HoTen}] không?", "Xác nhận sửa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var ds = _nhanVienBUS.GetAllNhanVien();
 
-            if (dialogResult == DialogResult.Yes)
-            {
-                // Gọi BUS thực hiện cập nhật
-                if (_nhanVienBUS.SuaNhanVien(nvCapNhat))
-                {
-                    MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadData(); // Load lại lưới để thấy sự thay đổi ngay lập tức
-
-                    // Xóa rỗng form và mở khóa để sẵn sàng thao tác khác
-                    btnLamTrong_Click(sender, e);
-                }
-                else
-                {
-                    MessageBox.Show("Cập nhật thất bại. Vui lòng kiểm tra lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            dgvNhanVien.DataSource = ds.Where(nv =>
+                (nv.MaNV != null && RemoveDiacritics(nv.MaNV).ToLower().Contains(keywordUnsign)) ||
+                (nv.HoTen != null && RemoveDiacritics(nv.HoTen).ToLower().Contains(keywordUnsign)) ||
+                (nv.SDT != null && nv.SDT.Contains(keywordUnsign)) ||
+                (nv.VaiTro != null && RemoveDiacritics(nv.VaiTro).ToLower().Contains(keywordUnsign))
+            ).ToList();
         }
     }
 }

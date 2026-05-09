@@ -32,6 +32,11 @@
             btnXoa = new Button();
             btnSua = new Button();
             dgvHangSanXuat = new DataGridView();
+            colMaHang = new DataGridViewTextBoxColumn();
+            colTenHang = new DataGridViewTextBoxColumn();
+            colQuocGia = new DataGridViewTextBoxColumn();
+            colMota = new DataGridViewTextBoxColumn();
+            Column1 = new DataGridViewTextBoxColumn();
             panel2 = new Panel();
             txtMoTa = new TextBox();
             txtQuocGia = new TextBox();
@@ -49,14 +54,8 @@
             btnThem = new Button();
             panel1 = new Panel();
             btnLamMoi = new Button();
-            btnTimKiem = new Button();
             txtTimKiem = new TextBox();
             label2 = new Label();
-            colMaHang = new DataGridViewTextBoxColumn();
-            colTenHang = new DataGridViewTextBoxColumn();
-            colQuocGia = new DataGridViewTextBoxColumn();
-            colMota = new DataGridViewTextBoxColumn();
-            Column1 = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvHangSanXuat).BeginInit();
             panel2.SuspendLayout();
             panel1.SuspendLayout();
@@ -112,6 +111,41 @@
             dgvHangSanXuat.Size = new Size(602, 638);
             dgvHangSanXuat.TabIndex = 28;
             dgvHangSanXuat.CellClick += dgvHangSanXuat_CellClick;
+            // 
+            // colMaHang
+            // 
+            colMaHang.DataPropertyName = "MaHang";
+            colMaHang.HeaderText = "Mã hãng";
+            colMaHang.MinimumWidth = 6;
+            colMaHang.Name = "colMaHang";
+            // 
+            // colTenHang
+            // 
+            colTenHang.DataPropertyName = "TenHang";
+            colTenHang.HeaderText = "Tên hãng";
+            colTenHang.MinimumWidth = 6;
+            colTenHang.Name = "colTenHang";
+            // 
+            // colQuocGia
+            // 
+            colQuocGia.DataPropertyName = "QuocGia";
+            colQuocGia.HeaderText = "Quốc gia";
+            colQuocGia.MinimumWidth = 6;
+            colQuocGia.Name = "colQuocGia";
+            // 
+            // colMota
+            // 
+            colMota.DataPropertyName = "MoTa";
+            colMota.HeaderText = "Mô tả";
+            colMota.MinimumWidth = 6;
+            colMota.Name = "colMota";
+            // 
+            // Column1
+            // 
+            Column1.DataPropertyName = "TrangThai";
+            Column1.HeaderText = "Trạng Thái";
+            Column1.MinimumWidth = 6;
+            Column1.Name = "Column1";
             // 
             // panel2
             // 
@@ -284,7 +318,6 @@
             panel1.BackColor = Color.White;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(btnLamMoi);
-            panel1.Controls.Add(btnTimKiem);
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
             panel1.Location = new Point(30, 61);
@@ -306,28 +339,17 @@
             btnLamMoi.UseVisualStyleBackColor = false;
             btnLamMoi.Click += btnLamMoi_Click;
             // 
-            // btnTimKiem
-            // 
-            btnTimKiem.BackColor = SystemColors.HotTrack;
-            btnTimKiem.FlatStyle = FlatStyle.Flat;
-            btnTimKiem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnTimKiem.ForeColor = Color.White;
-            btnTimKiem.Location = new Point(363, 48);
-            btnTimKiem.Name = "btnTimKiem";
-            btnTimKiem.Size = new Size(114, 39);
-            btnTimKiem.TabIndex = 6;
-            btnTimKiem.Text = "Tìm kiếm";
-            btnTimKiem.UseVisualStyleBackColor = false;
-            btnTimKiem.Click += btnTimKiem_Click;
-            // 
             // txtTimKiem
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
             txtTimKiem.Location = new Point(9, 52);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(348, 31);
+            txtTimKiem.Size = new Size(468, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tìm hãng sản xuất...";
+            txtTimKiem.TextChanged += txtTimKiem_TextChanged;
+            txtTimKiem.Enter += txtTimKiem_Enter;
+            txtTimKiem.Leave += txtTimKiem_Leave;
             // 
             // label2
             // 
@@ -338,41 +360,6 @@
             label2.Size = new Size(90, 25);
             label2.TabIndex = 0;
             label2.Text = "Tìm kiếm";
-            // 
-            // colMaHang
-            // 
-            colMaHang.DataPropertyName = "MaHang";
-            colMaHang.HeaderText = "Mã hãng";
-            colMaHang.MinimumWidth = 6;
-            colMaHang.Name = "colMaHang";
-            // 
-            // colTenHang
-            // 
-            colTenHang.DataPropertyName = "TenHang";
-            colTenHang.HeaderText = "Tên hãng";
-            colTenHang.MinimumWidth = 6;
-            colTenHang.Name = "colTenHang";
-            // 
-            // colQuocGia
-            // 
-            colQuocGia.DataPropertyName = "QuocGia";
-            colQuocGia.HeaderText = "Quốc gia";
-            colQuocGia.MinimumWidth = 6;
-            colQuocGia.Name = "colQuocGia";
-            // 
-            // colMota
-            // 
-            colMota.DataPropertyName = "MoTa";
-            colMota.HeaderText = "Mô tả";
-            colMota.MinimumWidth = 6;
-            colMota.Name = "colMota";
-            // 
-            // Column1
-            // 
-            Column1.DataPropertyName = "TrangThai";
-            Column1.HeaderText = "Trạng Thái";
-            Column1.MinimumWidth = 6;
-            Column1.Name = "Column1";
             // 
             // UC_HangSanXuat
             // 
@@ -418,7 +405,6 @@
         private Button btnThem;
         private Panel panel1;
         private Button btnLamMoi;
-        private Button btnTimKiem;
         private TextBox txtTimKiem;
         private Label label2;
         private ComboBox cboTrangThai;

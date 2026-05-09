@@ -29,6 +29,9 @@ namespace GUI
             }
 
             LoadData();
+
+            // Khởi tạo chữ mờ cho thanh tìm kiếm
+            SetPlaceholderTimKiem();
         }
 
         private void LoadData()
@@ -122,7 +125,6 @@ namespace GUI
                 }
                 catch (Exception ex)
                 {
-                    // Hứng lỗi do tầng DAL ném lên (Lỗi chuỗi kết nối, trùng khóa chính...)
                     MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -198,34 +200,90 @@ namespace GUI
             }
         }
 
-        private void btnTimKiem_Click(object sender, EventArgs e)
+        private void btnLamMoi_Click(object sender, EventArgs e)
         {
-            string keyword = txtTimKiem.Text.Trim().ToLower();
-            if (string.IsNullOrEmpty(keyword))
+            txtTimKiem.Clear();
+            SetPlaceholderTimKiem();
+            LoadData();
+            btnLamTrong_Click(sender, e);
+        }
+
+        // ==========================================
+        // CÁC HÀM XỬ LÝ THANH TÌM KIẾM MỚI
+        // ==========================================
+
+        private void SetPlaceholderTimKiem()
+        {
+            if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
+            {
+                txtTimKiem.Text = "Tìm hãng sản xuất...";
+                txtTimKiem.ForeColor = System.Drawing.Color.Gray;
+            }
+        }
+
+        private void txtTimKiem_Enter(object sender, EventArgs e)
+        {
+            if (txtTimKiem.Text == "Tìm hãng sản xuất...")
+            {
+                txtTimKiem.Text = "";
+                txtTimKiem.ForeColor = System.Drawing.Color.Black;
+            }
+        }
+
+        private void txtTimKiem_Leave(object sender, EventArgs e)
+        {
+            SetPlaceholderTimKiem();
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "";
+
+            var normalizedString = text.Normalize(System.Text.NormalizationForm.FormD);
+            var stringBuilder = new System.Text.StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != System.Globalization.UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC)
+                                .Replace("đ", "d").Replace("Đ", "D");
+        }
+
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            string keyword = txtTimKiem.Text.Trim();
+
+            // Bỏ qua nếu đang là chữ mờ hoặc trống
+            if (string.IsNullOrEmpty(keyword) || keyword == "Tìm hãng sản xuất...")
             {
                 LoadData();
                 return;
             }
 
+            // Chuyển TỪ KHÓA về dạng: Không dấu + Chữ thường
+            string keywordUnsign = RemoveDiacritics(keyword).ToLower();
+
             try
             {
                 var ds = _bus.GetAll();
                 dgvHangSanXuat.DataSource = ds.Where(h =>
-                    (h.MaHang != null && h.MaHang.ToLower().Contains(keyword)) ||
-                    (h.TenHang != null && h.TenHang.ToLower().Contains(keyword))
+                    (h.MaHang != null && RemoveDiacritics(h.MaHang).ToLower().Contains(keywordUnsign)) ||
+                    (h.TenHang != null && RemoveDiacritics(h.TenHang).ToLower().Contains(keywordUnsign)) ||
+                    (h.QuocGia != null && RemoveDiacritics(h.QuocGia).ToLower().Contains(keywordUnsign)) ||
+                    (h.MoTa != null && RemoveDiacritics(h.MoTa).ToLower().Contains(keywordUnsign)) ||
+                    (h.TrangThai != null && RemoveDiacritics(h.TrangThai).ToLower().Contains(keywordUnsign))
                 ).ToList();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Lỗi tải dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void btnLamMoi_Click(object sender, EventArgs e)
-        {
-            txtTimKiem.Clear();
-            LoadData();
-            btnLamTrong_Click(sender, e);
         }
     }
 }

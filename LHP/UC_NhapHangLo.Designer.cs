@@ -860,6 +860,7 @@
             cboLocNCC.Name = "cboLocNCC";
             cboLocNCC.Size = new Size(546, 31);
             cboLocNCC.TabIndex = 9;
+            cboLocNCC.SelectedIndexChanged += cboLocNCC_SelectedIndexChanged;
             // 
             // btnLamMoi
             // 
@@ -887,7 +888,6 @@
             btnLoc.TabIndex = 8;
             btnLoc.Text = "Lọc";
             btnLoc.UseVisualStyleBackColor = false;
-            btnLoc.Click += btnLoc_Click;
             // 
             // cboLocTrangThai
             // 
@@ -898,6 +898,7 @@
             cboLocTrangThai.Name = "cboLocTrangThai";
             cboLocTrangThai.Size = new Size(546, 31);
             cboLocTrangThai.TabIndex = 3;
+            cboLocTrangThai.SelectedIndexChanged += cboLocTrangThai_SelectedIndexChanged;
             // 
             // label19
             // 
@@ -916,6 +917,7 @@
             dtpDenNgay.Name = "dtpDenNgay";
             dtpDenNgay.Size = new Size(546, 30);
             dtpDenNgay.TabIndex = 1;
+            dtpDenNgay.ValueChanged += dtpDenNgay_ValueChanged;
             // 
             // dtpTuNgay
             // 
@@ -924,6 +926,7 @@
             dtpTuNgay.Name = "dtpTuNgay";
             dtpTuNgay.Size = new Size(546, 30);
             dtpTuNgay.TabIndex = 0;
+            dtpTuNgay.ValueChanged += dtpTuNgay_ValueChanged;
             // 
             // tabPage3
             // 

@@ -64,7 +64,6 @@
             label1.TabIndex = 1;
             label1.Text = "Quản lý cửa hàng điện thoại";
             label1.TextAlign = ContentAlignment.MiddleCenter;
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -128,6 +127,8 @@
             txtTenDangNhap.Size = new Size(372, 34);
             txtTenDangNhap.TabIndex = 6;
             txtTenDangNhap.Text = "Nhập tên đăng nhập...";
+            txtTenDangNhap.Enter += txtTenDangNhap_Enter;
+            txtTenDangNhap.Leave += txtTenDangNhap_Leave;
             // 
             // txtMatKhau
             // 
@@ -137,6 +138,8 @@
             txtMatKhau.Size = new Size(372, 34);
             txtMatKhau.TabIndex = 7;
             txtMatKhau.Text = "Nhập mật khẩu...";
+            txtMatKhau.Enter += txtMatKhau_Enter;
+            txtMatKhau.Leave += txtMatKhau_Leave;
             // 
             // btnDangNhap
             // 
@@ -149,7 +152,7 @@
             btnDangNhap.TabIndex = 8;
             btnDangNhap.Text = "Đăng nhập";
             btnDangNhap.UseVisualStyleBackColor = false;
-            btnDangNhap.Click += btnDangNhap_Click_1;
+            btnDangNhap.Click += btnDangNhap_Click;
             // 
             // FormDangNhap
             // 

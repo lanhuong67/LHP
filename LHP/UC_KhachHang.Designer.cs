@@ -57,7 +57,6 @@
             btnThemKH = new Button();
             panel1 = new Panel();
             btnLamMoi = new Button();
-            btnTimKiem = new Button();
             txtTimKiem = new TextBox();
             label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvKhachHang).BeginInit();
@@ -357,7 +356,6 @@
             panel1.BackColor = Color.White;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(btnLamMoi);
-            panel1.Controls.Add(btnTimKiem);
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
             panel1.Location = new Point(16, 58);
@@ -379,28 +377,17 @@
             btnLamMoi.UseVisualStyleBackColor = false;
             btnLamMoi.Click += btnLamMoi_Click;
             // 
-            // btnTimKiem
-            // 
-            btnTimKiem.BackColor = SystemColors.HotTrack;
-            btnTimKiem.FlatStyle = FlatStyle.Flat;
-            btnTimKiem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnTimKiem.ForeColor = Color.White;
-            btnTimKiem.Location = new Point(363, 48);
-            btnTimKiem.Name = "btnTimKiem";
-            btnTimKiem.Size = new Size(114, 39);
-            btnTimKiem.TabIndex = 6;
-            btnTimKiem.Text = "Tìm kiếm";
-            btnTimKiem.UseVisualStyleBackColor = false;
-            btnTimKiem.Click += btnTimKiem_Click;
-            // 
             // txtTimKiem
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
             txtTimKiem.Location = new Point(9, 52);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(348, 31);
+            txtTimKiem.Size = new Size(468, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tìm tên hoặc số điện thoại...";
+            txtTimKiem.TextChanged += txtTimKiem_TextChanged;
+            txtTimKiem.Enter += txtTimKiem_Enter;
+            txtTimKiem.Leave += txtTimKiem_Leave;
             // 
             // label2
             // 
@@ -458,7 +445,6 @@
         private Button btnThemKH;
         private Panel panel1;
         private Button btnLamMoi;
-        private Button btnTimKiem;
         private TextBox txtTimKiem;
         private Label label2;
         private Panel panel3;

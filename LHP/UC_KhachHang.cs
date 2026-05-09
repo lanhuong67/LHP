@@ -24,6 +24,9 @@ namespace GUI
         {
             dgvKhachHang.AutoGenerateColumns = false;
             LoadData();
+
+            // Khởi tạo chữ mờ cho thanh tìm kiếm lúc vừa mở Form
+            SetPlaceholderTimKiem();
         }
 
         private void LoadData()
@@ -107,7 +110,7 @@ namespace GUI
                 }
                 else MessageBox.Show("Lỗi! Mã khách hàng này đã tồn tại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else // Nhánh ấn Lưu khi đang ở chế độ Xem (Không cho phép)
+            else // Nhánh ấn Lưu khi đang ở chế độ Xem
             {
                 MessageBox.Show("Vui lòng sử dụng nút [Sửa] để cập nhật thông tin khách hàng hiện tại!", "Hướng dẫn", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -166,25 +169,86 @@ namespace GUI
             }
         }
 
-        // ==========================================
-        // 4. CÁC NÚT BẤM (BUTTONS) - TÌM KIẾM
-        // ==========================================
-        private void btnTimKiem_Click(object sender, EventArgs e)
-        {
-            string keyword = txtTimKiem.Text.Trim().ToLower();
-            if (string.IsNullOrEmpty(keyword)) { LoadData(); return; }
-
-            var ds = _bus.GetAll();
-            dgvKhachHang.DataSource = ds.Where(k =>
-                (k.MaKH != null && k.MaKH.ToLower().Contains(keyword)) ||
-                (k.HoTen != null && k.HoTen.ToLower().Contains(keyword)) ||
-                (k.SDT != null && k.SDT.Contains(keyword))).ToList();
-        }
-
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTimKiem.Clear();
+            SetPlaceholderTimKiem(); // Trả lại chữ mờ
             LoadData();
+        }
+
+        // ==========================================
+        // 4. CÁC HÀM XỬ LÝ THANH TÌM KIẾM MỚI
+        // ==========================================
+
+        private void SetPlaceholderTimKiem()
+        {
+            if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
+            {
+                txtTimKiem.Text = "Tìm tên hoặc số điện thoại...";
+                txtTimKiem.ForeColor = System.Drawing.Color.Gray;
+            }
+        }
+
+        // Khi click chuột VÀO ô tìm kiếm
+        private void txtTimKiem_Enter(object sender, EventArgs e)
+        {
+            if (txtTimKiem.Text == "Tìm tên hoặc số điện thoại...")
+            {
+                txtTimKiem.Text = "";
+                txtTimKiem.ForeColor = System.Drawing.Color.Black;
+            }
+        }
+
+        // Khi click chuột RA KHỎI ô tìm kiếm
+        private void txtTimKiem_Leave(object sender, EventArgs e)
+        {
+            SetPlaceholderTimKiem();
+        }
+
+        // Hàm hỗ trợ loại bỏ dấu tiếng Việt
+        private string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "";
+
+            var normalizedString = text.Normalize(System.Text.NormalizationForm.FormD);
+            var stringBuilder = new System.Text.StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != System.Globalization.UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC)
+                                .Replace("đ", "d").Replace("Đ", "D");
+        }
+
+        // Cơ chế: Tìm tới đâu, lọc tới đó (Hỗ trợ Không dấu)
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            string keyword = txtTimKiem.Text.Trim();
+
+            // Bỏ qua nếu đang là chữ mờ hoặc trống
+            if (string.IsNullOrEmpty(keyword) || keyword == "Tìm tên hoặc số điện thoại...")
+            {
+                LoadData();
+                return;
+            }
+
+            // Chuyển từ khóa về dạng: Không dấu + Chữ thường
+            string keywordUnsign = RemoveDiacritics(keyword).ToLower();
+
+            var ds = _bus.GetAll();
+
+            dgvKhachHang.DataSource = ds.Where(k =>
+                (k.MaKH != null && RemoveDiacritics(k.MaKH).ToLower().Contains(keywordUnsign)) ||
+                (k.HoTen != null && RemoveDiacritics(k.HoTen).ToLower().Contains(keywordUnsign)) ||
+                (k.SDT != null && k.SDT.Contains(keywordUnsign)) ||
+                (k.DiaChi != null && RemoveDiacritics(k.DiaChi).ToLower().Contains(keywordUnsign))
+            ).ToList();
         }
     }
 }

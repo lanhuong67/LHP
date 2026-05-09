@@ -32,7 +32,6 @@
             panel1 = new Panel();
             btnLamMoi = new Button();
             cboTimKiemHang = new ComboBox();
-            btnTimKiem = new Button();
             txtTimKiem = new TextBox();
             label2 = new Label();
             btnThem = new Button();
@@ -89,7 +88,6 @@
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(btnLamMoi);
             panel1.Controls.Add(cboTimKiemHang);
-            panel1.Controls.Add(btnTimKiem);
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
             panel1.Location = new Point(18, 65);
@@ -103,9 +101,9 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(329, 91);
+            btnLamMoi.Location = new Point(168, 89);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(114, 39);
+            btnLamMoi.Size = new Size(222, 39);
             btnLamMoi.TabIndex = 5;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -120,20 +118,7 @@
             cboTimKiemHang.Name = "cboTimKiemHang";
             cboTimKiemHang.Size = new Size(279, 33);
             cboTimKiemHang.TabIndex = 2;
-            // 
-            // btnTimKiem
-            // 
-            btnTimKiem.BackColor = SystemColors.HotTrack;
-            btnTimKiem.FlatStyle = FlatStyle.Flat;
-            btnTimKiem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnTimKiem.ForeColor = Color.White;
-            btnTimKiem.Location = new Point(126, 89);
-            btnTimKiem.Name = "btnTimKiem";
-            btnTimKiem.Size = new Size(114, 39);
-            btnTimKiem.TabIndex = 6;
-            btnTimKiem.Text = "Tìm kiếm";
-            btnTimKiem.UseVisualStyleBackColor = false;
-            btnTimKiem.Click += btnTimKiem_Click;
+            cboTimKiemHang.SelectedIndexChanged += cboTimKiemHang_SelectedIndexChanged;
             // 
             // txtTimKiem
             // 
@@ -143,6 +128,9 @@
             txtTimKiem.Size = new Size(279, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tên sản phẩm...";
+            txtTimKiem.TextChanged += txtTimKiem_TextChanged;
+            txtTimKiem.Enter += txtTimKiem_Enter;
+            txtTimKiem.Leave += txtTimKiem_Leave;
             // 
             // label2
             // 
@@ -526,7 +514,6 @@
         private TextBox txtTimKiem;
         private Button btnLamMoi;
         private Button btnThem;
-        private Button btnTimKiem;
         private Panel panel2;
         private DataGridView dgvSanPham;
         private Label label4;

@@ -83,12 +83,12 @@ namespace GUI
                 }
                 cboLocNCC.DataSource = listNCC_Loc;
 
-                // 6. Load ComboBox Lọc Trạng Thái (ĐÃ BỎ LƯU NHÁP)
+                // 6. Load ComboBox Lọc Trạng Thái
                 cboLocTrangThai.Items.Clear();
                 cboLocTrangThai.Items.Add("--Tất cả trạng thái--");
                 cboLocTrangThai.Items.Add("Hoàn thành");
-                cboLocTrangThai.Items.Add("Đã hủy"); // Phòng hờ tính năng hủy
-                cboLocTrangThai.SelectedIndex = 0; // Chọn mặc định dòng đầu tiên
+                cboLocTrangThai.Items.Add("Đã hủy");
+                cboLocTrangThai.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -250,46 +250,8 @@ namespace GUI
             lblTongChi.Text = dsLichSu.Sum(x => x.TongTien).ToString("N0") + " đ";
         }
 
-        private void btnLoc_Click(object sender, EventArgs e)
-        {
-            var dsLoc = _pnBus.GetLichSuNhap();
-
-            DateTime tuNgay = dtpTuNgay.Value.Date;
-            DateTime denNgay = dtpDenNgay.Value.Date;
-            dsLoc = dsLoc.Where(x => x.NgayNhap.Date >= tuNgay && x.NgayNhap.Date <= denNgay).ToList();
-
-            string nccDaChon = cboLocNCC.Text.Trim();
-            if (!string.IsNullOrEmpty(nccDaChon) && nccDaChon != "--Tất cả Nhà cung cấp--")
-            {
-                dsLoc = dsLoc.Where(x => x.TenNCC != null && x.TenNCC.Contains(nccDaChon)).ToList();
-            }
-
-            string trangThai = cboLocTrangThai.Text.Trim();
-            if (!string.IsNullOrEmpty(trangThai) && trangThai != "--Tất cả trạng thái--")
-            {
-                dsLoc = dsLoc.Where(x => x.TrangThai == trangThai).ToList();
-            }
-
-            dgvLichSuNhap.DataSource = dsLoc;
-
-            lblTongPhieuNhap.Text = dsLoc.Count.ToString();
-            lblTongSPDaNhap.Text = dsLoc.Sum(x => x.SoSanPham).ToString();
-            lblTongChi.Text = dsLoc.Sum(x => x.TongTien).ToString("N0") + " đ";
-        }
-
-        private void btnLamMoi_Click(object sender, EventArgs e)
-        {
-            dtpTuNgay.Value = DateTime.Now;
-            dtpDenNgay.Value = DateTime.Now;
-            cboLocNCC.Text = "--Tất cả Nhà cung cấp--";
-            cboLocTrangThai.Text = "--Tất cả trạng thái--";
-
-            LoadLichSuNhap();
-        }
-
         private void dgvLichSuNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Kiểm tra click đúng vào cột Chi tiết
             if (e.RowIndex >= 0 && dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colChiTiet")
             {
                 LichSuNhapViewModel phieuDuocChon = dgvLichSuNhap.Rows[e.RowIndex].DataBoundItem as LichSuNhapViewModel;
@@ -299,6 +261,80 @@ namespace GUI
                     MessageBox.Show($"Mã Phiếu: {phieuDuocChon.MaPN}\nNhà cung cấp: {phieuDuocChon.TenNCC}\nTổng tiền: {phieuDuocChon.TongTien:N0} đ\n\nForm xem chi tiết sẽ được phát triển ở giai đoạn sau.", "Thông tin phiếu nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+        }
+
+        // ==========================================
+        // CƠ CHẾ LỌC TỰ ĐỘNG (REAL-TIME FILTERING)
+        // ==========================================
+        private void ThucHienLocDuLieu()
+        {
+            // Tránh lỗi khi form đang tải dữ liệu mà chưa xong
+            if (_pnBus == null || cboLocNCC.Items.Count == 0) return;
+
+            var dsLoc = _pnBus.GetLichSuNhap();
+
+            // 1. Lọc theo Ngày
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date;
+            dsLoc = dsLoc.Where(x => x.NgayNhap.Date >= tuNgay && x.NgayNhap.Date <= denNgay).ToList();
+
+            // 2. Lọc theo Nhà cung cấp
+            string nccDaChon = cboLocNCC.Text.Trim();
+            if (!string.IsNullOrEmpty(nccDaChon) && nccDaChon != "--Tất cả Nhà cung cấp--")
+            {
+                dsLoc = dsLoc.Where(x => x.TenNCC != null && x.TenNCC.Contains(nccDaChon)).ToList();
+            }
+
+            // 3. Lọc theo Trạng thái
+            string trangThai = cboLocTrangThai.Text.Trim();
+            if (!string.IsNullOrEmpty(trangThai) && trangThai != "--Tất cả trạng thái--")
+            {
+                dsLoc = dsLoc.Where(x => x.TrangThai == trangThai).ToList();
+            }
+
+            // 4. Đổ dữ liệu lên UI
+            dgvLichSuNhap.DataSource = dsLoc;
+            lblTongPhieuNhap.Text = dsLoc.Count.ToString();
+            lblTongSPDaNhap.Text = dsLoc.Sum(x => x.SoSanPham).ToString();
+            lblTongChi.Text = dsLoc.Sum(x => x.TongTien).ToString("N0") + " đ";
+        }
+
+        // Bắt sự kiện thay đổi cho các công cụ bộ lọc
+        private void dtpTuNgay_ValueChanged(object sender, EventArgs e)
+        {
+            ThucHienLocDuLieu();
+        }
+
+        private void dtpDenNgay_ValueChanged(object sender, EventArgs e)
+        {
+            ThucHienLocDuLieu();
+        }
+
+        private void cboLocNCC_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ThucHienLocDuLieu();
+        }
+
+        private void cboLocTrangThai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ThucHienLocDuLieu();
+        }
+
+        // ==========================================
+        // SỰ KIỆN: NÚT [LÀM MỚI]
+        // ==========================================
+        private void btnLamMoi_Click(object sender, EventArgs e)
+        {
+            // Trả ngày về hiện tại
+            dtpTuNgay.Value = DateTime.Now;
+            dtpDenNgay.Value = DateTime.Now;
+
+            // Trả combobox về dòng đầu tiên (Tất cả...)
+            if (cboLocNCC.Items.Count > 0) cboLocNCC.SelectedIndex = 0;
+            if (cboLocTrangThai.Items.Count > 0) cboLocTrangThai.SelectedIndex = 0;
+
+            // Chạy lại bộ lọc với trạng thái mặc định
+            ThucHienLocDuLieu();
         }
     }
 
