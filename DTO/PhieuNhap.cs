@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -57,5 +58,28 @@ namespace DTO
         public int SoSanPham { get; set; }
         public decimal TongTien { get; set; }
         public string TrangThai { get; set; }
+
+        // ====================================================
+        // VŨ KHÍ BÍ MẬT: Báo cho WinForms biết cấm vẽ cột này ra giao diện
+        // Nhưng dữ liệu bên dưới RAM thì vẫn giữ nguyên để dùng cho nút [Chi tiết]
+        // ====================================================
+        [Browsable(false)]
+        public string GhiChu { get; set; }
+    }
+
+    public class LoHangViewModel
+    {
+        public string MaLo { get; set; }        // Tự ghép từ Mã Phiếu + Mã SP
+        public string TenSP { get; set; }
+        public string MaPN { get; set; }
+        public DateTime NgayNhap { get; set; }
+        public int SoLuongNhap { get; set; }
+        public int SoLuongDaBan { get; set; }
+
+        // Code tự động tính số lượng còn lại
+        public int ConLai => SoLuongNhap - SoLuongDaBan;
+
+        // Code tự động xét trạng thái lô
+        public string TrangThai => ConLai == 0 ? "Đã bán hết" : "Còn hàng";
     }
 }

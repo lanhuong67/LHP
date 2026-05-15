@@ -12,9 +12,15 @@ namespace BUS
         public List<ChiNhanh> GetAllChiNhanh() => _dal.GetAllChiNhanh();
 
         public bool TaoPhieuNhap(PhieuNhap pn, List<ChiTietPhieuNhap> ds) => _dal.TaoPhieuNhap(pn, ds);
-        public List<LichSuNhapViewModel> GetLichSuNhap()
+
+        public List<LichSuNhapViewModel> GetLichSuNhap() => _dal.GetLichSuNhap();
+
+        // CẬP NHẬT: Thêm tham số lyDoHuy
+        public bool HuyPhieuNhap(string maPN, string lyDoHuy)
         {
-            return _dal.GetLichSuNhap();
+            return _dal.HuyPhieuNhap(maPN, lyDoHuy);
         }
+
+        public List<LoHangViewModel> GetDanhSachLoHang() => _dal.GetDanhSachLoHang();
     }
 }

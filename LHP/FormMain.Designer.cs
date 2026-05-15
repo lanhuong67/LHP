@@ -500,6 +500,7 @@ namespace GUI
             // 
             // picTaoHoaDon
             // 
+            picTaoHoaDon.Cursor = Cursors.Hand;
             picTaoHoaDon.Image = (Image)resources.GetObject("picTaoHoaDon.Image");
             picTaoHoaDon.Location = new Point(12, 188);
             picTaoHoaDon.Name = "picTaoHoaDon";
@@ -507,6 +508,7 @@ namespace GUI
             picTaoHoaDon.SizeMode = PictureBoxSizeMode.Zoom;
             picTaoHoaDon.TabIndex = 9;
             picTaoHoaDon.TabStop = false;
+            picTaoHoaDon.Click += picTaoHoaDon_Click;
             // 
             // picDanhSachHD
             // 
@@ -551,6 +553,7 @@ namespace GUI
             // lblTaoHoaDon
             // 
             lblTaoHoaDon.AutoSize = true;
+            lblTaoHoaDon.Cursor = Cursors.Hand;
             lblTaoHoaDon.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblTaoHoaDon.ForeColor = Color.White;
             lblTaoHoaDon.Location = new Point(104, 197);
@@ -558,6 +561,7 @@ namespace GUI
             lblTaoHoaDon.Size = new Size(119, 25);
             lblTaoHoaDon.TabIndex = 18;
             lblTaoHoaDon.Text = "Tạo hóa đơn";
+            lblTaoHoaDon.Click += lblTaoHoaDon_Click;
             // 
             // lblCanhBaoTonKho
             // 

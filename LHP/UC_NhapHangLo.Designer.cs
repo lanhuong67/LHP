@@ -79,14 +79,6 @@
             label2 = new Label();
             tabPage2 = new TabPage();
             dgvLichSuNhap = new DataGridView();
-            colMaPhieu = new DataGridViewTextBoxColumn();
-            colNgayNhap = new DataGridViewTextBoxColumn();
-            colNCC = new DataGridViewTextBoxColumn();
-            colNhanVien = new DataGridViewTextBoxColumn();
-            colSoSp = new DataGridViewTextBoxColumn();
-            colTongTien = new DataGridViewTextBoxColumn();
-            colTrangThai = new DataGridViewTextBoxColumn();
-            colChiTiet = new DataGridViewButtonColumn();
             panel8 = new Panel();
             lblTongChi = new Label();
             label22 = new Label();
@@ -105,7 +97,7 @@
             dtpDenNgay = new DateTimePicker();
             dtpTuNgay = new DateTimePicker();
             tabPage3 = new TabPage();
-            dgvTheoDoiLoHang = new DataGridView();
+            dgvLoHang = new DataGridView();
             colMaLo = new DataGridViewTextBoxColumn();
             colSanPham = new DataGridViewTextBoxColumn();
             colPhieuNhap = new DataGridViewTextBoxColumn();
@@ -116,9 +108,18 @@
             colTrangThaiLoHang = new DataGridViewTextBoxColumn();
             panel9 = new Panel();
             btnTimLoHang = new Button();
-            comboBox2 = new ComboBox();
-            comboBox1 = new ComboBox();
-            textBox1 = new TextBox();
+            cboTrangThai_Lo = new ComboBox();
+            cboSanPham_Lo = new ComboBox();
+            txtTimMaLo = new TextBox();
+            colMaPhieu = new DataGridViewTextBoxColumn();
+            colNgayNhap = new DataGridViewTextBoxColumn();
+            colNCC = new DataGridViewTextBoxColumn();
+            colNhanVien = new DataGridViewTextBoxColumn();
+            colSoSp = new DataGridViewTextBoxColumn();
+            colTongTien = new DataGridViewTextBoxColumn();
+            colTrangThai = new DataGridViewTextBoxColumn();
+            colChiTiet = new DataGridViewButtonColumn();
+            colHuyPhieu = new DataGridViewButtonColumn();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvChiTietNhap).BeginInit();
@@ -133,7 +134,7 @@
             panel6.SuspendLayout();
             panel5.SuspendLayout();
             tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvTheoDoiLoHang).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvLoHang).BeginInit();
             panel9.SuspendLayout();
             SuspendLayout();
             // 
@@ -657,7 +658,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvLichSuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvLichSuNhap.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLichSuNhap.Columns.AddRange(new DataGridViewColumn[] { colMaPhieu, colNgayNhap, colNCC, colNhanVien, colSoSp, colTongTien, colTrangThai, colChiTiet });
+            dgvLichSuNhap.Columns.AddRange(new DataGridViewColumn[] { colMaPhieu, colNgayNhap, colNCC, colNhanVien, colSoSp, colTongTien, colTrangThai, colChiTiet, colHuyPhieu });
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
@@ -680,64 +681,6 @@
             dgvLichSuNhap.Size = new Size(1033, 489);
             dgvLichSuNhap.TabIndex = 7;
             dgvLichSuNhap.CellContentClick += dgvLichSuNhap_CellContentClick;
-            // 
-            // colMaPhieu
-            // 
-            colMaPhieu.DataPropertyName = "MaPN";
-            colMaPhieu.HeaderText = "Mã phiếu";
-            colMaPhieu.MinimumWidth = 6;
-            colMaPhieu.Name = "colMaPhieu";
-            // 
-            // colNgayNhap
-            // 
-            colNgayNhap.DataPropertyName = "NgayNhap";
-            colNgayNhap.HeaderText = "Ngày nhập";
-            colNgayNhap.MinimumWidth = 6;
-            colNgayNhap.Name = "colNgayNhap";
-            // 
-            // colNCC
-            // 
-            colNCC.DataPropertyName = "TenNCC";
-            colNCC.HeaderText = "Nhà cung cấp";
-            colNCC.MinimumWidth = 6;
-            colNCC.Name = "colNCC";
-            // 
-            // colNhanVien
-            // 
-            colNhanVien.DataPropertyName = "TenNhanVien";
-            colNhanVien.HeaderText = "Nhân viên";
-            colNhanVien.MinimumWidth = 6;
-            colNhanVien.Name = "colNhanVien";
-            // 
-            // colSoSp
-            // 
-            colSoSp.DataPropertyName = "SoSanPham";
-            colSoSp.HeaderText = "Số sản phẩm";
-            colSoSp.MinimumWidth = 6;
-            colSoSp.Name = "colSoSp";
-            // 
-            // colTongTien
-            // 
-            colTongTien.DataPropertyName = "TongTien";
-            colTongTien.HeaderText = "Tổng tiền";
-            colTongTien.MinimumWidth = 6;
-            colTongTien.Name = "colTongTien";
-            // 
-            // colTrangThai
-            // 
-            colTrangThai.DataPropertyName = "TrangThai";
-            colTrangThai.HeaderText = "Trạng thái";
-            colTrangThai.MinimumWidth = 6;
-            colTrangThai.Name = "colTrangThai";
-            // 
-            // colChiTiet
-            // 
-            colChiTiet.DataPropertyName = "ChiTiet";
-            colChiTiet.HeaderText = "Chi tiết";
-            colChiTiet.MinimumWidth = 6;
-            colChiTiet.Name = "colChiTiet";
-            colChiTiet.Resizable = DataGridViewTriState.True;
-            colChiTiet.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
             // panel8
             // 
@@ -912,7 +855,9 @@
             // 
             // dtpDenNgay
             // 
+            dtpDenNgay.CustomFormat = "dd/MM/yyyy";
             dtpDenNgay.Font = new Font("Segoe UI", 10.2F);
+            dtpDenNgay.Format = DateTimePickerFormat.Custom;
             dtpDenNgay.Location = new Point(34, 85);
             dtpDenNgay.Name = "dtpDenNgay";
             dtpDenNgay.Size = new Size(546, 30);
@@ -921,7 +866,9 @@
             // 
             // dtpTuNgay
             // 
+            dtpTuNgay.CustomFormat = "dd/MM/yyyy";
             dtpTuNgay.Font = new Font("Segoe UI", 10.2F);
+            dtpTuNgay.Format = DateTimePickerFormat.Custom;
             dtpTuNgay.Location = new Point(34, 20);
             dtpTuNgay.Name = "dtpTuNgay";
             dtpTuNgay.Size = new Size(546, 30);
@@ -932,7 +879,7 @@
             // 
             tabPage3.BackColor = Color.LightSteelBlue;
             tabPage3.BorderStyle = BorderStyle.FixedSingle;
-            tabPage3.Controls.Add(dgvTheoDoiLoHang);
+            tabPage3.Controls.Add(dgvLoHang);
             tabPage3.Controls.Add(panel9);
             tabPage3.Location = new Point(4, 44);
             tabPage3.Name = "tabPage3";
@@ -941,62 +888,70 @@
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Theo dõi lô hàng";
             // 
-            // dgvTheoDoiLoHang
+            // dgvLoHang
             // 
-            dgvTheoDoiLoHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvTheoDoiLoHang.BackgroundColor = Color.White;
-            dgvTheoDoiLoHang.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvTheoDoiLoHang.Columns.AddRange(new DataGridViewColumn[] { colMaLo, colSanPham, colPhieuNhap, colNgayNhapLoHang, colSoLuongNhap, colDaBan, colConLai, colTrangThaiLoHang });
-            dgvTheoDoiLoHang.Location = new Point(6, 98);
-            dgvTheoDoiLoHang.Name = "dgvTheoDoiLoHang";
-            dgvTheoDoiLoHang.RowHeadersWidth = 51;
-            dgvTheoDoiLoHang.Size = new Size(1038, 720);
-            dgvTheoDoiLoHang.TabIndex = 1;
+            dgvLoHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvLoHang.BackgroundColor = Color.White;
+            dgvLoHang.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvLoHang.Columns.AddRange(new DataGridViewColumn[] { colMaLo, colSanPham, colPhieuNhap, colNgayNhapLoHang, colSoLuongNhap, colDaBan, colConLai, colTrangThaiLoHang });
+            dgvLoHang.Location = new Point(6, 98);
+            dgvLoHang.Name = "dgvLoHang";
+            dgvLoHang.RowHeadersWidth = 51;
+            dgvLoHang.Size = new Size(1038, 720);
+            dgvLoHang.TabIndex = 1;
             // 
             // colMaLo
             // 
+            colMaLo.DataPropertyName = "MaLo";
             colMaLo.HeaderText = "Mã lô";
             colMaLo.MinimumWidth = 6;
             colMaLo.Name = "colMaLo";
             // 
             // colSanPham
             // 
+            colSanPham.DataPropertyName = "TenSP";
             colSanPham.HeaderText = "Sản phẩm";
             colSanPham.MinimumWidth = 6;
             colSanPham.Name = "colSanPham";
             // 
             // colPhieuNhap
             // 
+            colPhieuNhap.DataPropertyName = "MaPN";
             colPhieuNhap.HeaderText = "Phiếu nhập";
             colPhieuNhap.MinimumWidth = 6;
             colPhieuNhap.Name = "colPhieuNhap";
             // 
             // colNgayNhapLoHang
             // 
+            colNgayNhapLoHang.DataPropertyName = "NgayNhap";
             colNgayNhapLoHang.HeaderText = "Ngày nhập";
             colNgayNhapLoHang.MinimumWidth = 6;
             colNgayNhapLoHang.Name = "colNgayNhapLoHang";
             // 
             // colSoLuongNhap
             // 
+            colSoLuongNhap.DataPropertyName = "SoLuongNhap";
             colSoLuongNhap.HeaderText = "SL nhập";
             colSoLuongNhap.MinimumWidth = 6;
             colSoLuongNhap.Name = "colSoLuongNhap";
             // 
             // colDaBan
             // 
+            colDaBan.DataPropertyName = "SoLuongDaBan";
             colDaBan.HeaderText = "Đã bán";
             colDaBan.MinimumWidth = 6;
             colDaBan.Name = "colDaBan";
             // 
             // colConLai
             // 
+            colConLai.DataPropertyName = "ConLai";
             colConLai.HeaderText = "Còn lại";
             colConLai.MinimumWidth = 6;
             colConLai.Name = "colConLai";
             // 
             // colTrangThaiLoHang
             // 
+            colTrangThaiLoHang.DataPropertyName = "TrangThai";
             colTrangThaiLoHang.HeaderText = "Trạng thái";
             colTrangThaiLoHang.MinimumWidth = 6;
             colTrangThaiLoHang.Name = "colTrangThaiLoHang";
@@ -1005,9 +960,9 @@
             // 
             panel9.BackColor = Color.White;
             panel9.Controls.Add(btnTimLoHang);
-            panel9.Controls.Add(comboBox2);
-            panel9.Controls.Add(comboBox1);
-            panel9.Controls.Add(textBox1);
+            panel9.Controls.Add(cboTrangThai_Lo);
+            panel9.Controls.Add(cboSanPham_Lo);
+            panel9.Controls.Add(txtTimMaLo);
             panel9.Location = new Point(6, 6);
             panel9.Name = "panel9";
             panel9.Size = new Size(1034, 86);
@@ -1025,32 +980,100 @@
             btnTimLoHang.TabIndex = 9;
             btnTimLoHang.Text = "Tìm";
             btnTimLoHang.UseVisualStyleBackColor = false;
+            btnTimLoHang.Click += btnTimLoHang_Click;
             // 
-            // comboBox2
+            // cboTrangThai_Lo
             // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(575, 25);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(251, 33);
-            comboBox2.TabIndex = 2;
-            comboBox2.Text = "--Tất cả trạng thái--";
+            cboTrangThai_Lo.FormattingEnabled = true;
+            cboTrangThai_Lo.Location = new Point(575, 25);
+            cboTrangThai_Lo.Name = "cboTrangThai_Lo";
+            cboTrangThai_Lo.Size = new Size(251, 33);
+            cboTrangThai_Lo.TabIndex = 2;
+            cboTrangThai_Lo.Text = "--Tất cả trạng thái--";
+            cboTrangThai_Lo.SelectedIndexChanged += cboTrangThai_Lo_SelectedIndexChanged;
             // 
-            // comboBox1
+            // cboSanPham_Lo
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(286, 25);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(251, 33);
-            comboBox1.TabIndex = 1;
-            comboBox1.Text = "--Tất cả sản phẩm--";
+            cboSanPham_Lo.FormattingEnabled = true;
+            cboSanPham_Lo.Location = new Point(286, 25);
+            cboSanPham_Lo.Name = "cboSanPham_Lo";
+            cboSanPham_Lo.Size = new Size(251, 33);
+            cboSanPham_Lo.TabIndex = 1;
+            cboSanPham_Lo.Text = "--Tất cả sản phẩm--";
+            cboSanPham_Lo.SelectedIndexChanged += cboSanPham_Lo_SelectedIndexChanged;
             // 
-            // textBox1
+            // txtTimMaLo
             // 
-            textBox1.Location = new Point(18, 25);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(251, 31);
-            textBox1.TabIndex = 0;
-            textBox1.Text = "Tìm mã...";
+            txtTimMaLo.Location = new Point(18, 25);
+            txtTimMaLo.Name = "txtTimMaLo";
+            txtTimMaLo.Size = new Size(251, 31);
+            txtTimMaLo.TabIndex = 0;
+            txtTimMaLo.Text = "Tìm mã...";
+            // 
+            // colMaPhieu
+            // 
+            colMaPhieu.DataPropertyName = "MaPN";
+            colMaPhieu.HeaderText = "Mã phiếu";
+            colMaPhieu.MinimumWidth = 6;
+            colMaPhieu.Name = "colMaPhieu";
+            // 
+            // colNgayNhap
+            // 
+            colNgayNhap.DataPropertyName = "NgayNhap";
+            colNgayNhap.HeaderText = "Ngày nhập";
+            colNgayNhap.MinimumWidth = 6;
+            colNgayNhap.Name = "colNgayNhap";
+            // 
+            // colNCC
+            // 
+            colNCC.DataPropertyName = "TenNCC";
+            colNCC.HeaderText = "Nhà cung cấp";
+            colNCC.MinimumWidth = 6;
+            colNCC.Name = "colNCC";
+            // 
+            // colNhanVien
+            // 
+            colNhanVien.DataPropertyName = "TenNhanVien";
+            colNhanVien.HeaderText = "Nhân viên";
+            colNhanVien.MinimumWidth = 6;
+            colNhanVien.Name = "colNhanVien";
+            // 
+            // colSoSp
+            // 
+            colSoSp.DataPropertyName = "SoSanPham";
+            colSoSp.HeaderText = "Số sản phẩm";
+            colSoSp.MinimumWidth = 6;
+            colSoSp.Name = "colSoSp";
+            // 
+            // colTongTien
+            // 
+            colTongTien.DataPropertyName = "TongTien";
+            colTongTien.HeaderText = "Tổng tiền";
+            colTongTien.MinimumWidth = 6;
+            colTongTien.Name = "colTongTien";
+            // 
+            // colTrangThai
+            // 
+            colTrangThai.DataPropertyName = "TrangThai";
+            colTrangThai.HeaderText = "Trạng thái";
+            colTrangThai.MinimumWidth = 6;
+            colTrangThai.Name = "colTrangThai";
+            // 
+            // colChiTiet
+            // 
+            colChiTiet.DataPropertyName = "ChiTiet";
+            colChiTiet.HeaderText = "Chi tiết";
+            colChiTiet.MinimumWidth = 6;
+            colChiTiet.Name = "colChiTiet";
+            colChiTiet.Resizable = DataGridViewTriState.True;
+            colChiTiet.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // colHuyPhieu
+            // 
+            colHuyPhieu.HeaderText = "Hủy";
+            colHuyPhieu.MinimumWidth = 6;
+            colHuyPhieu.Name = "colHuyPhieu";
+            colHuyPhieu.UseColumnTextForButtonValue = true;
             // 
             // UC_NhapHangLo
             // 
@@ -1084,7 +1107,7 @@
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
             tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvTheoDoiLoHang).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvLoHang).EndInit();
             panel9.ResumeLayout(false);
             panel9.PerformLayout();
             ResumeLayout(false);
@@ -1152,19 +1175,11 @@
         private Label lblTongSPDaNhap;
         private Label lblTongPhieuNhap;
         private Panel panel9;
-        private DataGridView dgvTheoDoiLoHang;
-        private DataGridViewTextBoxColumn colMaLo;
-        private DataGridViewTextBoxColumn colSanPham;
-        private DataGridViewTextBoxColumn colPhieuNhap;
-        private DataGridViewTextBoxColumn colNgayNhapLoHang;
-        private DataGridViewTextBoxColumn colSoLuongNhap;
-        private DataGridViewTextBoxColumn colDaBan;
-        private DataGridViewTextBoxColumn colConLai;
-        private DataGridViewTextBoxColumn colTrangThaiLoHang;
+        private DataGridView dgvLoHang;
         private Button btnTimLoHang;
-        private ComboBox comboBox2;
-        private ComboBox comboBox1;
-        private TextBox textBox1;
+        private ComboBox cboTrangThai_Lo;
+        private ComboBox cboSanPham_Lo;
+        private TextBox txtTimMaLo;
         private DataGridViewTextBoxColumn colNhap_STT;
         private DataGridViewTextBoxColumn colNhap_SanPham;
         private DataGridViewTextBoxColumn colNhap_SoLuong;
@@ -1173,6 +1188,14 @@
         private DataGridViewButtonColumn colNhap_Xoa;
         private ComboBox cboNhanVien;
         private Label label16;
+        private DataGridViewTextBoxColumn colMaLo;
+        private DataGridViewTextBoxColumn colSanPham;
+        private DataGridViewTextBoxColumn colPhieuNhap;
+        private DataGridViewTextBoxColumn colNgayNhapLoHang;
+        private DataGridViewTextBoxColumn colSoLuongNhap;
+        private DataGridViewTextBoxColumn colDaBan;
+        private DataGridViewTextBoxColumn colConLai;
+        private DataGridViewTextBoxColumn colTrangThaiLoHang;
         private DataGridViewTextBoxColumn colMaPhieu;
         private DataGridViewTextBoxColumn colNgayNhap;
         private DataGridViewTextBoxColumn colNCC;
@@ -1181,5 +1204,6 @@
         private DataGridViewTextBoxColumn colTongTien;
         private DataGridViewTextBoxColumn colTrangThai;
         private DataGridViewButtonColumn colChiTiet;
+        private DataGridViewButtonColumn colHuyPhieu;
     }
 }

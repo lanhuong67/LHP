@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260509180450_ThemChiTietIMEI")]
+    partial class ThemChiTietIMEI
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,44 +44,6 @@ namespace DAL.Migrations
                     b.HasKey("MaChiNhanh");
 
                     b.ToTable("ChiNhanh");
-                });
-
-            modelBuilder.Entity("DTO.ChiTietHoaDon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("DonGia")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<string>("GhiChuImei")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MaHD")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("MaSP")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("SoLuong")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ThanhTien")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MaHD");
-
-                    b.ToTable("ChiTietHoaDon");
                 });
 
             modelBuilder.Entity("DTO.ChiTietIMEI", b =>
@@ -177,38 +142,6 @@ namespace DAL.Migrations
                     b.HasKey("MaHang");
 
                     b.ToTable("HangSanXuat");
-                });
-
-            modelBuilder.Entity("DTO.HoaDon", b =>
-                {
-                    b.Property<string>("MaHD")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("MaNV")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime>("NgayLap")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SDTKhachHang")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<decimal>("TongTien")
-                        .HasColumnType("decimal(18,0)");
-
-                    b.Property<string>("TrangThai")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("MaHD");
-
-                    b.ToTable("HoaDon");
                 });
 
             modelBuilder.Entity("DTO.KhachHang", b =>
@@ -403,17 +336,6 @@ namespace DAL.Migrations
                     b.ToTable("SanPham");
                 });
 
-            modelBuilder.Entity("DTO.ChiTietHoaDon", b =>
-                {
-                    b.HasOne("DTO.HoaDon", "HoaDon")
-                        .WithMany("ChiTietHoaDons")
-                        .HasForeignKey("MaHD")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HoaDon");
-                });
-
             modelBuilder.Entity("DTO.ChiTietIMEI", b =>
                 {
                     b.HasOne("DTO.PhieuNhap", "PhieuNhap")
@@ -498,11 +420,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("DTO.HangSanXuat", b =>
                 {
                     b.Navigation("SanPhams");
-                });
-
-            modelBuilder.Entity("DTO.HoaDon", b =>
-                {
-                    b.Navigation("ChiTietHoaDons");
                 });
 
             modelBuilder.Entity("DTO.NhaCungCap", b =>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+
 namespace DAL
 {
     public class KhachHangDAL
@@ -11,6 +12,23 @@ namespace DAL
         public List<KhachHang> GetAll()
         {
             return _db.KhachHangs.ToList();
+        }
+
+        // ========================================================
+        // HÀM MỚI: TÌM KHÁCH HÀNG THEO SỐ ĐIỆN THOẠI
+        // Phục vụ cho tính năng gợi ý tên tự động bên Hóa Đơn
+        // ========================================================
+        public KhachHang TimKhachHangTheoSDT(string sdt)
+        {
+            try
+            {
+                // Tìm khách hàng đầu tiên khớp với số điện thoại truyền vào
+                return _db.KhachHangs.FirstOrDefault(kh => kh.SDT == sdt);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi tìm kiếm số điện thoại: " + ex.Message);
+            }
         }
 
         public bool Them(KhachHang kh)
@@ -23,7 +41,6 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                // Thay vì MessageBox, ta NÉM lỗi này lên tầng GUI để GUI hiện thông báo
                 throw new Exception("Lỗi Database khi Thêm Khách Hàng: " + (ex.InnerException?.Message ?? ex.Message));
             }
         }
@@ -48,7 +65,6 @@ namespace DAL
             catch { return false; }
         }
 
-        // Mình viết sẵn hàm Xóa cho bạn luôn
         public bool Xoa(string maKH)
         {
             try
@@ -62,7 +78,7 @@ namespace DAL
                 }
                 return false;
             }
-            catch { return false; } // Sẽ lỗi nếu khách này đã có Hóa đơn (dính khóa ngoại)
+            catch { return false; }
         }
     }
 }

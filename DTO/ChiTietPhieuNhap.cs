@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DTO
@@ -34,5 +35,8 @@ namespace DTO
 
         [Column(TypeName = "decimal(18,0)")]
         public decimal ThanhTien { get; set; } = 0;
+
+        [NotMapped] // Rất quan trọng: Báo cho EF Core không tạo cột này trong DB
+        public List<string> DanhSachIMEI { get; set; } = new List<string>();
     }
 }

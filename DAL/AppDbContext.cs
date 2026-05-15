@@ -13,11 +13,18 @@ namespace DAL
         public DbSet<PhieuNhap> PhieuNhaps { get; set; }
         public DbSet<ChiTietPhieuNhap> ChiTietPhieuNhaps { get; set; }
         public DbSet<ChiNhanh> ChiNhanhs { get; set; }
+        public DbSet<ChiTietIMEI> ChiTietIMEIs { get; set; }
+
+        // ===============================================
+        // BỔ SUNG 2 BẢNG NÀY CHO MODULE BÁN HÀNG
+        // ===============================================
+        public DbSet<HoaDon> HoaDons { get; set; }
+        public DbSet<ChiTietHoaDon> ChiTietHoaDons { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Sửa lại tên Server chuẩn xác 100% theo máy của Phúc
                 optionsBuilder.UseSqlServer("Server=.;Database=QL_CuaHangDienThoai;User Id=sa;Password=123123;TrustServerCertificate=True;");
             }
         }

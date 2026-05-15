@@ -183,6 +183,20 @@ namespace GUI
             // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picNhapHang_Click(sender, e);
         }
+
+        private void picTaoHoaDon_Click(object sender, EventArgs e)
+        {
+            UC_TaoHoaDon ucTaoHoaDon = new UC_TaoHoaDon();
+            AddUserControl(ucTaoHoaDon);
+        }
+
+
+        private void lblTaoHoaDon_Click(object sender, EventArgs e)
+        {
+            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
+            picTaoHoaDon_Click(sender, e);
+        }
+
     }
 
  
