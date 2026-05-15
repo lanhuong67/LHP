@@ -86,7 +86,7 @@ namespace GUI
         }
 
         // ==========================================
-        // 2. XỬ LÝ ĐĂNG NHẬP
+        // 2. XỬ LÝ ĐĂNG NHẬP VÀ GÁN SESSION
         // ==========================================
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
@@ -107,8 +107,14 @@ namespace GUI
 
             if (tk != null)
             {
+                // 🟢 ĐIỂM SÁNG LÀ TẠI ĐÂY: Lưu thông tin người dùng vào Session
+                // Từ giờ trở đi, bất cứ form nào cần biết "Ai đang dùng máy" chỉ cần gọi UserSession ra hỏi
+                UserSession.MaNV = tk.MaNV;
+                UserSession.HoTen = tk.HoTen;
+                UserSession.ChucVu = tk.VaiTro;
+
                 lblError.Visible = false;
-                FormMain frm = new FormMain(tk.VaiTro, tk.TenDangNhap);
+                FormMain frm = new FormMain();
                 this.Hide();
                 frm.ShowDialog();
                 this.Close();

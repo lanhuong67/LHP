@@ -37,6 +37,10 @@ namespace DAL
                     sp.GiaNhap = spUpdate.GiaNhap;
                     sp.GiaBan = spUpdate.GiaBan;
                     sp.CauHinh = spUpdate.CauHinh;
+
+                    // 🔴 ĐÂY CHÍNH LÀ DÒNG BẠN BỊ THIẾU NÀY:
+                    sp.TrangThai = spUpdate.TrangThai;
+
                     _db.SaveChanges();
                     return true;
                 }

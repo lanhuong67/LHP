@@ -512,6 +512,7 @@ namespace GUI
             // 
             // picDanhSachHD
             // 
+            picDanhSachHD.Cursor = Cursors.Hand;
             picDanhSachHD.Image = (Image)resources.GetObject("picDanhSachHD.Image");
             picDanhSachHD.Location = new Point(12, 237);
             picDanhSachHD.Name = "picDanhSachHD";
@@ -519,6 +520,7 @@ namespace GUI
             picDanhSachHD.SizeMode = PictureBoxSizeMode.Zoom;
             picDanhSachHD.TabIndex = 12;
             picDanhSachHD.TabStop = false;
+            picDanhSachHD.Click += picDanhSachHD_Click;
             // 
             // pictureBox2
             // 
@@ -542,6 +544,7 @@ namespace GUI
             // lblDanhSachHD
             // 
             lblDanhSachHD.AutoSize = true;
+            lblDanhSachHD.Cursor = Cursors.Hand;
             lblDanhSachHD.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblDanhSachHD.ForeColor = Color.White;
             lblDanhSachHD.Location = new Point(104, 245);
@@ -549,6 +552,7 @@ namespace GUI
             lblDanhSachHD.Size = new Size(186, 25);
             lblDanhSachHD.TabIndex = 19;
             lblDanhSachHD.Text = "Danh sách đơn hàng";
+            lblDanhSachHD.Click += lblDanhSachHD_Click;
             // 
             // lblTaoHoaDon
             // 

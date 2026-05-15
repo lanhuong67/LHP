@@ -80,4 +80,13 @@ namespace DTO
         public decimal TongTien { get; set; }
         public string TrangThai { get; set; }
     }
+
+    public class ChiTietHoaDonViewModel
+    {
+        public string TenSP { get; set; }
+        public int SoLuong { get; set; }
+        public decimal DonGia { get; set; }
+        public decimal ThanhTien { get; set; }
+        public string GhiChuImei { get; set; }
+    }
 }

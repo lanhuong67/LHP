@@ -91,7 +91,9 @@ namespace GUI
                     txtGiaBan.Text = sp.GiaBan.ToString("0.##");
                     txtTonKho.Text = sp.TonKho.ToString();
                     txtCauHinh.Text = sp.CauHinh;
-                    cboTrangThai.SelectedItem = sp.TrangThai;
+
+                    // SỬ DỤNG .Text THAY VÌ .SelectedItem ĐỂ TRÁNH LỖI KHOẢNG TRẮNG TỪ DB
+                    cboTrangThai.Text = sp.TrangThai;
 
                     isAdding = false;
                     txtMaSP.ReadOnly = true;
@@ -152,7 +154,7 @@ namespace GUI
                 GiaBan = giaBan,
                 CauHinh = txtCauHinh.Text.Trim(),
                 TonKho = 0, // Mới tạo luôn bằng 0
-                TrangThai = cboTrangThai.SelectedItem?.ToString() ?? "Đang kinh doanh"
+                TrangThai = cboTrangThai.Text // Dùng .Text an toàn hơn trong WinForms
             };
 
             if (isAdding)
@@ -187,6 +189,11 @@ namespace GUI
             decimal.TryParse(txtGiaNhap.Text, out giaNhap);
             decimal.TryParse(txtGiaBan.Text, out giaBan);
 
+            // BẮT CHÍNH XÁC TRẠNG THÁI HIỂN THỊ TRÊN GIAO DIỆN
+            string trangThaiChon = string.IsNullOrWhiteSpace(cboTrangThai.Text)
+                                   ? "Đang kinh doanh"
+                                   : cboTrangThai.Text;
+
             SanPham spCapNhat = new SanPham
             {
                 MaSP = txtMaSP.Text.Trim(),
@@ -195,7 +202,7 @@ namespace GUI
                 GiaNhap = giaNhap,
                 GiaBan = giaBan,
                 CauHinh = txtCauHinh.Text.Trim(),
-                TrangThai = cboTrangThai.SelectedItem?.ToString() ?? "Đang kinh doanh"
+                TrangThai = trangThaiChon // Đã cập nhật dòng này
                 // Không cập nhật TonKho ở đây để tránh làm sai lệch số lượng kho thực tế
             };
 

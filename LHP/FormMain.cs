@@ -7,35 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+// Thêm thư viện DTO để gọi UserSession
+using DTO;
 
 namespace GUI
 {
     public partial class FormMain : Form
     {
-        private string _vaiTro;
-        private string _tenHienThi;
-
-        // Hàm khởi tạo nhận 2 tham số: Vai trò và Tên để hiển thị
-        public FormMain(string vaiTro, string ten)
+        // 🔴 ĐIỂM SỬA 1: Không cần truyền tham số vào hàm khởi tạo nữa
+        // Vì mọi thông tin (Vai trò, Tên) đều được lấy từ túi "UserSession"
+        public FormMain()
         {
             InitializeComponent();
-            this._vaiTro = vaiTro;
-            this._tenHienThi = ten;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            // 1. Cập nhật dòng chữ "Xin chào, [tên]" ở góc phải
-            lblTenNV.Text = $"Xin chào, {_tenHienThi}";
+            // 🔴 ĐIỂM SỬA 2: Lấy Tên hiển thị từ Session
+            lblTenNV.Text = $"Xin chào, {UserSession.HoTen}";
 
-            // 2. Thực hiện phân quyền
+            // Thực hiện phân quyền
             PhanQuyenHeThong();
         }
 
         private void PhanQuyenHeThong()
         {
-            // Nếu người đăng nhập KHÔNG PHẢI là Admin (tức là Staff/Nhân viên bình thường)
-            if (_vaiTro != "Admin")
+            // 🔴 ĐIỂM SỬA 3: Kiểm tra Vai trò từ Session
+            if (UserSession.ChucVu != "Admin")
             {
                 // ==========================================
                 // 1. ẨN NHÓM TÍNH NĂNG KHO HÀNG CHUYÊN SÂU
@@ -64,7 +62,7 @@ namespace GUI
                 picChiNhanh.Visible = false;
 
                 // (Tùy chọn) Ẩn luôn chữ tiêu đề "Danh mục" màu trắng nhạt trên menu
-                lblTitleDanhMuc.Visible = false; 
+                lblTitleDanhMuc.Visible = false;
 
                 // ==========================================
                 // 3. ẨN TOÀN BỘ NHÓM "BÁO CÁO"
@@ -78,13 +76,12 @@ namespace GUI
                 picTopBanChay.Visible = false;
 
                 // (Tùy chọn) Ẩn luôn chữ tiêu đề "Báo cáo" màu trắng nhạt trên menu
-                lblTitleBaoCao.Visible = false; 
+                lblTitleBaoCao.Visible = false;
             }
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)
         {
-            // 1. Hiển thị hộp thoại xác nhận để tránh người dùng bấm nhầm
             DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất và quay lại màn hình đăng nhập không?",
                                                   "Xác nhận đăng xuất",
                                                   MessageBoxButtons.YesNo,
@@ -92,35 +89,31 @@ namespace GUI
 
             if (result == DialogResult.Yes)
             {
-                // 2. Ẩn Form hiện tại (FormMain)
+                // 🔴 ĐIỂM SỬA 4: Xóa sạch Session khi đăng xuất để bảo mật
+                UserSession.MaNV = "";
+                UserSession.HoTen = "";
+                UserSession.ChucVu = "";
+
                 this.Hide();
-
-                // 3. Khởi tạo lại Form Đăng nhập
                 FormDangNhap frmLogin = new FormDangNhap();
-
-                // 4. Hiển thị Form Đăng nhập dưới dạng Dialog
                 frmLogin.ShowDialog();
-
-                // 5. Sau khi Form Đăng nhập đóng lại (nếu có), ta mới đóng hẳn FormMain
                 this.Close();
             }
         }
+
         private void AddUserControl(UserControl uc)
         {
-            // Đặt UserControl lấp đầy vùng chứa
             uc.Dock = DockStyle.Fill;
-
-            // Xóa các UserControl hiện đang hiển thị trước đó
             pnlContainer.Controls.Clear();
-
-            // Thêm UserControl mới vào và đẩy lên mặt trước
             pnlContainer.Controls.Add(uc);
             uc.BringToFront();
         }
 
+        // ================================================================
+        // TẤT CẢ CÁC SỰ KIỆN CLICK MENU CỦA BẠN ĐƯỢC GIỮ NGUYÊN BÊN DƯỚI
+        // ================================================================
         private void picNhanVien_Click(object sender, EventArgs e)
         {
-            // Gọi UC_NhanVien ra và đưa vào Panel chứa (pnlContainer)
             UC_NhanVien ucNhanVien = new UC_NhanVien();
             AddUserControl(ucNhanVien);
         }
@@ -130,18 +123,14 @@ namespace GUI
             picNhanVien_Click(sender, e);
         }
 
-        // Sự kiện khi click vào Icon/Hình ảnh của nút Danh sách khách hàng
         private void picDanhSachKH_Click(object sender, EventArgs e)
         {
-            // Gọi UC_KhachHang ra và đưa vào hàm AddUserControl bạn đã viết sẵn
             UC_KhachHang ucKhachHang = new UC_KhachHang();
             AddUserControl(ucKhachHang);
         }
 
-        // Sự kiện khi click vào dòng chữ "Danh sách khách hàng"
         private void lblDanhSachKH_Click(object sender, EventArgs e)
         {
-            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picDanhSachKH_Click(sender, e);
         }
 
@@ -151,10 +140,8 @@ namespace GUI
             AddUserControl(ucHangSanXuat);
         }
 
-     
         private void lblHangSanXuat_Click(object sender, EventArgs e)
         {
-            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picHangSanXuat_Click(sender, e);
         }
 
@@ -164,10 +151,8 @@ namespace GUI
             AddUserControl(ucSanPham);
         }
 
-
         private void lblSanPham_Click(object sender, EventArgs e)
         {
-            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picSanPham_Click(sender, e);
         }
 
@@ -177,10 +162,8 @@ namespace GUI
             AddUserControl(ucNhapHangLo);
         }
 
-
         private void lblNhapHang_Click(object sender, EventArgs e)
         {
-            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picNhapHang_Click(sender, e);
         }
 
@@ -190,14 +173,20 @@ namespace GUI
             AddUserControl(ucTaoHoaDon);
         }
 
-
         private void lblTaoHoaDon_Click(object sender, EventArgs e)
         {
-            // Tái sử dụng lại hàm click của hình ảnh cho đồng bộ
             picTaoHoaDon_Click(sender, e);
         }
 
-    }
+        private void picDanhSachHD_Click(object sender, EventArgs e)
+        {
+            UC_DanhSachHoaDon ucDanhSachHoaDon = new UC_DanhSachHoaDon();
+            AddUserControl(ucDanhSachHoaDon);
+        }
 
- 
+        private void lblDanhSachHD_Click(object sender, EventArgs e)
+        {
+            picDanhSachHD_Click(sender, e);
+        }
+    }
 }

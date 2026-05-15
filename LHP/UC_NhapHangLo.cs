@@ -42,6 +42,14 @@ namespace GUI
             HienThiLoHang();
 
             KhoiTaoTraiNghiemNguoiDung();
+
+            // Hiển thị tên nhân viên đang trực tiếp nhập hàng từ Session
+            if (txtNhanVien != null)
+            {
+                txtNhanVien.Text = UserSession.HoTen;
+                txtNhanVien.ReadOnly = true;
+                txtNhanVien.BackColor = SystemColors.Control;
+            }
         }
 
         // ==========================================================
@@ -124,14 +132,6 @@ namespace GUI
                 cboHangSX_Loc.DataSource = _spBus.GetAllHang();
                 cboHangSX_Loc.DisplayMember = "TenHang";
                 cboHangSX_Loc.ValueMember = "MaHang";
-
-                var dsAdmin = _nhanVienBUS.GetAllNhanVien().Where(nv => nv.VaiTro.ToLower() == "admin").ToList();
-                if (dsAdmin.Any())
-                {
-                    cboNhanVien.DataSource = dsAdmin;
-                    cboNhanVien.DisplayMember = "HoTen";
-                    cboNhanVien.ValueMember = "MaNV";
-                }
 
                 var listNCC_Loc = new List<string> { "--Tất cả Nhà cung cấp--" };
                 if (dsNCC != null) listNCC_Loc.AddRange(dsNCC.Select(ncc => ncc.TenNCC));
@@ -246,10 +246,16 @@ namespace GUI
 
         private void btnXacNhan_Click(object sender, EventArgs e)
         {
+            // Kiểm tra phân quyền: Chỉ Admin mới được xác nhận nhập lô hàng lớn
+            if (UserSession.ChucVu != "Admin")
+            {
+                MessageBox.Show("Chỉ quản lý (Admin) mới có quyền xác nhận nhập kho!", "Cảnh báo bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
             if (!gioHang.Any()) { MessageBox.Show("Chưa có sản phẩm nào để nhập!", "Cảnh báo"); return; }
             if (cboNhaCungCap.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Nhà cung cấp!", "Cảnh báo"); return; }
             if (cboChiNhanh.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Chi nhánh!", "Cảnh báo"); return; }
-            if (cboNhanVien.SelectedValue == null) { MessageBox.Show("Không có quyền Admin!", "Cảnh báo"); return; }
 
             if (MessageBox.Show("Xác nhận nhập lô hàng này? Tồn kho sẽ tăng ngay lập tức.", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
@@ -259,7 +265,7 @@ namespace GUI
                     NgayNhap = dtpNgayNhap.Value,
                     MaNCC = cboNhaCungCap.SelectedValue.ToString(),
                     MaChiNhanh = cboChiNhanh.SelectedValue.ToString(),
-                    MaNV = cboNhanVien.SelectedValue.ToString(),
+                    MaNV = UserSession.MaNV, // Lấy mã NV trực tiếp từ Session
                     SoHoaDonNCC = txtSoHoaDonNCC.Text,
                     GhiChu = txtGhiChu.Text,
                     TongTien = gioHang.Sum(x => x.ThanhTien),

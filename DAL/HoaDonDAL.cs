@@ -107,5 +107,21 @@ namespace DAL
                         };
             return query.OrderByDescending(x => x.NgayLap).ToList();
         }
+        public List<ChiTietHoaDonViewModel> GetChiTietHoaDon(string maHD)
+        {
+            var query = from ct in _db.ChiTietHoaDons
+                        join sp in _db.SanPhams on ct.MaSP equals sp.MaSP
+                        where ct.MaHD == maHD
+                        select new ChiTietHoaDonViewModel
+                        {
+                            TenSP = sp.TenSP,
+                            SoLuong = ct.SoLuong,
+                            DonGia = ct.DonGia,
+                            ThanhTien = ct.ThanhTien,
+                            GhiChuImei = ct.GhiChuImei
+                        };
+            return query.ToList();
+        }
     }
+
 }

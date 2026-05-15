@@ -39,8 +39,8 @@ namespace GUI
             KhoiTaoTraiNghiemNguoiDung();
             LoadComboBoxes();
 
-            // Điền sẵn tên nhân viên đang trực quầy
-            txtNhanVien.Text = "Lê Hữu Phúc";
+            // Lấy tên nhân viên tự động từ Session
+            txtNhanVien.Text = UserSession.HoTen;
             txtNhanVien.ReadOnly = true;
             txtNhanVien.BackColor = SystemColors.Control;
 
@@ -269,7 +269,7 @@ namespace GUI
                 {
                     MaHD = txtMaHD.Text,
                     NgayLap = dtpNgayLap.Value,
-                    MaNV = "NV001", // Code tạm, sau này thay bằng mã NV đang đăng nhập
+                    MaNV = UserSession.MaNV, // Lấy mã NV tự động từ Session
                     SDTKhachHang = sdtLuu,
                     TongTien = gioHang.Sum(x => x.ThanhTien),
                     TrangThai = "Hoàn thành"

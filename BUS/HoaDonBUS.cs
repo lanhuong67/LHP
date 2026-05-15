@@ -25,5 +25,9 @@ namespace BUS
         {
             return _dal.GetDanhSachHoaDon();
         }
+        public List<ChiTietHoaDonViewModel> GetChiTietHoaDon(string maHD)
+        {
+            return _dal.GetChiTietHoaDon(maHD);
+        }
     }
 }
