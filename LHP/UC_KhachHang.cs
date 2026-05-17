@@ -250,5 +250,10 @@ namespace GUI
                 (k.DiaChi != null && RemoveDiacritics(k.DiaChi).ToLower().Contains(keywordUnsign))
             ).ToList();
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

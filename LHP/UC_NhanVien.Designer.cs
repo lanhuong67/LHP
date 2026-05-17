@@ -69,7 +69,8 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label1.Location = new Point(36, 11);
+            label1.Location = new Point(45, 14);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(226, 35);
             label1.TabIndex = 2;
@@ -81,9 +82,10 @@
             btnXoa.FlatStyle = FlatStyle.Flat;
             btnXoa.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnXoa.ForeColor = Color.Red;
-            btnXoa.Location = new Point(416, 191);
+            btnXoa.Location = new Point(644, 229);
+            btnXoa.Margin = new Padding(4, 4, 4, 4);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(126, 51);
+            btnXoa.Size = new Size(158, 50);
             btnXoa.TabIndex = 18;
             btnXoa.Text = "✖ Xóa";
             btnXoa.UseVisualStyleBackColor = false;
@@ -95,9 +97,10 @@
             btnSua.FlatStyle = FlatStyle.Flat;
             btnSua.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnSua.ForeColor = Color.Black;
-            btnSua.Location = new Point(247, 191);
+            btnSua.Location = new Point(392, 229);
+            btnSua.Margin = new Padding(4, 4, 4, 4);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(126, 51);
+            btnSua.Size = new Size(158, 50);
             btnSua.TabIndex = 17;
             btnSua.Text = "✎ Sửa";
             btnSua.UseVisualStyleBackColor = false;
@@ -110,11 +113,12 @@
             dgvNhanVien.BackgroundColor = Color.White;
             dgvNhanVien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvNhanVien.Columns.AddRange(new DataGridViewColumn[] { colMaNV, colHoTen, colSDT, colEmail, colVaiTro });
-            dgvNhanVien.Location = new Point(16, 262);
+            dgvNhanVien.Location = new Point(21, 303);
+            dgvNhanVien.Margin = new Padding(4, 4, 4, 4);
             dgvNhanVien.Name = "dgvNhanVien";
             dgvNhanVien.RowHeadersVisible = false;
             dgvNhanVien.RowHeadersWidth = 51;
-            dgvNhanVien.Size = new Size(632, 648);
+            dgvNhanVien.Size = new Size(846, 659);
             dgvNhanVien.TabIndex = 16;
             dgvNhanVien.CellClick += dgvNhanVien_CellClick;
             // 
@@ -174,31 +178,35 @@
             panel2.Controls.Add(label6);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label3);
-            panel2.Location = new Point(668, 58);
+            panel2.Location = new Point(896, 72);
+            panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(428, 852);
+            panel2.Size = new Size(626, 890);
             panel2.TabIndex = 1;
             // 
             // txtMaNV
             // 
-            txtMaNV.Location = new Point(160, 42);
+            txtMaNV.Location = new Point(253, 58);
+            txtMaNV.Margin = new Padding(4, 4, 4, 4);
             txtMaNV.Name = "txtMaNV";
-            txtMaNV.Size = new Size(132, 27);
+            txtMaNV.Size = new Size(164, 31);
             txtMaNV.TabIndex = 0;
             // 
             // txtMatKhau
             // 
             txtMatKhau.Font = new Font("Segoe UI", 10.8F);
-            txtMatKhau.Location = new Point(19, 494);
+            txtMatKhau.Location = new Point(77, 624);
+            txtMatKhau.Margin = new Padding(4, 4, 4, 4);
             txtMatKhau.Name = "txtMatKhau";
-            txtMatKhau.Size = new Size(390, 31);
+            txtMatKhau.Size = new Size(486, 31);
             txtMatKhau.TabIndex = 13;
             // 
             // label9
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 10.8F);
-            label9.Location = new Point(19, 466);
+            label9.Location = new Point(77, 588);
+            label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
             label9.Size = new Size(86, 25);
             label9.TabIndex = 23;
@@ -207,9 +215,10 @@
             // txtTaiKhoan
             // 
             txtTaiKhoan.Font = new Font("Segoe UI", 10.8F);
-            txtTaiKhoan.Location = new Point(19, 418);
+            txtTaiKhoan.Location = new Point(77, 528);
+            txtTaiKhoan.Margin = new Padding(4, 4, 4, 4);
             txtTaiKhoan.Name = "txtTaiKhoan";
-            txtTaiKhoan.Size = new Size(390, 31);
+            txtTaiKhoan.Size = new Size(486, 31);
             txtTaiKhoan.TabIndex = 12;
             // 
             // btnLamTrong
@@ -218,9 +227,10 @@
             btnLamTrong.FlatStyle = FlatStyle.Flat;
             btnLamTrong.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamTrong.ForeColor = Color.Black;
-            btnLamTrong.Location = new Point(234, 575);
+            btnLamTrong.Location = new Point(353, 711);
+            btnLamTrong.Margin = new Padding(4, 4, 4, 4);
             btnLamTrong.Name = "btnLamTrong";
-            btnLamTrong.Size = new Size(142, 64);
+            btnLamTrong.Size = new Size(178, 46);
             btnLamTrong.TabIndex = 7;
             btnLamTrong.Text = "Làm trống";
             btnLamTrong.UseVisualStyleBackColor = false;
@@ -232,9 +242,10 @@
             btnLuu.FlatStyle = FlatStyle.Flat;
             btnLuu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
-            btnLuu.Location = new Point(56, 575);
+            btnLuu.Location = new Point(131, 711);
+            btnLuu.Margin = new Padding(4, 4, 4, 4);
             btnLuu.Name = "btnLuu";
-            btnLuu.Size = new Size(142, 64);
+            btnLuu.Size = new Size(178, 46);
             btnLuu.TabIndex = 8;
             btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = false;
@@ -244,7 +255,8 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 10.8F);
-            label11.Location = new Point(19, 390);
+            label11.Location = new Point(77, 494);
+            label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(86, 25);
             label11.TabIndex = 20;
@@ -253,16 +265,18 @@
             // txtVaiTro
             // 
             txtVaiTro.Font = new Font("Segoe UI", 10.8F);
-            txtVaiTro.Location = new Point(19, 342);
+            txtVaiTro.Location = new Point(77, 434);
+            txtVaiTro.Margin = new Padding(4, 4, 4, 4);
             txtVaiTro.Name = "txtVaiTro";
-            txtVaiTro.Size = new Size(390, 31);
+            txtVaiTro.Size = new Size(486, 31);
             txtVaiTro.TabIndex = 11;
             // 
             // label10
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 10.8F);
-            label10.Location = new Point(19, 314);
+            label10.Location = new Point(77, 398);
+            label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(63, 25);
             label10.TabIndex = 18;
@@ -271,16 +285,18 @@
             // txtEmail
             // 
             txtEmail.Font = new Font("Segoe UI", 10.8F);
-            txtEmail.Location = new Point(19, 266);
+            txtEmail.Location = new Point(77, 338);
+            txtEmail.Margin = new Padding(4, 4, 4, 4);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(390, 31);
+            txtEmail.Size = new Size(486, 31);
             txtEmail.TabIndex = 10;
             // 
             // label8
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 10.8F);
-            label8.Location = new Point(19, 238);
+            label8.Location = new Point(77, 304);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(54, 25);
             label8.TabIndex = 14;
@@ -289,16 +305,18 @@
             // txtSDT
             // 
             txtSDT.Font = new Font("Segoe UI", 10.8F);
-            txtSDT.Location = new Point(19, 193);
+            txtSDT.Location = new Point(77, 247);
+            txtSDT.Margin = new Padding(4, 4, 4, 4);
             txtSDT.Name = "txtSDT";
-            txtSDT.Size = new Size(390, 31);
+            txtSDT.Size = new Size(486, 31);
             txtSDT.TabIndex = 8;
             // 
             // label7
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 10.8F);
-            label7.Location = new Point(19, 165);
+            label7.Location = new Point(77, 212);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(117, 25);
             label7.TabIndex = 12;
@@ -307,16 +325,18 @@
             // txtHoTen
             // 
             txtHoTen.Font = new Font("Segoe UI", 10.8F);
-            txtHoTen.Location = new Point(19, 117);
+            txtHoTen.Location = new Point(77, 152);
+            txtHoTen.Margin = new Padding(4, 4, 4, 4);
             txtHoTen.Name = "txtHoTen";
-            txtHoTen.Size = new Size(390, 31);
+            txtHoTen.Size = new Size(486, 31);
             txtHoTen.TabIndex = 7;
             // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 10.8F);
-            label6.Location = new Point(19, 89);
+            label6.Location = new Point(77, 117);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(66, 25);
             label6.TabIndex = 5;
@@ -326,7 +346,8 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 10.8F);
-            label4.Location = new Point(19, 41);
+            label4.Location = new Point(77, 57);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(118, 25);
             label4.TabIndex = 8;
@@ -337,7 +358,8 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             label3.ForeColor = Color.MediumBlue;
-            label3.Location = new Point(9, 6);
+            label3.Location = new Point(49, 14);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(184, 25);
             label3.TabIndex = 7;
@@ -349,9 +371,10 @@
             btnThemNV.FlatStyle = FlatStyle.Flat;
             btnThemNV.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnThemNV.ForeColor = Color.White;
-            btnThemNV.Location = new Point(36, 188);
+            btnThemNV.Location = new Point(90, 225);
+            btnThemNV.Margin = new Padding(4, 4, 4, 4);
             btnThemNV.Name = "btnThemNV";
-            btnThemNV.Size = new Size(185, 51);
+            btnThemNV.Size = new Size(231, 50);
             btnThemNV.TabIndex = 14;
             btnThemNV.Text = "➕ Thêm NV";
             btnThemNV.UseVisualStyleBackColor = false;
@@ -364,9 +387,10 @@
             panel1.Controls.Add(btnLamMoi);
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
-            panel1.Location = new Point(17, 58);
+            panel1.Location = new Point(21, 72);
+            panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(631, 115);
+            panel1.Size = new Size(846, 124);
             panel1.TabIndex = 13;
             // 
             // btnLamMoi
@@ -375,9 +399,10 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(483, 48);
+            btnLamMoi.Location = new Point(667, 58);
+            btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(114, 39);
+            btnLamMoi.Size = new Size(142, 49);
             btnLamMoi.TabIndex = 5;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -386,9 +411,10 @@
             // txtTimKiem
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
-            txtTimKiem.Location = new Point(9, 52);
+            txtTimKiem.Location = new Point(38, 67);
+            txtTimKiem.Margin = new Padding(4, 4, 4, 4);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(468, 31);
+            txtTimKiem.Size = new Size(584, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tìm tên hoặc số điện thoại...";
             txtTimKiem.TextChanged += txtTimKiem_TextChanged;
@@ -399,7 +425,8 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.Location = new Point(9, 11);
+            label2.Location = new Point(11, 14);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(90, 25);
             label2.TabIndex = 0;
@@ -407,7 +434,7 @@
             // 
             // UC_NhanVien
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
             Controls.Add(btnXoa);
@@ -417,8 +444,10 @@
             Controls.Add(btnThemNV);
             Controls.Add(panel1);
             Controls.Add(label1);
+            Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "UC_NhanVien";
-            Size = new Size(1113, 938);
+            Size = new Size(1546, 986);
             Load += UC_NhanVien_Load;
             ((System.ComponentModel.ISupportInitialize)dgvNhanVien).EndInit();
             panel2.ResumeLayout(false);

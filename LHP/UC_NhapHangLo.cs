@@ -521,6 +521,11 @@ namespace GUI
         private void btnTimLoHang_Click(object sender, EventArgs e) { HienThiLoHang(); }
         private void cboSanPham_Lo_SelectedIndexChanged(object sender, EventArgs e) { HienThiLoHang(); }
         private void cboTrangThai_Lo_SelectedIndexChanged(object sender, EventArgs e) { HienThiLoHang(); }
+
+        private void txtNhanVien_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class ChiTietNhapViewModel

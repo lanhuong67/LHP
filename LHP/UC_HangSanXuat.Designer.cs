@@ -65,7 +65,8 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label1.Location = new Point(36, 11);
+            label1.Location = new Point(45, 14);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(182, 35);
             label1.TabIndex = 3;
@@ -77,9 +78,10 @@
             btnXoa.FlatStyle = FlatStyle.Flat;
             btnXoa.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnXoa.ForeColor = Color.Red;
-            btnXoa.Location = new Point(429, 194);
+            btnXoa.Location = new Point(641, 238);
+            btnXoa.Margin = new Padding(4, 4, 4, 4);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(126, 51);
+            btnXoa.Size = new Size(158, 64);
             btnXoa.TabIndex = 30;
             btnXoa.Text = "✖ Xóa";
             btnXoa.UseVisualStyleBackColor = false;
@@ -91,9 +93,10 @@
             btnSua.FlatStyle = FlatStyle.Flat;
             btnSua.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnSua.ForeColor = Color.Black;
-            btnSua.Location = new Point(260, 194);
+            btnSua.Location = new Point(364, 238);
+            btnSua.Margin = new Padding(4, 4, 4, 4);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(126, 51);
+            btnSua.Size = new Size(158, 64);
             btnSua.TabIndex = 29;
             btnSua.Text = "✎ Sửa";
             btnSua.UseVisualStyleBackColor = false;
@@ -106,10 +109,11 @@
             dgvHangSanXuat.BackgroundColor = Color.White;
             dgvHangSanXuat.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvHangSanXuat.Columns.AddRange(new DataGridViewColumn[] { colMaHang, colTenHang, colQuocGia, colMota, Column1 });
-            dgvHangSanXuat.Location = new Point(29, 265);
+            dgvHangSanXuat.Location = new Point(45, 327);
+            dgvHangSanXuat.Margin = new Padding(4, 4, 4, 4);
             dgvHangSanXuat.Name = "dgvHangSanXuat";
             dgvHangSanXuat.RowHeadersWidth = 51;
-            dgvHangSanXuat.Size = new Size(602, 638);
+            dgvHangSanXuat.Size = new Size(868, 644);
             dgvHangSanXuat.TabIndex = 28;
             dgvHangSanXuat.CellClick += dgvHangSanXuat_CellClick;
             // 
@@ -165,41 +169,46 @@
             panel2.Controls.Add(label6);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label3);
-            panel2.Location = new Point(656, 61);
+            panel2.Location = new Point(939, 14);
+            panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(428, 842);
+            panel2.Size = new Size(589, 957);
             panel2.TabIndex = 27;
             // 
             // txtMoTa
             // 
             txtMoTa.Font = new Font("Segoe UI", 10.8F);
-            txtMoTa.Location = new Point(19, 341);
+            txtMoTa.Location = new Point(26, 419);
+            txtMoTa.Margin = new Padding(4, 4, 4, 4);
             txtMoTa.Multiline = true;
             txtMoTa.Name = "txtMoTa";
-            txtMoTa.Size = new Size(390, 107);
+            txtMoTa.Size = new Size(528, 133);
             txtMoTa.TabIndex = 23;
             // 
             // txtQuocGia
             // 
-            txtQuocGia.Location = new Point(26, 255);
+            txtQuocGia.Location = new Point(34, 312);
+            txtQuocGia.Margin = new Padding(4, 4, 4, 4);
             txtQuocGia.Name = "txtQuocGia";
-            txtQuocGia.Size = new Size(383, 27);
+            txtQuocGia.Size = new Size(520, 31);
             txtQuocGia.TabIndex = 22;
             // 
             // cboTrangThai
             // 
             cboTrangThai.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cboTrangThai.FormattingEnabled = true;
-            cboTrangThai.Location = new Point(19, 505);
+            cboTrangThai.Location = new Point(26, 624);
+            cboTrangThai.Margin = new Padding(4, 4, 4, 4);
             cboTrangThai.Name = "cboTrangThai";
-            cboTrangThai.Size = new Size(390, 33);
+            cboTrangThai.Size = new Size(528, 33);
             cboTrangThai.TabIndex = 21;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 10.8F);
-            label5.Location = new Point(19, 477);
+            label5.Location = new Point(26, 589);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(89, 25);
             label5.TabIndex = 20;
@@ -208,9 +217,10 @@
             // txtMaHang
             // 
             txtMaHang.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtMaHang.Location = new Point(186, 56);
+            txtMaHang.Location = new Point(234, 63);
+            txtMaHang.Margin = new Padding(4, 4, 4, 4);
             txtMaHang.Name = "txtMaHang";
-            txtMaHang.Size = new Size(223, 31);
+            txtMaHang.Size = new Size(320, 31);
             txtMaHang.TabIndex = 19;
             // 
             // btnLamTrong
@@ -219,9 +229,10 @@
             btnLamTrong.FlatStyle = FlatStyle.Flat;
             btnLamTrong.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamTrong.ForeColor = Color.Black;
-            btnLamTrong.Location = new Point(234, 575);
+            btnLamTrong.Location = new Point(328, 715);
+            btnLamTrong.Margin = new Padding(4, 4, 4, 4);
             btnLamTrong.Name = "btnLamTrong";
-            btnLamTrong.Size = new Size(142, 64);
+            btnLamTrong.Size = new Size(178, 50);
             btnLamTrong.TabIndex = 7;
             btnLamTrong.Text = "Làm trống";
             btnLamTrong.UseVisualStyleBackColor = false;
@@ -233,9 +244,10 @@
             btnLuu.FlatStyle = FlatStyle.Flat;
             btnLuu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
-            btnLuu.Location = new Point(56, 575);
+            btnLuu.Location = new Point(106, 715);
+            btnLuu.Margin = new Padding(4, 4, 4, 4);
             btnLuu.Name = "btnLuu";
-            btnLuu.Size = new Size(142, 64);
+            btnLuu.Size = new Size(178, 50);
             btnLuu.TabIndex = 8;
             btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = false;
@@ -245,7 +257,8 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 10.8F);
-            label8.Location = new Point(19, 301);
+            label8.Location = new Point(26, 369);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(59, 25);
             label8.TabIndex = 14;
@@ -255,7 +268,8 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 10.8F);
-            label7.Location = new Point(19, 214);
+            label7.Location = new Point(26, 261);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(84, 25);
             label7.TabIndex = 12;
@@ -264,16 +278,18 @@
             // txtTenHang
             // 
             txtTenHang.Font = new Font("Segoe UI", 10.8F);
-            txtTenHang.Location = new Point(19, 147);
+            txtTenHang.Location = new Point(26, 177);
+            txtTenHang.Margin = new Padding(4, 4, 4, 4);
             txtTenHang.Name = "txtTenHang";
-            txtTenHang.Size = new Size(390, 31);
+            txtTenHang.Size = new Size(528, 31);
             txtTenHang.TabIndex = 7;
             // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 10.8F);
-            label6.Location = new Point(19, 119);
+            label6.Location = new Point(26, 142);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(83, 25);
             label6.TabIndex = 10;
@@ -283,7 +299,8 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 10.8F);
-            label4.Location = new Point(19, 55);
+            label4.Location = new Point(26, 62);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(152, 25);
             label4.TabIndex = 8;
@@ -294,7 +311,8 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             label3.ForeColor = Color.MediumBlue;
-            label3.Location = new Point(9, 6);
+            label3.Location = new Point(14, 9);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(220, 25);
             label3.TabIndex = 7;
@@ -306,9 +324,10 @@
             btnThem.FlatStyle = FlatStyle.Flat;
             btnThem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnThem.ForeColor = Color.White;
-            btnThem.Location = new Point(69, 196);
+            btnThem.Location = new Point(87, 241);
+            btnThem.Margin = new Padding(4, 4, 4, 4);
             btnThem.Name = "btnThem";
-            btnThem.Size = new Size(132, 49);
+            btnThem.Size = new Size(165, 61);
             btnThem.TabIndex = 26;
             btnThem.Text = "➕ Thêm Hãng";
             btnThem.UseVisualStyleBackColor = false;
@@ -321,9 +340,10 @@
             panel1.Controls.Add(btnLamMoi);
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
-            panel1.Location = new Point(30, 61);
+            panel1.Location = new Point(38, 76);
+            panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(602, 115);
+            panel1.Size = new Size(875, 129);
             panel1.TabIndex = 25;
             // 
             // btnLamMoi
@@ -332,9 +352,10 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(483, 48);
+            btnLamMoi.Location = new Point(703, 56);
+            btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(114, 39);
+            btnLamMoi.Size = new Size(142, 49);
             btnLamMoi.TabIndex = 5;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -343,9 +364,10 @@
             // txtTimKiem
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
-            txtTimKiem.Location = new Point(9, 52);
+            txtTimKiem.Location = new Point(48, 65);
+            txtTimKiem.Margin = new Padding(4, 4, 4, 4);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(468, 31);
+            txtTimKiem.Size = new Size(584, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tìm hãng sản xuất...";
             txtTimKiem.TextChanged += txtTimKiem_TextChanged;
@@ -356,7 +378,8 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            label2.Location = new Point(9, 11);
+            label2.Location = new Point(11, 14);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(90, 25);
             label2.TabIndex = 0;
@@ -364,7 +387,7 @@
             // 
             // UC_HangSanXuat
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
             Controls.Add(btnXoa);
@@ -374,8 +397,10 @@
             Controls.Add(btnThem);
             Controls.Add(panel1);
             Controls.Add(label1);
+            Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "UC_HangSanXuat";
-            Size = new Size(1113, 938);
+            Size = new Size(1546, 986);
             Load += UC_HangSanXuat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvHangSanXuat).EndInit();
             panel2.ResumeLayout(false);

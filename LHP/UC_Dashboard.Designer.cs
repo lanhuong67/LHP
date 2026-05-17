@@ -36,7 +36,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
             Name = "UC_Dashboard";
-            Size = new Size(1252, 1079);
+            Size = new Size(1546, 986);
             ResumeLayout(false);
         }
 

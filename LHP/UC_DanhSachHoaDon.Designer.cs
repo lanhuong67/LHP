@@ -30,7 +30,6 @@
         {
             label1 = new Label();
             panel1 = new Panel();
-            txtTimKiemHD = new TextBox();
             btnLamMoi = new Button();
             cboTrangThai = new ComboBox();
             label2 = new Label();
@@ -53,7 +52,8 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label1.Location = new Point(36, 11);
+            label1.Location = new Point(45, 14);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(238, 35);
             label1.TabIndex = 2;
@@ -62,25 +62,17 @@
             // panel1
             // 
             panel1.BackColor = Color.White;
-            panel1.Controls.Add(txtTimKiemHD);
             panel1.Controls.Add(btnLamMoi);
             panel1.Controls.Add(cboTrangThai);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(dtpDenNgay);
             panel1.Controls.Add(dtpTuNgay);
             panel1.Font = new Font("Segoe UI", 10.8F);
-            panel1.Location = new Point(36, 82);
+            panel1.Location = new Point(45, 53);
+            panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1033, 278);
+            panel1.Size = new Size(1291, 283);
             panel1.TabIndex = 3;
-            // 
-            // txtTimKiemHD
-            // 
-            txtTimKiemHD.Location = new Point(592, 208);
-            txtTimKiemHD.Multiline = true;
-            txtTimKiemHD.Name = "txtTimKiemHD";
-            txtTimKiemHD.Size = new Size(125, 57);
-            txtTimKiemHD.TabIndex = 8;
             // 
             // btnLamMoi
             // 
@@ -88,9 +80,10 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(34, 208);
+            btnLamMoi.Location = new Point(42, 216);
+            btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(161, 57);
+            btnLamMoi.Size = new Size(201, 46);
             btnLamMoi.TabIndex = 7;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -99,9 +92,10 @@
             // cboTrangThai
             // 
             cboTrangThai.FormattingEnabled = true;
-            cboTrangThai.Location = new Point(34, 157);
+            cboTrangThai.Location = new Point(42, 154);
+            cboTrangThai.Margin = new Padding(4, 4, 4, 4);
             cboTrangThai.Name = "cboTrangThai";
-            cboTrangThai.Size = new Size(941, 33);
+            cboTrangThai.Size = new Size(1175, 33);
             cboTrangThai.TabIndex = 3;
             cboTrangThai.Text = "--Tất cả trạng thái--";
             cboTrangThai.SelectedIndexChanged += Cbo_AutoDropDown;
@@ -109,7 +103,8 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(45, 64);
+            label2.Location = new Point(56, 64);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(42, 25);
             label2.TabIndex = 2;
@@ -117,16 +112,18 @@
             // 
             // dtpDenNgay
             // 
-            dtpDenNgay.Location = new Point(34, 98);
+            dtpDenNgay.Location = new Point(42, 93);
+            dtpDenNgay.Margin = new Padding(4, 4, 4, 4);
             dtpDenNgay.Name = "dtpDenNgay";
-            dtpDenNgay.Size = new Size(941, 31);
+            dtpDenNgay.Size = new Size(1175, 31);
             dtpDenNgay.TabIndex = 1;
             // 
             // dtpTuNgay
             // 
-            dtpTuNgay.Location = new Point(34, 20);
+            dtpTuNgay.Location = new Point(42, 25);
+            dtpTuNgay.Margin = new Padding(4, 4, 4, 4);
             dtpTuNgay.Name = "dtpTuNgay";
-            dtpTuNgay.Size = new Size(941, 31);
+            dtpTuNgay.Size = new Size(1175, 31);
             dtpTuNgay.TabIndex = 0;
             // 
             // dgvDanhSachHoaDon
@@ -136,11 +133,12 @@
             dgvDanhSachHoaDon.BackgroundColor = Color.White;
             dgvDanhSachHoaDon.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDanhSachHoaDon.Columns.AddRange(new DataGridViewColumn[] { colMaHD, colNgayLap, colTenNhanVien, colTenKhachHang, colTongTien, colTrangThai, colChiTiet, colHuyDon });
-            dgvDanhSachHoaDon.Location = new Point(36, 377);
+            dgvDanhSachHoaDon.Location = new Point(67, 371);
+            dgvDanhSachHoaDon.Margin = new Padding(4, 4, 4, 4);
             dgvDanhSachHoaDon.Name = "dgvDanhSachHoaDon";
             dgvDanhSachHoaDon.RowHeadersVisible = false;
             dgvDanhSachHoaDon.RowHeadersWidth = 51;
-            dgvDanhSachHoaDon.Size = new Size(1033, 528);
+            dgvDanhSachHoaDon.Size = new Size(1460, 595);
             dgvDanhSachHoaDon.TabIndex = 4;
             dgvDanhSachHoaDon.CellContentClick += dgvDanhSachHoaDon_CellContentClick;
             dgvDanhSachHoaDon.CellFormatting += dgvDanhSachHoaDon_CellFormatting;
@@ -205,14 +203,16 @@
             // 
             // UC_DanhSachHoaDon
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
             Controls.Add(dgvDanhSachHoaDon);
             Controls.Add(panel1);
             Controls.Add(label1);
+            Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "UC_DanhSachHoaDon";
-            Size = new Size(1113, 938);
+            Size = new Size(1546, 986);
             Load += UC_DanhSachHoaDon_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -231,7 +231,6 @@
         private DateTimePicker dtpTuNgay;
         private Button btnLamMoi;
         private DataGridView dgvDanhSachHoaDon;
-        private TextBox txtTimKiemHD;
         private DataGridViewTextBoxColumn colMaHD;
         private DataGridViewTextBoxColumn colNgayLap;
         private DataGridViewTextBoxColumn colTenNhanVien;

@@ -46,11 +46,10 @@
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colHang, colSanPham, colTenHang, colSoLuong, colDoanhThu });
-            dataGridView1.Location = new Point(57, 146);
+            dataGridView1.Location = new Point(63, 159);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.RowTemplate.Height = 29;
-            dataGridView1.Size = new Size(1009, 722);
+            dataGridView1.Size = new Size(1433, 781);
             dataGridView1.TabIndex = 0;
             // 
             // colHang
@@ -86,8 +85,8 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(39, 13);
+            label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            label1.Location = new Point(43, 14);
             label1.Name = "label1";
             label1.Size = new Size(290, 35);
             label1.TabIndex = 2;
@@ -95,38 +94,38 @@
             // 
             // comboBox1
             // 
-            comboBox1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox1.Font = new Font("Segoe UI", 12F);
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(674, 70);
+            comboBox1.Location = new Point(748, 81);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(205, 36);
+            comboBox1.Size = new Size(327, 36);
             comboBox1.TabIndex = 3;
             // 
             // button5
             // 
             button5.BackColor = SystemColors.HotTrack;
             button5.FlatStyle = FlatStyle.Flat;
-            button5.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            button5.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             button5.ForeColor = Color.White;
-            button5.Location = new Point(906, 70);
+            button5.Location = new Point(1134, 76);
             button5.Name = "button5";
-            button5.Size = new Size(160, 41);
+            button5.Size = new Size(178, 45);
             button5.TabIndex = 9;
             button5.Text = "Xem";
             button5.UseVisualStyleBackColor = false;
             // 
             // UC_TopBanChay
             // 
-            AutoScaleDimensions = new SizeF(9F, 23F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
             Controls.Add(button5);
             Controls.Add(comboBox1);
             Controls.Add(label1);
             Controls.Add(dataGridView1);
-            Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
+            Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "UC_TopBanChay";
-            Size = new Size(1113, 938);
+            Size = new Size(1546, 986);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

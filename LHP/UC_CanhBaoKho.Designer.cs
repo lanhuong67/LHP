@@ -47,7 +47,7 @@
             panel3 = new Panel();
             label8 = new Label();
             label5 = new Label();
-            button5 = new Button();
+            btnNhapKho = new Button();
             label2 = new Label();
             label3 = new Label();
             comboBox1 = new ComboBox();
@@ -60,8 +60,9 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(36, 11);
+            label1.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            label1.Location = new Point(45, 14);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(223, 35);
             label1.TabIndex = 2;
@@ -71,11 +72,12 @@
             // 
             btnLamMoi.BackColor = Color.WhiteSmoke;
             btnLamMoi.FlatStyle = FlatStyle.Flat;
-            btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(890, 11);
+            btnLamMoi.Location = new Point(1343, 14);
+            btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(163, 57);
+            btnLamMoi.Size = new Size(144, 58);
             btnLamMoi.TabIndex = 6;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -86,11 +88,11 @@
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, colMaSP, colTenSP, colHang, colTonKho, colMucCanhBao, colThaoTac });
-            dataGridView1.Location = new Point(36, 346);
+            dataGridView1.Location = new Point(39, 408);
+            dataGridView1.Margin = new Padding(4, 4, 4, 4);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.RowTemplate.Height = 29;
-            dataGridView1.Size = new Size(1017, 552);
+            dataGridView1.Size = new Size(1448, 558);
             dataGridView1.TabIndex = 7;
             // 
             // Column1
@@ -143,17 +145,19 @@
             panel1.BackColor = Color.LavenderBlush;
             panel1.Controls.Add(label7);
             panel1.Controls.Add(label4);
-            panel1.Location = new Point(36, 88);
+            panel1.Location = new Point(240, 110);
+            panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(316, 100);
+            panel1.Size = new Size(317, 125);
             panel1.TabIndex = 8;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
+            label7.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label7.ForeColor = Color.DarkRed;
-            label7.Location = new Point(22, 55);
+            label7.Location = new Point(28, 69);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(41, 31);
             label7.TabIndex = 15;
@@ -162,9 +166,10 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            label4.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             label4.ForeColor = Color.DarkRed;
-            label4.Location = new Point(22, 13);
+            label4.Location = new Point(28, 16);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(182, 25);
             label4.TabIndex = 14;
@@ -175,17 +180,19 @@
             panel2.BackColor = Color.Honeydew;
             panel2.Controls.Add(label9);
             panel2.Controls.Add(label6);
-            panel2.Location = new Point(737, 88);
+            panel2.Location = new Point(1170, 110);
+            panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(316, 100);
+            panel2.Size = new Size(317, 125);
             panel2.TabIndex = 9;
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
+            label9.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label9.ForeColor = Color.DarkGreen;
-            label9.Location = new Point(17, 55);
+            label9.Location = new Point(21, 69);
+            label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
             label9.Size = new Size(41, 31);
             label9.TabIndex = 17;
@@ -194,9 +201,10 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            label6.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             label6.ForeColor = Color.DarkGreen;
-            label6.Location = new Point(17, 13);
+            label6.Location = new Point(21, 16);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(199, 25);
             label6.TabIndex = 16;
@@ -207,17 +215,19 @@
             panel3.BackColor = Color.LightYellow;
             panel3.Controls.Add(label8);
             panel3.Controls.Add(label5);
-            panel3.Location = new Point(388, 88);
+            panel3.Location = new Point(694, 110);
+            panel3.Margin = new Padding(4, 4, 4, 4);
             panel3.Name = "panel3";
-            panel3.Size = new Size(316, 100);
+            panel3.Size = new Size(317, 125);
             panel3.TabIndex = 9;
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label8.ForeColor = Color.DarkGoldenrod;
-            label8.Location = new Point(20, 55);
+            label8.Location = new Point(25, 69);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(41, 31);
             label8.TabIndex = 16;
@@ -226,32 +236,35 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
+            label5.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
             label5.ForeColor = Color.DarkGoldenrod;
-            label5.Location = new Point(20, 13);
+            label5.Location = new Point(25, 16);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(154, 25);
             label5.TabIndex = 15;
             label5.Text = "Sắp hết (tồn 3–4)";
             // 
-            // button5
+            // btnNhapKho
             // 
-            button5.BackColor = SystemColors.HotTrack;
-            button5.FlatStyle = FlatStyle.Flat;
-            button5.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point);
-            button5.ForeColor = Color.White;
-            button5.Location = new Point(69, 267);
-            button5.Name = "button5";
-            button5.Size = new Size(263, 53);
-            button5.TabIndex = 10;
-            button5.Text = "Nhập kho hàng loạt";
-            button5.UseVisualStyleBackColor = false;
+            btnNhapKho.BackColor = SystemColors.HotTrack;
+            btnNhapKho.FlatStyle = FlatStyle.Flat;
+            btnNhapKho.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            btnNhapKho.ForeColor = Color.White;
+            btnNhapKho.Location = new Point(149, 334);
+            btnNhapKho.Margin = new Padding(4, 4, 4, 4);
+            btnNhapKho.Name = "btnNhapKho";
+            btnNhapKho.Size = new Size(266, 66);
+            btnNhapKho.TabIndex = 10;
+            btnNhapKho.Text = "Nhập kho hàng loạt";
+            btnNhapKho.UseVisualStyleBackColor = false;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(58, 219);
+            label2.Font = new Font("Segoe UI", 12F);
+            label2.Location = new Point(149, 280);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(820, 28);
             label2.TabIndex = 11;
@@ -260,8 +273,9 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(832, 278);
+            label3.Font = new Font("Segoe UI", 12F);
+            label3.Location = new Point(1145, 353);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(42, 28);
             label3.TabIndex = 12;
@@ -269,31 +283,34 @@
             // 
             // comboBox1
             // 
-            comboBox1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            comboBox1.Font = new Font("Segoe UI", 12F);
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(880, 275);
+            comboBox1.Location = new Point(1205, 349);
+            comboBox1.Margin = new Padding(4, 4, 4, 4);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(151, 36);
+            comboBox1.Size = new Size(188, 36);
             comboBox1.TabIndex = 13;
             comboBox1.Text = "Tất cả";
             // 
             // UC_CanhBaoKho
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
             Controls.Add(comboBox1);
             Controls.Add(label3);
             Controls.Add(label2);
-            Controls.Add(button5);
+            Controls.Add(btnNhapKho);
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(dataGridView1);
             Controls.Add(btnLamMoi);
             Controls.Add(label1);
+            Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "UC_CanhBaoKho";
-            Size = new Size(1113, 938);
+            Size = new Size(1546, 986);
             Load += UC_CanhBaoKho_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel1.ResumeLayout(false);
@@ -321,7 +338,7 @@
         private DataGridViewTextBoxColumn colTonKho;
         private DataGridViewTextBoxColumn colMucCanhBao;
         private DataGridViewButtonColumn colThaoTac;
-        private Button button5;
+        private Button btnNhapKho;
         private Label label2;
         private Label label3;
         private ComboBox comboBox1;
