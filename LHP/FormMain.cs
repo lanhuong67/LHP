@@ -188,5 +188,82 @@ namespace GUI
         {
             picDanhSachHD_Click(sender, e);
         }
+
+        private void picBaoHanh_Click(object sender, EventArgs e)
+        {
+            UC_BaoHanh ucBaoHanh = new UC_BaoHanh();
+            AddUserControl(ucBaoHanh);
+        }
+
+        private void lblBaoHanh_Click(object sender, EventArgs e)
+        {
+            picBaoHanh_Click(sender, e);
+        }
+
+        private void picDashBoard_Click(object sender, EventArgs e)
+        {
+            UC_Dashboard ucDashboard = new UC_Dashboard();
+            AddUserControl(ucDashboard);
+        }
+
+        private void lblDashBoard_Click(object sender, EventArgs e)
+        {
+            picDashBoard_Click(sender, e);
+        }
+
+        private void picCanhBaoKho_Click(object sender, EventArgs e)
+        {
+            UC_CanhBaoKho ucCanhBaoKho = new UC_CanhBaoKho();
+            AddUserControl(ucCanhBaoKho);
+        }
+
+        private void lblCanhBaoKho_Click(object sender, EventArgs e)
+        {
+            picCanhBaoKho_Click(sender, e);
+        }
+
+        private void picChiNhanh_Click(object sender, EventArgs e)
+        {
+            UC_ChiNhanh ucChiNhanh = new UC_ChiNhanh();
+            AddUserControl(ucChiNhanh);
+        }
+
+        private void lblChiNhanh_Click(object sender, EventArgs e)
+        {
+            picChiNhanh_Click(sender, e);
+        }
+
+        private void picChamSocKhachHang_Click(object sender, EventArgs e)
+        {
+            UC_ChamSocKH ucChamSocKH = new UC_ChamSocKH();
+            AddUserControl(ucChamSocKH);
+        }
+
+        private void lblChamSocKhachHang_Click(object sender, EventArgs e)
+        {
+            picChamSocKhachHang_Click(sender, e);
+        }
+
+        private void picDoanhThu_Click(object sender, EventArgs e)
+        {
+            UC_DoanhThu ucDoanhThu= new UC_DoanhThu();
+            AddUserControl(ucDoanhThu);
+        }
+
+        private void lblDoanhThu_Click(object sender, EventArgs e)
+        {
+            picDoanhThu_Click(sender, e);
+        }
+
+        private void picTopBanChay_Click(object sender, EventArgs e)
+        {
+            UC_TopBanChay ucTopBanChay = new UC_TopBanChay();
+            AddUserControl(ucTopBanChay);
+        }
+
+        private void lblTopBanChay_Click(object sender, EventArgs e)
+        {
+            picTopBanChay_Click(sender, e);
+        }
     }
 }

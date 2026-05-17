@@ -20,6 +20,7 @@ namespace DAL
         // ===============================================
         public DbSet<HoaDon> HoaDons { get; set; }
         public DbSet<ChiTietHoaDon> ChiTietHoaDons { get; set; }
+        public DbSet<PhieuBaoHanh> PhieuBaoHanhs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
