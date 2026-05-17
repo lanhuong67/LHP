@@ -10,21 +10,11 @@ using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class UC_ChamSocKH : UserControl
+    public partial class UC_ChiNhanh : UserControl
     {
-        public UC_ChamSocKH()
+        public UC_ChiNhanh()
         {
             InitializeComponent();
-        }
-
-        private void UC_ChamSocKH_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
