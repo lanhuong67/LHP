@@ -30,8 +30,9 @@ namespace GUI
 
         private void UC_TaoHoaDon_Load(object sender, EventArgs e)
         {
-            // Tắt tự sinh cột vì đã cấu hình tay ngoài Design
+            // Tắt tự sinh cột và ẩn cột dấu * (RowHeaders) cho bảng gọn gàng
             dgvGioHang.AutoGenerateColumns = false;
+            dgvGioHang.RowHeadersVisible = false; // 🔴 Xóa cột xám/dấu * ở lề trái
             dgvGioHang.DataSource = gioHang;
 
             // Chạy các thiết lập ban đầu
@@ -54,7 +55,7 @@ namespace GUI
         // ==========================================
         private void KhoiTaoTraiNghiemNguoiDung()
         {
-            // Xử lý ô Số điện thoại (Chữ mờ) bằng code ẩn để khỏi kéo thả rườm rà
+            // Xử lý ô Số điện thoại (Chữ mờ)
             txtSDTKhachHang.Enter += (s, e) => {
                 if (txtSDTKhachHang.Text == _placeholderSDT)
                 {
@@ -74,11 +75,9 @@ namespace GUI
                 }
             };
 
-            // Kích hoạt chữ mờ ngay khi mở form
             txtSDTKhachHang.Focus();
             this.Focus();
 
-            // Xử lý ComboBox tự xổ xuống khi click vào
             ComboBox[] danhSachCbo = { cboHangSX, cboSanPham };
             foreach (var cbo in danhSachCbo)
             {
@@ -88,7 +87,6 @@ namespace GUI
             }
         }
 
-        // Sự kiện này bạn đã gán bằng Tia Sét (TextChanged) ngoài Design
         private void TxtSDTKhachHang_TextChanged(object sender, EventArgs e)
         {
             string sdt = txtSDTKhachHang.Text.Trim();
@@ -133,32 +131,51 @@ namespace GUI
         {
             try
             {
-                cboHangSX.DataSource = _spBus.GetAllHang();
+                // 🔴 LOGIC RÀNG BUỘC KÈM "--Chọn hãng--"
+                var dsHangHoatDong = _spBus.GetAllHang().Where(h => h.TrangThai == "Đang hợp tác").ToList();
+                dsHangHoatDong.Insert(0, new HangSanXuat { MaHang = "", TenHang = "--Chọn hãng--" });
+
+                cboHangSX.DataSource = dsHangHoatDong;
                 cboHangSX.DisplayMember = "TenHang";
                 cboHangSX.ValueMember = "MaHang";
             }
             catch { }
         }
 
-        // Sự kiện này bạn đã gán bằng Tia Sét (SelectedIndexChanged) ngoài Design
         private void cboHangSX_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboHangSX.SelectedValue != null)
+            // Chỉ load sản phẩm khi người dùng chọn một hãng thật sự (khác rỗng)
+            if (cboHangSX.SelectedValue != null && cboHangSX.SelectedValue.ToString() != "")
             {
                 string maHang = cboHangSX.SelectedValue.ToString();
-                cboSanPham.DataSource = _spBus.GetAll().Where(s => s.MaHang == maHang).ToList();
+
+                var dsSP = _spBus.GetAll()
+                                 .Where(s => s.MaHang == maHang && s.TrangThai == "Đang kinh doanh" && s.TonKho > 0)
+                                 .ToList();
+
+                dsSP.Insert(0, new SanPham { MaSP = "", TenSP = "--Chọn sản phẩm--" });
+
+                cboSanPham.DataSource = dsSP;
                 cboSanPham.DisplayMember = "TenSP";
                 cboSanPham.ValueMember = "MaSP";
+            }
+            else
+            {
+                cboSanPham.DataSource = null; // Xóa danh sách SP nếu đang ở "--Chọn hãng--"
             }
         }
 
         // ==========================================
-        // 4. LOGIC THÊM SẢN PHẨM (KÈM POP-UP IMEI)
+        // 4. LOGIC THÊM SẢN PHẨM (KÈM POP-UP IMEI FIFO)
         // ==========================================
-        // Sự kiện này bạn đã gán bằng Tia Sét (Click) ngoài Design
         private void btnThemSanPham_Click(object sender, EventArgs e)
         {
-            if (cboSanPham.SelectedItem is not SanPham sp) return;
+            // Bắt lỗi nếu người dùng chưa chọn sản phẩm cụ thể
+            if (cboSanPham.SelectedItem is not SanPham sp || string.IsNullOrEmpty(sp.MaSP))
+            {
+                MessageBox.Show("Vui lòng chọn một sản phẩm hợp lệ để thêm!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             int soLuongMua = (int)numSoLuong.Value;
             if (soLuongMua <= 0) { MessageBox.Show("Vui lòng chọn số lượng cần mua!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
@@ -171,7 +188,7 @@ namespace GUI
                 return;
             }
 
-            // Gọi form ép chọn IMEI
+            // Gọi form ép chọn IMEI (Đã nâng cấp Auto-check FIFO)
             using (FormChonIMEI frm = new FormChonIMEI(sp.TenSP, soLuongMua, danhSachImeiKho))
             {
                 if (frm.ShowDialog() == DialogResult.OK)
@@ -198,8 +215,8 @@ namespace GUI
                     dgvGioHang.Refresh();
                     CapNhatTongTien();
 
-                    // ĐẶT LẠI SỐ LƯỢNG VỀ 0 SAU KHI THÊM THÀNH CÔNG
                     numSoLuong.Value = 0;
+                    cboSanPham.SelectedIndex = 0; // Trả về chữ "--Chọn sản phẩm--"
                 }
             }
         }
@@ -210,18 +227,14 @@ namespace GUI
             lblTongTien.Text = gioHang.Sum(x => x.ThanhTien).ToString("N0") + " đ";
         }
 
-        // Sự kiện này bạn đã gán bằng Tia Sét (CellFormatting) ngoài Design
         private void dgvGioHang_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // Tự sinh số thứ tự
             if (dgvGioHang.Columns[e.ColumnIndex].Name == "colSTT")
                 e.Value = (e.RowIndex + 1).ToString();
         }
 
-        // Sự kiện này bạn đã gán bằng Tia Sét (CellContentClick) ngoài Design
         private void dgvGioHang_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Xử lý nút Xóa
             if (dgvGioHang.Columns[e.ColumnIndex].Name == "colXoa" && e.RowIndex >= 0)
             {
                 gioHang.RemoveAt(e.RowIndex);
@@ -232,7 +245,6 @@ namespace GUI
         // ==========================================
         // 5. CHỐT ĐƠN VÀ THANH TOÁN
         // ==========================================
-        // Sự kiện này bạn đã gán bằng Tia Sét (Click) ngoài Design
         private void btnHuyDon_Click(object sender, EventArgs e)
         {
             if (gioHang.Count > 0)
@@ -249,14 +261,12 @@ namespace GUI
             }
         }
 
-        // Sự kiện này bạn đã gán bằng Tia Sét (Click) ngoài Design
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
             if (!gioHang.Any()) { MessageBox.Show("Giỏ hàng đang trống!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
 
             string sdtLuu = txtSDTKhachHang.Text == _placeholderSDT ? "" : txtSDTKhachHang.Text;
 
-            // Tự động lưu Khách hàng mới vào Database
             if (!string.IsNullOrEmpty(sdtLuu) && txtTenKhachHang.ReadOnly == false && !string.IsNullOrWhiteSpace(txtTenKhachHang.Text))
             {
                 KhachHang khMoi = new KhachHang { MaKH = "KH" + DateTime.Now.ToString("yyMMddHHmm"), HoTen = txtTenKhachHang.Text.Trim(), SDT = sdtLuu };
@@ -269,7 +279,7 @@ namespace GUI
                 {
                     MaHD = txtMaHD.Text,
                     NgayLap = dtpNgayLap.Value,
-                    MaNV = UserSession.MaNV, // Lấy mã NV tự động từ Session
+                    MaNV = UserSession.MaNV ?? "NV01", // Dự phòng nếu quên đăng nhập
                     SDTKhachHang = sdtLuu,
                     TongTien = gioHang.Sum(x => x.ThanhTien),
                     TrangThai = "Hoàn thành"
@@ -290,14 +300,14 @@ namespace GUI
                     {
                         MessageBox.Show("Thanh toán thành công! Đã trừ tồn kho.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Reset giao diện chuẩn bị cho đơn hàng mới
                         gioHang.Clear();
                         CapNhatTongTien();
                         SinhMaHoaDon();
                         txtSDTKhachHang.Text = "";
                         txtSDTKhachHang.Focus();
                         this.Focus();
-                        numSoLuong.Value = 0; // Đảm bảo số lượng cũng được reset về 0 sau khi thanh toán
+                        numSoLuong.Value = 0;
+                        if (cboHangSX.Items.Count > 0) cboHangSX.SelectedIndex = 0;
                     }
                 }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
@@ -306,7 +316,7 @@ namespace GUI
     }
 
     // ==========================================================
-    // CLASS FORM POP-UP CHỌN IMEI 
+    // CLASS FORM POP-UP CHỌN IMEI (TÍCH HỢP TỰ ĐỘNG CHỌN FIFO)
     // ==========================================================
     public class FormChonIMEI : Form
     {
@@ -319,28 +329,47 @@ namespace GUI
         {
             _soLuongCanChon = soLuongCanChon;
             this.Text = $"Chọn mã IMEI - {tenSP}";
-            this.Size = new Size(400, 450);
+            this.Size = new Size(420, 450);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
-            Label lblHuongDan = new Label() { Text = $"Vui lòng tích chọn ĐÚNG {soLuongCanChon} mã IMEI để bán:", Left = 15, Top = 15, Width = 350 };
-
-            clbImeis = new CheckedListBox() { Left = 15, Top = 40, Width = 350, Height = 280, CheckOnClick = true };
-            clbImeis.Items.AddRange(danhSachImeiSanSang.ToArray());
-
-            clbImeis.ItemCheck += (s, e) =>
+            // Câu hướng dẫn chuyên nghiệp
+            Label lblHuongDan = new Label()
             {
-                int currentChecked = clbImeis.CheckedItems.Count;
-                if (e.NewValue == CheckState.Checked) currentChecked++;
-                if (e.NewValue == CheckState.Unchecked) currentChecked--;
-
-                lblTrangThai.Text = $"Đã chọn: {currentChecked} / {_soLuongCanChon}";
-                lblTrangThai.ForeColor = currentChecked == _soLuongCanChon ? Color.Green : (currentChecked > _soLuongCanChon ? Color.Red : Color.Blue);
+                Text = $"Hệ thống đã tự động tích ưu tiên {soLuongCanChon} mã IMEI nhập kho lâu nhất (FIFO). Vui lòng kiểm tra và xác nhận:",
+                Left = 15,
+                Top = 10,
+                Width = 380,
+                Height = 40,
+                ForeColor = Color.DarkGreen,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold)
             };
 
-            lblTrangThai = new Label() { Text = $"Đã chọn: 0 / {soLuongCanChon}", Left = 15, Top = 330, Width = 150, ForeColor = Color.Blue, Font = new Font("Arial", 10, FontStyle.Bold) };
-            Button btnXacNhan = new Button() { Text = "Xác nhận", Left = 245, Top = 330, Width = 120, Height = 35, BackColor = Color.DodgerBlue, ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+            clbImeis = new CheckedListBox() { Left = 15, Top = 50, Width = 370, Height = 250, CheckOnClick = true };
+            clbImeis.Items.AddRange(danhSachImeiSanSang.ToArray());
+
+            // 🔴 LOGIC AUTO-CHECK FIFO: Tự động đánh dấu tích chữ V vào n dòng đầu tiên
+            for (int i = 0; i < _soLuongCanChon && i < clbImeis.Items.Count; i++)
+            {
+                clbImeis.SetItemChecked(i, true);
+            }
+
+            // Gán sự kiện hiển thị số lượng chọn
+            clbImeis.ItemCheck += (s, e) =>
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    int currentChecked = clbImeis.CheckedItems.Count;
+                    lblTrangThai.Text = $"Đã chọn: {currentChecked} / {_soLuongCanChon}";
+                    lblTrangThai.ForeColor = currentChecked == _soLuongCanChon ? Color.Green : (currentChecked > _soLuongCanChon ? Color.Red : Color.Blue);
+                });
+            };
+
+            int khoiTaoChecked = clbImeis.CheckedItems.Count;
+            lblTrangThai = new Label() { Text = $"Đã chọn: {khoiTaoChecked} / {soLuongCanChon}", Left = 15, Top = 330, Width = 150, ForeColor = Color.Green, Font = new Font("Arial", 10, FontStyle.Bold) };
+
+            Button btnXacNhan = new Button() { Text = "Xác nhận", Left = 265, Top = 320, Width = 120, Height = 40, BackColor = Color.DodgerBlue, ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
 
             btnXacNhan.Click += (s, e) =>
             {

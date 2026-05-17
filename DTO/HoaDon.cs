@@ -27,6 +27,9 @@ namespace DTO
         [StringLength(50)]
         public string TrangThai { get; set; } = "Hoàn thành";
 
+        // 🔴 ĐÃ ĐƯỢC CHUYỂN VỀ ĐÚNG VỊ TRÍ NÀY ĐỂ LƯU XUỐNG DATABASE
+        public string LyDoHuy { get; set; } = string.Empty;
+
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; } = new List<ChiTietHoaDon>();
     }
 

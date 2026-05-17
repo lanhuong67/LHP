@@ -28,21 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             label1 = new Label();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             btnHuyPhieu = new Button();
             btnXacNhan = new Button();
             dgvChiTietNhap = new DataGridView();
-            colNhap_STT = new DataGridViewTextBoxColumn();
-            colNhap_SanPham = new DataGridViewTextBoxColumn();
-            colNhap_SoLuong = new DataGridViewTextBoxColumn();
-            colNhap_GiaNhap = new DataGridViewTextBoxColumn();
-            colNhap_ThanhTien = new DataGridViewTextBoxColumn();
-            colNhap_Xoa = new DataGridViewButtonColumn();
             panel3 = new Panel();
             btnThem = new Button();
             txtGiaNhap = new TextBox();
@@ -62,6 +58,7 @@
             label13 = new Label();
             label12 = new Label();
             panel1 = new Panel();
+            txtNhanVien = new TextBox();
             label16 = new Label();
             txtGhiChu = new TextBox();
             label8 = new Label();
@@ -119,7 +116,12 @@
             cboTrangThai_Lo = new ComboBox();
             cboSanPham_Lo = new ComboBox();
             txtTimMaLo = new TextBox();
-            txtNhanVien = new TextBox();
+            colNhap_STT = new DataGridViewTextBoxColumn();
+            colNhap_SanPham = new DataGridViewTextBoxColumn();
+            colNhap_SoLuong = new DataGridViewTextBoxColumn();
+            colNhap_GiaNhap = new DataGridViewTextBoxColumn();
+            colNhap_ThanhTien = new DataGridViewTextBoxColumn();
+            colNhap_Xoa = new DataGridViewButtonColumn();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvChiTietNhap).BeginInit();
@@ -210,56 +212,18 @@
             // 
             // dgvChiTietNhap
             // 
+            dgvChiTietNhap.AllowUserToAddRows = false;
             dgvChiTietNhap.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvChiTietNhap.BackgroundColor = Color.White;
             dgvChiTietNhap.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvChiTietNhap.Columns.AddRange(new DataGridViewColumn[] { colNhap_STT, colNhap_SanPham, colNhap_SoLuong, colNhap_GiaNhap, colNhap_ThanhTien, colNhap_Xoa });
             dgvChiTietNhap.Location = new Point(6, 341);
             dgvChiTietNhap.Name = "dgvChiTietNhap";
+            dgvChiTietNhap.RowHeadersVisible = false;
             dgvChiTietNhap.RowHeadersWidth = 51;
             dgvChiTietNhap.Size = new Size(1034, 477);
             dgvChiTietNhap.TabIndex = 3;
             dgvChiTietNhap.CellClick += dgvChiTietNhap_CellContentClick;
-            // 
-            // colNhap_STT
-            // 
-            colNhap_STT.HeaderText = "STT";
-            colNhap_STT.MinimumWidth = 6;
-            colNhap_STT.Name = "colNhap_STT";
-            // 
-            // colNhap_SanPham
-            // 
-            colNhap_SanPham.DataPropertyName = "TenSP";
-            colNhap_SanPham.HeaderText = "Sản phẩm";
-            colNhap_SanPham.MinimumWidth = 6;
-            colNhap_SanPham.Name = "colNhap_SanPham";
-            // 
-            // colNhap_SoLuong
-            // 
-            colNhap_SoLuong.DataPropertyName = "SoLuong";
-            colNhap_SoLuong.HeaderText = "Số lượng";
-            colNhap_SoLuong.MinimumWidth = 6;
-            colNhap_SoLuong.Name = "colNhap_SoLuong";
-            // 
-            // colNhap_GiaNhap
-            // 
-            colNhap_GiaNhap.DataPropertyName = "GiaNhap";
-            colNhap_GiaNhap.HeaderText = "Giá nhập";
-            colNhap_GiaNhap.MinimumWidth = 6;
-            colNhap_GiaNhap.Name = "colNhap_GiaNhap";
-            // 
-            // colNhap_ThanhTien
-            // 
-            colNhap_ThanhTien.DataPropertyName = "ThanhTien";
-            colNhap_ThanhTien.HeaderText = "Thành tiền";
-            colNhap_ThanhTien.MinimumWidth = 6;
-            colNhap_ThanhTien.Name = "colNhap_ThanhTien";
-            // 
-            // colNhap_Xoa
-            // 
-            colNhap_Xoa.HeaderText = "Xóa";
-            colNhap_Xoa.MinimumWidth = 6;
-            colNhap_Xoa.Name = "colNhap_Xoa";
             // 
             // panel3
             // 
@@ -482,6 +446,13 @@
             panel1.Size = new Size(589, 175);
             panel1.TabIndex = 0;
             // 
+            // txtNhanVien
+            // 
+            txtNhanVien.Location = new Point(396, 4);
+            txtNhanVien.Name = "txtNhanVien";
+            txtNhanVien.Size = new Size(167, 31);
+            txtNhanVien.TabIndex = 32;
+            // 
             // label16
             // 
             label16.AutoSize = true;
@@ -637,36 +608,38 @@
             // 
             // dgvLichSuNhap
             // 
+            dgvLichSuNhap.AllowUserToAddRows = false;
             dgvLichSuNhap.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvLichSuNhap.BackgroundColor = Color.White;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvLichSuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvLichSuNhap.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvLichSuNhap.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLichSuNhap.Columns.AddRange(new DataGridViewColumn[] { colMaPhieu, colNgayNhap, colNCC, colNhanVien, colSoSp, colTongTien, colTrangThai, colChiTiet, colHuyPhieu });
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            dgvLichSuNhap.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvLichSuNhap.DefaultCellStyle = dataGridViewCellStyle4;
             dgvLichSuNhap.Location = new Point(7, 320);
             dgvLichSuNhap.Name = "dgvLichSuNhap";
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvLichSuNhap.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvLichSuNhap.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dgvLichSuNhap.RowHeadersVisible = false;
             dgvLichSuNhap.RowHeadersWidth = 51;
             dgvLichSuNhap.Size = new Size(1033, 489);
             dgvLichSuNhap.TabIndex = 7;
@@ -945,12 +918,14 @@
             // 
             // dgvLoHang
             // 
+            dgvLoHang.AllowUserToAddRows = false;
             dgvLoHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvLoHang.BackgroundColor = Color.White;
             dgvLoHang.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLoHang.Columns.AddRange(new DataGridViewColumn[] { colMaLo, colSanPham, colPhieuNhap, colNgayNhapLoHang, colSoLuongNhap, colDaBan, colConLai, colTrangThaiLoHang });
             dgvLoHang.Location = new Point(6, 98);
             dgvLoHang.Name = "dgvLoHang";
+            dgvLoHang.RowHeadersVisible = false;
             dgvLoHang.RowHeadersWidth = 51;
             dgvLoHang.Size = new Size(1038, 720);
             dgvLoHang.TabIndex = 1;
@@ -1065,12 +1040,49 @@
             txtTimMaLo.TabIndex = 0;
             txtTimMaLo.Text = "Tìm mã...";
             // 
-            // txtNhanVien
+            // colNhap_STT
             // 
-            txtNhanVien.Location = new Point(396, 4);
-            txtNhanVien.Name = "txtNhanVien";
-            txtNhanVien.Size = new Size(167, 31);
-            txtNhanVien.TabIndex = 32;
+            colNhap_STT.HeaderText = "STT";
+            colNhap_STT.MinimumWidth = 6;
+            colNhap_STT.Name = "colNhap_STT";
+            // 
+            // colNhap_SanPham
+            // 
+            colNhap_SanPham.DataPropertyName = "TenSP";
+            colNhap_SanPham.HeaderText = "Sản phẩm";
+            colNhap_SanPham.MinimumWidth = 6;
+            colNhap_SanPham.Name = "colNhap_SanPham";
+            // 
+            // colNhap_SoLuong
+            // 
+            colNhap_SoLuong.DataPropertyName = "SoLuong";
+            colNhap_SoLuong.HeaderText = "Số lượng";
+            colNhap_SoLuong.MinimumWidth = 6;
+            colNhap_SoLuong.Name = "colNhap_SoLuong";
+            // 
+            // colNhap_GiaNhap
+            // 
+            colNhap_GiaNhap.DataPropertyName = "GiaNhap";
+            dataGridViewCellStyle1.Format = "N0";
+            colNhap_GiaNhap.DefaultCellStyle = dataGridViewCellStyle1;
+            colNhap_GiaNhap.HeaderText = "Giá nhập";
+            colNhap_GiaNhap.MinimumWidth = 6;
+            colNhap_GiaNhap.Name = "colNhap_GiaNhap";
+            // 
+            // colNhap_ThanhTien
+            // 
+            colNhap_ThanhTien.DataPropertyName = "ThanhTien";
+            dataGridViewCellStyle2.Format = "N0";
+            colNhap_ThanhTien.DefaultCellStyle = dataGridViewCellStyle2;
+            colNhap_ThanhTien.HeaderText = "Thành tiền";
+            colNhap_ThanhTien.MinimumWidth = 6;
+            colNhap_ThanhTien.Name = "colNhap_ThanhTien";
+            // 
+            // colNhap_Xoa
+            // 
+            colNhap_Xoa.HeaderText = "Xóa";
+            colNhap_Xoa.MinimumWidth = 6;
+            colNhap_Xoa.Name = "colNhap_Xoa";
             // 
             // UC_NhapHangLo
             // 
@@ -1177,12 +1189,6 @@
         private ComboBox cboTrangThai_Lo;
         private ComboBox cboSanPham_Lo;
         private TextBox txtTimMaLo;
-        private DataGridViewTextBoxColumn colNhap_STT;
-        private DataGridViewTextBoxColumn colNhap_SanPham;
-        private DataGridViewTextBoxColumn colNhap_SoLuong;
-        private DataGridViewTextBoxColumn colNhap_GiaNhap;
-        private DataGridViewTextBoxColumn colNhap_ThanhTien;
-        private DataGridViewButtonColumn colNhap_Xoa;
         private Label label16;
         private DataGridViewTextBoxColumn colMaLo;
         private DataGridViewTextBoxColumn colSanPham;
@@ -1202,5 +1208,11 @@
         private DataGridViewButtonColumn colChiTiet;
         private DataGridViewButtonColumn colHuyPhieu;
         private TextBox txtNhanVien;
+        private DataGridViewTextBoxColumn colNhap_STT;
+        private DataGridViewTextBoxColumn colNhap_SanPham;
+        private DataGridViewTextBoxColumn colNhap_SoLuong;
+        private DataGridViewTextBoxColumn colNhap_GiaNhap;
+        private DataGridViewTextBoxColumn colNhap_ThanhTien;
+        private DataGridViewButtonColumn colNhap_Xoa;
     }
 }

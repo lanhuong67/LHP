@@ -10,17 +10,19 @@ namespace DAL
     {
         private AppDbContext _db = new AppDbContext();
 
-        // 1. LẤY DANH SÁCH IMEI SẴN SÀNG BÁN CỦA 1 SẢN PHẨM
+        // 1. LẤY DANH SÁCH IMEI SẴN SÀNG BÁN (ĐÃ ÁP DỤNG FIFO - CŨ NHẤT LÊN ĐẦU)
         public List<string> GetImeiTonKho(string maSP)
         {
-            // Đã sửa lại thành trạng thái "Trong kho" và thuộc tính "IMEI"
-            return _db.ChiTietIMEIs
-                      .Where(x => x.MaSP == maSP && x.TrangThai == "Trong kho")
-                      .Select(x => x.IMEI)
-                      .ToList();
+            var query = from imei in _db.ChiTietIMEIs
+                        join pn in _db.PhieuNhaps on imei.MaPN equals pn.MaPN
+                        where imei.MaSP == maSP && imei.TrangThai == "Trong kho"
+                        orderby pn.NgayNhap ascending // 🔴 Sắp xếp Ngày nhập tăng dần (Máy cũ nằm trên)
+                        select imei.IMEI;
+
+            return query.ToList();
         }
 
-        // 2. TẠO HÓA ĐƠN & CẬP NHẬT LIÊN KẾT TOÀN DIỆN (SẢN PHẨM + LÔ HÀNG + KHÁCH HÀNG)
+        // 2. TẠO HÓA ĐƠN & CẬP NHẬT LIÊN KẾT TOÀN DIỆN
         public bool TaoHoaDon(HoaDon hd, List<ChiTietHoaDon> dsChiTiet)
         {
             using (var transaction = _db.Database.BeginTransaction())
@@ -89,7 +91,7 @@ namespace DAL
             }
         }
 
-        // 3. LẤY DANH SÁCH HÓA ĐƠN (HỖ TRỢ HIỂN THỊ TÊN KHÁCH & NHÂN VIÊN)
+        // 3. LẤY DANH SÁCH HÓA ĐƠN
         public List<HoaDonViewModel> GetDanhSachHoaDon()
         {
             var query = from hd in _db.HoaDons
@@ -107,6 +109,7 @@ namespace DAL
                         };
             return query.OrderByDescending(x => x.NgayLap).ToList();
         }
+
         public List<ChiTietHoaDonViewModel> GetChiTietHoaDon(string maHD)
         {
             var query = from ct in _db.ChiTietHoaDons
@@ -122,6 +125,61 @@ namespace DAL
                         };
             return query.ToList();
         }
-    }
 
+        // 4. HỦY HÓA ĐƠN VÀ HOÀN KHO
+        public bool HuyHoaDonThongTu78(string maHD, string lyDo, string maNhanVienHuy)
+        {
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var hd = _db.HoaDons.FirstOrDefault(x => x.MaHD == maHD);
+                    if (hd == null || hd.TrangThai == "Đã hủy") return false;
+
+                    // Cập nhật trạng thái và Lý do hủy (KHÔNG XÓA THEO TT78)
+                    hd.TrangThai = "Đã hủy";
+                    hd.LyDoHuy = $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm")}] NV {maNhanVienHuy} hủy: {lyDo}";
+
+                    var chiTiets = _db.ChiTietHoaDons.Where(x => x.MaHD == maHD).ToList();
+                    foreach (var ct in chiTiets)
+                    {
+                        var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == ct.MaSP);
+                        if (sp != null)
+                        {
+                            sp.TonKho += ct.SoLuong; // Cộng lại kho
+                        }
+
+                        // Hoàn lại trạng thái IMEI để bán tiếp
+                        if (!string.IsNullOrEmpty(ct.GhiChuImei))
+                        {
+                            var listImei = ct.GhiChuImei.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                        .Select(i => i.Trim()).ToList();
+
+                            var imeisToUpdate = _db.ChiTietIMEIs.Where(i => listImei.Contains(i.IMEI)).ToList();
+                            foreach (var imei in imeisToUpdate)
+                            {
+                                imei.TrangThai = "Trong kho"; // Nhả IMEI
+
+                                var loHang = _db.ChiTietPhieuNhaps.FirstOrDefault(pn => pn.MaPN == imei.MaPN && pn.MaSP == imei.MaSP);
+                                if (loHang != null)
+                                {
+                                    loHang.SoLuongDaBan -= 1;
+                                    if (loHang.SoLuongDaBan < 0) loHang.SoLuongDaBan = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    _db.SaveChanges();
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+    }
 }

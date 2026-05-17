@@ -22,7 +22,9 @@ namespace GUI
         {
             dgvSanPham.AutoGenerateColumns = false;
 
-            // Load Combobox Trạng thái
+            // 🔴 ĐĂNG KÝ SỰ KIỆN ĐỊNH DẠNG TIỀN TỆ TRÊN BẢNG
+            dgvSanPham.CellFormatting += dgvSanPham_CellFormatting;
+
             if (cboTrangThai.Items.Count == 0)
             {
                 cboTrangThai.Items.Add("Đang kinh doanh");
@@ -32,27 +34,39 @@ namespace GUI
 
             LoadComboBoxHang();
             LoadData();
-
-            // Khởi tạo chữ mờ cho thanh tìm kiếm
             SetPlaceholderTimKiem();
         }
 
-        // Tải dữ liệu vào 2 ComboBox Hãng Sản Xuất
+        // 🔴 HÀM XỬ LÝ ĐỊNH DẠNG TIỀN TỆ
+        private void dgvSanPham_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.Value != null)
+            {
+                string propName = dgvSanPham.Columns[e.ColumnIndex].DataPropertyName;
+                if (propName == "GiaNhap" || propName == "GiaBan")
+                {
+                    if (decimal.TryParse(e.Value.ToString(), out decimal val))
+                    {
+                        e.Value = val.ToString("N0");
+                        e.FormattingApplied = true;
+                    }
+                }
+            }
+        }
+
         private void LoadComboBoxHang()
         {
             try
             {
                 var dsHang = _bus.GetAllHang();
-
-                // 1. Load cho ComboBox phần nhập liệu
-                cboHangSanXuat.DataSource = dsHang;
+                var dsHangHoatDong = dsHang.Where(h => h.TrangThai == "Đang hợp tác").ToList();
+                cboHangSanXuat.DataSource = dsHangHoatDong;
                 cboHangSanXuat.DisplayMember = "TenHang";
                 cboHangSanXuat.ValueMember = "MaHang";
 
-                // 2. Load cho ComboBox phần Tìm kiếm (Có thêm dòng "--Tất cả hãng--")
                 var dsHangTimKiem = new List<HangSanXuat>();
                 dsHangTimKiem.Add(new HangSanXuat { MaHang = "", TenHang = "--Tất cả hãng--" });
-                if (dsHang != null) dsHangTimKiem.AddRange(dsHang); // Nối danh sách hãng thật vào sau
+                if (dsHang != null) dsHangTimKiem.AddRange(dsHang);
 
                 cboTimKiemHang.DataSource = dsHangTimKiem;
                 cboTimKiemHang.DisplayMember = "TenHang";
@@ -87,12 +101,13 @@ namespace GUI
                     txtMaSP.Text = sp.MaSP;
                     txtTenSP.Text = sp.TenSP;
                     cboHangSanXuat.SelectedValue = sp.MaHang;
-                    txtGiaNhap.Text = sp.GiaNhap.ToString("0.##");
-                    txtGiaBan.Text = sp.GiaBan.ToString("0.##");
+
+                    // 🔴 THÊM FORMAT TIỀN LÊN TEXTBOX KHI CLICK
+                    txtGiaNhap.Text = sp.GiaNhap.ToString("N0");
+                    txtGiaBan.Text = sp.GiaBan.ToString("N0");
+
                     txtTonKho.Text = sp.TonKho.ToString();
                     txtCauHinh.Text = sp.CauHinh;
-
-                    // SỬ DỤNG .Text THAY VÌ .SelectedItem ĐỂ TRÁNH LỖI KHOẢNG TRẮNG TỪ DB
                     cboTrangThai.Text = sp.TrangThai;
 
                     isAdding = false;
@@ -116,7 +131,7 @@ namespace GUI
             txtGiaNhap.Clear();
             txtGiaBan.Clear();
             txtCauHinh.Clear();
-            txtTonKho.Text = "0"; // Reset về 0
+            txtTonKho.Text = "0";
 
             if (cboHangSanXuat.Items.Count > 0) cboHangSanXuat.SelectedIndex = 0;
             if (cboTrangThai.Items.Count > 0) cboTrangThai.SelectedIndex = 0;
@@ -126,7 +141,6 @@ namespace GUI
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            // Tự động nhận diện Thêm mới nếu mã không khóa
             if (!isAdding && txtMaSP.ReadOnly == false && !string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
                 isAdding = true;
@@ -138,8 +152,10 @@ namespace GUI
                 return;
             }
 
+            // 🔴 XÓA BỎ DẤU PHẨY TRƯỚC KHI ÉP KIỂU VÀO DATABASE
             decimal giaNhap = 0, giaBan = 0;
-            if (!decimal.TryParse(txtGiaNhap.Text, out giaNhap) || !decimal.TryParse(txtGiaBan.Text, out giaBan))
+            if (!decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out giaNhap) ||
+                !decimal.TryParse(txtGiaBan.Text.Replace(",", ""), out giaBan))
             {
                 MessageBox.Show("Giá nhập và Giá bán phải là số hợp lệ!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -153,8 +169,8 @@ namespace GUI
                 GiaNhap = giaNhap,
                 GiaBan = giaBan,
                 CauHinh = txtCauHinh.Text.Trim(),
-                TonKho = 0, // Mới tạo luôn bằng 0
-                TrangThai = cboTrangThai.Text // Dùng .Text an toàn hơn trong WinForms
+                TonKho = 0,
+                TrangThai = cboTrangThai.Text
             };
 
             if (isAdding)
@@ -185,11 +201,11 @@ namespace GUI
                 return;
             }
 
+            // 🔴 XÓA BỎ DẤU PHẨY TRƯỚC KHI ÉP KIỂU VÀO DATABASE
             decimal giaNhap = 0, giaBan = 0;
-            decimal.TryParse(txtGiaNhap.Text, out giaNhap);
-            decimal.TryParse(txtGiaBan.Text, out giaBan);
+            decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out giaNhap);
+            decimal.TryParse(txtGiaBan.Text.Replace(",", ""), out giaBan);
 
-            // BẮT CHÍNH XÁC TRẠNG THÁI HIỂN THỊ TRÊN GIAO DIỆN
             string trangThaiChon = string.IsNullOrWhiteSpace(cboTrangThai.Text)
                                    ? "Đang kinh doanh"
                                    : cboTrangThai.Text;
@@ -202,8 +218,7 @@ namespace GUI
                 GiaNhap = giaNhap,
                 GiaBan = giaBan,
                 CauHinh = txtCauHinh.Text.Trim(),
-                TrangThai = trangThaiChon // Đã cập nhật dòng này
-                // Không cập nhật TonKho ở đây để tránh làm sai lệch số lượng kho thực tế
+                TrangThai = trangThaiChon
             };
 
             if (MessageBox.Show($"Bạn có chắc chắn muốn cập nhật SP [{spCapNhat.TenSP}]?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -245,7 +260,7 @@ namespace GUI
         {
             txtTimKiem.Clear();
             SetPlaceholderTimKiem();
-            if (cboTimKiemHang.Items.Count > 0) cboTimKiemHang.SelectedIndex = 0; // Đưa bộ lọc hãng về "--Tất cả hãng--"
+            if (cboTimKiemHang.Items.Count > 0) cboTimKiemHang.SelectedIndex = 0;
             LoadData();
             btnLamTrong_Click(sender, e);
         }
@@ -307,10 +322,8 @@ namespace GUI
                                 .Replace("đ", "d").Replace("Đ", "D");
         }
 
-        // HÀM LỌC CHUNG CHO CẢ TEXTBOX VÀ COMBOBOX
         private void ThucHienLocDuLieu()
         {
-            // Tránh lỗi khi form chưa load xong dữ liệu
             if (_bus == null) return;
 
             string keyword = txtTimKiem.Text.Trim();
@@ -320,7 +333,6 @@ namespace GUI
             {
                 var ds = _bus.GetAll();
 
-                // 1. Lọc theo từ khóa (Mã, Tên, Cấu hình) - Có không dấu
                 if (!string.IsNullOrEmpty(keyword) && keyword != "Tên sản phẩm...")
                 {
                     string keywordUnsign = RemoveDiacritics(keyword).ToLower();
@@ -331,8 +343,6 @@ namespace GUI
                     ).ToList();
                 }
 
-                // 2. Lọc theo Hãng Sản Xuất (Nếu người dùng không chọn "--Tất cả hãng--")
-                // Điều kiện cboTimKiemHang.SelectedIndex > 0 để bỏ qua dòng "--Tất cả hãng--" ở trên cùng
                 if (!string.IsNullOrEmpty(maHangLoc) && cboTimKiemHang.SelectedIndex > 0)
                 {
                     ds = ds.Where(s => s.MaHang == maHangLoc).ToList();
@@ -340,19 +350,14 @@ namespace GUI
 
                 dgvSanPham.DataSource = ds;
             }
-            catch (Exception)
-            {
-                // Bỏ qua lỗi ngầm khi gõ quá nhanh
-            }
+            catch (Exception) { }
         }
 
-        // Bắt sự kiện khi gõ chữ
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
         {
             ThucHienLocDuLieu();
         }
 
-        // Bắt sự kiện khi chọn hãng
         private void cboTimKiemHang_SelectedIndexChanged(object sender, EventArgs e)
         {
             ThucHienLocDuLieu();

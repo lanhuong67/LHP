@@ -105,12 +105,14 @@
             // 
             // dgvNhanVien
             // 
+            dgvNhanVien.AllowUserToAddRows = false;
             dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvNhanVien.BackgroundColor = Color.White;
             dgvNhanVien.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvNhanVien.Columns.AddRange(new DataGridViewColumn[] { colMaNV, colHoTen, colSDT, colEmail, colVaiTro });
             dgvNhanVien.Location = new Point(16, 262);
             dgvNhanVien.Name = "dgvNhanVien";
+            dgvNhanVien.RowHeadersVisible = false;
             dgvNhanVien.RowHeadersWidth = 51;
             dgvNhanVien.Size = new Size(632, 648);
             dgvNhanVien.TabIndex = 16;

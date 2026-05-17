@@ -105,12 +105,14 @@
             // 
             // dgvKhachHang
             // 
+            dgvKhachHang.AllowUserToAddRows = false;
             dgvKhachHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvKhachHang.BackgroundColor = Color.White;
             dgvKhachHang.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvKhachHang.Columns.AddRange(new DataGridViewColumn[] { colMaKH, colHoTen, colSĐT, colDiaChi });
             dgvKhachHang.Location = new Point(15, 262);
             dgvKhachHang.Name = "dgvKhachHang";
+            dgvKhachHang.RowHeadersVisible = false;
             dgvKhachHang.RowHeadersWidth = 51;
             dgvKhachHang.Size = new Size(602, 638);
             dgvKhachHang.TabIndex = 22;

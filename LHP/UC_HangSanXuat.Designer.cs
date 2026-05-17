@@ -101,6 +101,7 @@
             // 
             // dgvHangSanXuat
             // 
+            dgvHangSanXuat.AllowUserToAddRows = false;
             dgvHangSanXuat.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvHangSanXuat.BackgroundColor = Color.White;
             dgvHangSanXuat.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;

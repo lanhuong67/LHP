@@ -17,9 +17,8 @@ namespace GUI
         private PhieuNhapBUS _pnBus = new PhieuNhapBUS();
 
         private BindingList<ChiTietNhapViewModel> gioHang = new BindingList<ChiTietNhapViewModel>();
-
-        // Chuỗi mặc định cho ô tìm kiếm
         private readonly string _placeholderText = "Tìm mã...";
+        private bool _isProcessingClick = false;
 
         public UC_NhapHangLo()
         {
@@ -30,6 +29,9 @@ namespace GUI
         {
             dgvChiTietNhap.AutoGenerateColumns = false;
             dgvChiTietNhap.DataSource = gioHang;
+
+            // 🔴 ĐĂNG KÝ SỰ KIỆN LÀM ĐẸP TIỀN TỆ TRÊN BẢNG LỊCH SỬ NHẬP
+            dgvLichSuNhap.CellFormatting += dgvLichSuNhap_CellFormatting;
 
             ThiếtLapNgayThang(dtpTuNgay);
             ThiếtLapNgayThang(dtpDenNgay);
@@ -43,18 +45,17 @@ namespace GUI
 
             KhoiTaoTraiNghiemNguoiDung();
 
-            // Hiển thị tên nhân viên đang trực tiếp nhập hàng từ Session
             if (txtNhanVien != null)
             {
                 txtNhanVien.Text = UserSession.HoTen;
                 txtNhanVien.ReadOnly = true;
                 txtNhanVien.BackColor = SystemColors.Control;
             }
+
+            dgvLichSuNhap.CellContentClick -= dgvLichSuNhap_CellContentClick;
+            dgvLichSuNhap.CellContentClick += dgvLichSuNhap_CellContentClick;
         }
 
-        // ==========================================================
-        // CÁC HÀM XỬ LÝ UX 
-        // ==========================================================
         private void KhoiTaoTraiNghiemNguoiDung()
         {
             if (txtTimMaLo != null)
@@ -99,9 +100,6 @@ namespace GUI
             if (sender is ComboBox cbo && !cbo.DroppedDown) cbo.DroppedDown = true;
         }
 
-        // ==========================================================
-        // CÁC HÀM THIẾT LẬP CƠ BẢN
-        // ==========================================================
         private void ThiếtLapNgayThang(DateTimePicker dtp)
         {
             dtp.Format = DateTimePickerFormat.Custom;
@@ -129,7 +127,8 @@ namespace GUI
                 cboNhaCungCap.DisplayMember = "TenNCC";
                 cboNhaCungCap.ValueMember = "MaNCC";
 
-                cboHangSX_Loc.DataSource = _spBus.GetAllHang();
+                var dsHangHoatDong = _spBus.GetAllHang().Where(h => h.TrangThai == "Đang hợp tác").ToList();
+                cboHangSX_Loc.DataSource = dsHangHoatDong;
                 cboHangSX_Loc.DisplayMember = "TenHang";
                 cboHangSX_Loc.ValueMember = "MaHang";
 
@@ -152,7 +151,7 @@ namespace GUI
             if (cboHangSX_Loc.SelectedValue != null)
             {
                 string maHang = cboHangSX_Loc.SelectedValue.ToString();
-                cboSanPham.DataSource = _spBus.GetAll().Where(s => s.MaHang == maHang).ToList();
+                cboSanPham.DataSource = _spBus.GetAll().Where(s => s.MaHang == maHang && s.TrangThai == "Đang kinh doanh").ToList();
                 cboSanPham.DisplayMember = "TenSP";
                 cboSanPham.ValueMember = "MaSP";
             }
@@ -160,20 +159,23 @@ namespace GUI
 
         private void cboSanPham_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // 🔴 HIỂN THỊ DẤU PHẨY TIỀN TỆ TRÊN TEXTBOX
             if (cboSanPham.SelectedItem is SanPham sp)
-                txtGiaNhap.Text = sp.GiaNhap.ToString("0.##");
+                txtGiaNhap.Text = sp.GiaNhap.ToString("N0");
         }
 
-        // ==========================================================
-        // XỬ LÝ TAB: TẠO PHIẾU NHẬP
-        // ==========================================================
         private void btnThem_Click(object sender, EventArgs e)
         {
             if (cboSanPham.SelectedItem is not SanPham sp) return;
 
             int soLuong = (int)numSoLuong.Value;
             if (soLuong <= 0) { MessageBox.Show("Số lượng phải lớn hơn 0!", "Cảnh báo"); return; }
-            if (!decimal.TryParse(txtGiaNhap.Text, out decimal giaNhap)) { MessageBox.Show("Giá nhập không hợp lệ!", "Lỗi"); return; }
+
+            // 🔴 LỌC DẤU PHẨY TRƯỚC KHI ÉP KIỂU VÀO DATABASE
+            if (!decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out decimal giaNhap))
+            {
+                MessageBox.Show("Giá nhập không hợp lệ!", "Lỗi"); return;
+            }
 
             using (FormNhapIMEI frmIMEI = new FormNhapIMEI(sp.TenSP, soLuong, sp.MaHang))
             {
@@ -216,6 +218,17 @@ namespace GUI
         {
             if (dgvChiTietNhap.Columns[e.ColumnIndex].Name == "colNhap_STT")
                 e.Value = (e.RowIndex + 1).ToString();
+
+            // 🔴 ĐỊNH DẠNG TIỀN TỆ CHO GIỎ HÀNG NHẬP
+            string propName = dgvChiTietNhap.Columns[e.ColumnIndex].DataPropertyName;
+            if ((propName == "GiaNhap" || propName == "ThanhTien") && e.Value != null)
+            {
+                if (decimal.TryParse(e.Value.ToString(), out decimal val))
+                {
+                    e.Value = val.ToString("N0");
+                    e.FormattingApplied = true;
+                }
+            }
         }
 
         private void dgvChiTietNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -246,7 +259,6 @@ namespace GUI
 
         private void btnXacNhan_Click(object sender, EventArgs e)
         {
-            // Kiểm tra phân quyền: Chỉ Admin mới được xác nhận nhập lô hàng lớn
             if (UserSession.ChucVu != "Admin")
             {
                 MessageBox.Show("Chỉ quản lý (Admin) mới có quyền xác nhận nhập kho!", "Cảnh báo bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -265,7 +277,7 @@ namespace GUI
                     NgayNhap = dtpNgayNhap.Value,
                     MaNCC = cboNhaCungCap.SelectedValue.ToString(),
                     MaChiNhanh = cboChiNhanh.SelectedValue.ToString(),
-                    MaNV = UserSession.MaNV, // Lấy mã NV trực tiếp từ Session
+                    MaNV = UserSession.MaNV ?? "Admin",
                     SoHoaDonNCC = txtSoHoaDonNCC.Text,
                     GhiChu = txtGhiChu.Text,
                     TongTien = gioHang.Sum(x => x.ThanhTien),
@@ -295,9 +307,6 @@ namespace GUI
             }
         }
 
-        // ==========================================================
-        // XỬ LÝ TAB: LỊCH SỬ NHẬP HÀNG & POP-UP HỦY
-        // ==========================================================
         private void LoadLichSuNhap()
         {
             var dsLichSu = _pnBus.GetLichSuNhap();
@@ -309,22 +318,37 @@ namespace GUI
             lblTongChi.Text = dsLichSu.Sum(x => x.TongTien).ToString("N0") + " đ";
         }
 
+        // 🔴 ĐỊNH DẠNG TIỀN TỆ CHO BẢNG LỊCH SỬ NHẬP HÀNG
+        private void dgvLichSuNhap_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvLichSuNhap.Columns[e.ColumnIndex].DataPropertyName == "TongTien" && e.Value != null)
+            {
+                if (decimal.TryParse(e.Value.ToString(), out decimal val))
+                {
+                    e.Value = val.ToString("N0");
+                    e.FormattingApplied = true;
+                }
+            }
+        }
+
         private string PromptLyDoHuy()
         {
             Form prompt = new Form()
             {
-                Width = 400,
-                Height = 200,
+                Width = 460,
+                Height = 240,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 Text = "Xác nhận hủy phiếu nhập",
                 StartPosition = FormStartPosition.CenterScreen,
                 MaximizeBox = false,
                 MinimizeBox = false
             };
-            Label textLabel = new Label() { Left = 20, Top = 20, Width = 350, Text = "Vui lòng nhập lý do hủy phiếu (Bắt buộc):" };
-            TextBox textBox = new TextBox() { Left = 20, Top = 50, Width = 340, Multiline = true, Height = 55 };
-            Button confirmation = new Button() { Text = "Xác nhận hủy", Left = 240, Width = 120, Top = 115, DialogResult = DialogResult.OK, BackColor = Color.Red, ForeColor = Color.White };
-            Button cancel = new Button() { Text = "Quay lại", Left = 110, Width = 120, Top = 115, DialogResult = DialogResult.Cancel };
+
+            Label textLabel = new Label() { Left = 20, Top = 20, Width = 400, AutoSize = true, Font = new Font("Segoe UI", 10, FontStyle.Bold), Text = "Vui lòng nhập lý do hủy phiếu (Bắt buộc):" };
+            TextBox textBox = new TextBox() { Left = 20, Top = 60, Width = 400, Multiline = true, Height = 60 };
+
+            Button cancel = new Button() { Text = "Quay lại", Left = 130, Width = 120, Height = 35, Top = 140, DialogResult = DialogResult.Cancel, FlatStyle = FlatStyle.Flat };
+            Button confirmation = new Button() { Text = "Xác nhận hủy", Left = 260, Width = 150, Height = 35, Top = 140, DialogResult = DialogResult.OK, BackColor = Color.Red, ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
 
             prompt.Controls.Add(textLabel); prompt.Controls.Add(textBox);
             prompt.Controls.Add(confirmation); prompt.Controls.Add(cancel);
@@ -335,39 +359,41 @@ namespace GUI
 
         private void dgvLichSuNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-            var phieuDuocChon = dgvLichSuNhap.Rows[e.RowIndex].DataBoundItem as LichSuNhapViewModel;
-            if (phieuDuocChon == null) return;
+            if (e.RowIndex < 0 || _isProcessingClick) return;
 
-            if (dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colChiTiet")
+            _isProcessingClick = true;
+            try
             {
-                string thongBao = $"Mã Phiếu: {phieuDuocChon.MaPN}\n" +
-                                  $"Nhà cung cấp: {phieuDuocChon.TenNCC}\n" +
-                                  $"Tổng tiền: {phieuDuocChon.TongTien:N0} đ\n" +
-                                  $"Ghi chú: {(string.IsNullOrEmpty(phieuDuocChon.GhiChu) ? "Không có" : phieuDuocChon.GhiChu)}\n\n" +
-                                  $"Form xem chi tiết sẽ được phát triển ở giai đoạn sau.";
+                var phieuDuocChon = dgvLichSuNhap.Rows[e.RowIndex].DataBoundItem as LichSuNhapViewModel;
+                if (phieuDuocChon == null) return;
 
-                MessageBox.Show(thongBao, "Thông tin phiếu nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if (dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colHuyPhieu")
-            {
-                if (phieuDuocChon.TrangThai == "Đã hủy")
+                if (dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colChiTiet")
                 {
-                    MessageBox.Show("Phiếu này đã được hủy trước đó rồi!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    string thongBao = $"Mã Phiếu: {phieuDuocChon.MaPN}\n" +
+                                      $"Nhà cung cấp: {phieuDuocChon.TenNCC}\n" +
+                                      $"Tổng tiền: {phieuDuocChon.TongTien:N0} đ\n" +
+                                      $"Ghi chú: {(string.IsNullOrEmpty(phieuDuocChon.GhiChu) ? "Không có" : phieuDuocChon.GhiChu)}\n\n" +
+                                      $"Form xem chi tiết sẽ được phát triển ở giai đoạn sau.";
+
+                    MessageBox.Show(thongBao, "Thông tin phiếu nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
-                string lyDo = PromptLyDoHuy();
-                if (lyDo != null)
+                else if (dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colHuyPhieu")
                 {
-                    if (string.IsNullOrWhiteSpace(lyDo))
+                    if (phieuDuocChon.TrangThai == "Đã hủy")
                     {
-                        MessageBox.Show("Bạn phải ghi rõ lý do để hệ thống lưu vết thu hồi kho!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Phiếu này đã được hủy trước đó rồi!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
 
-                    try
+                    string lyDo = PromptLyDoHuy();
+                    if (lyDo != null)
                     {
+                        if (string.IsNullOrWhiteSpace(lyDo))
+                        {
+                            MessageBox.Show("Bạn phải ghi rõ lý do để hệ thống lưu vết thu hồi kho!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
                         if (_pnBus.HuyPhieuNhap(phieuDuocChon.MaPN, lyDo))
                         {
                             MessageBox.Show("Hủy phiếu và trừ tồn kho thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -375,8 +401,15 @@ namespace GUI
                             HienThiLoHang();
                         }
                     }
-                    catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi khi hủy", MessageBoxButtons.OK, MessageBoxIcon.Error); }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Lỗi xử lý", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _isProcessingClick = false;
             }
         }
 
@@ -428,9 +461,6 @@ namespace GUI
             ThucHienLocDuLieu();
         }
 
-        // ==========================================================
-        // CÁC HÀM XỬ LÝ CHO TAB "THEO DÕI LÔ HÀNG"
-        // ==========================================================
         private void LoadComboBox_LoHang()
         {
             try
