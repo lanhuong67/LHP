@@ -44,6 +44,7 @@
             colTrangThai = new DataGridViewTextBoxColumn();
             colChiTiet = new DataGridViewButtonColumn();
             colHuyDon = new DataGridViewButtonColumn();
+            txtTimKiemHD = new TextBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDanhSachHoaDon).BeginInit();
             SuspendLayout();
@@ -62,6 +63,7 @@
             // panel1
             // 
             panel1.BackColor = Color.White;
+            panel1.Controls.Add(txtTimKiemHD);
             panel1.Controls.Add(btnLamMoi);
             panel1.Controls.Add(cboTrangThai);
             panel1.Controls.Add(label2);
@@ -71,7 +73,7 @@
             panel1.Location = new Point(45, 53);
             panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1291, 283);
+            panel1.Size = new Size(1291, 281);
             panel1.TabIndex = 3;
             // 
             // btnLamMoi
@@ -80,10 +82,10 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(42, 216);
+            btnLamMoi.Location = new Point(155, 213);
             btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(201, 46);
+            btnLamMoi.Size = new Size(201, 49);
             btnLamMoi.TabIndex = 7;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -92,7 +94,7 @@
             // cboTrangThai
             // 
             cboTrangThai.FormattingEnabled = true;
-            cboTrangThai.Location = new Point(42, 154);
+            cboTrangThai.Location = new Point(42, 149);
             cboTrangThai.Margin = new Padding(4, 4, 4, 4);
             cboTrangThai.Name = "cboTrangThai";
             cboTrangThai.Size = new Size(1175, 33);
@@ -103,7 +105,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(56, 64);
+            label2.Location = new Point(56, 65);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(42, 25);
@@ -112,7 +114,7 @@
             // 
             // dtpDenNgay
             // 
-            dtpDenNgay.Location = new Point(42, 93);
+            dtpDenNgay.Location = new Point(42, 94);
             dtpDenNgay.Margin = new Padding(4, 4, 4, 4);
             dtpDenNgay.Name = "dtpDenNgay";
             dtpDenNgay.Size = new Size(1175, 31);
@@ -133,12 +135,12 @@
             dgvDanhSachHoaDon.BackgroundColor = Color.White;
             dgvDanhSachHoaDon.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDanhSachHoaDon.Columns.AddRange(new DataGridViewColumn[] { colMaHD, colNgayLap, colTenNhanVien, colTenKhachHang, colTongTien, colTrangThai, colChiTiet, colHuyDon });
-            dgvDanhSachHoaDon.Location = new Point(67, 371);
+            dgvDanhSachHoaDon.Location = new Point(45, 356);
             dgvDanhSachHoaDon.Margin = new Padding(4, 4, 4, 4);
             dgvDanhSachHoaDon.Name = "dgvDanhSachHoaDon";
             dgvDanhSachHoaDon.RowHeadersVisible = false;
             dgvDanhSachHoaDon.RowHeadersWidth = 51;
-            dgvDanhSachHoaDon.Size = new Size(1460, 595);
+            dgvDanhSachHoaDon.Size = new Size(1291, 506);
             dgvDanhSachHoaDon.TabIndex = 4;
             dgvDanhSachHoaDon.CellContentClick += dgvDanhSachHoaDon_CellContentClick;
             dgvDanhSachHoaDon.CellFormatting += dgvDanhSachHoaDon_CellFormatting;
@@ -201,6 +203,15 @@
             colHuyDon.Text = "Hủy";
             colHuyDon.UseColumnTextForButtonValue = true;
             // 
+            // txtTimKiemHD
+            // 
+            txtTimKiemHD.Location = new Point(853, 213);
+            txtTimKiemHD.Margin = new Padding(4, 4, 4, 4);
+            txtTimKiemHD.Multiline = true;
+            txtTimKiemHD.Name = "txtTimKiemHD";
+            txtTimKiemHD.Size = new Size(155, 48);
+            txtTimKiemHD.TabIndex = 8;
+            // 
             // UC_DanhSachHoaDon
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -212,7 +223,7 @@
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 4, 4, 4);
             Name = "UC_DanhSachHoaDon";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             Load += UC_DanhSachHoaDon_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -239,5 +250,6 @@
         private DataGridViewTextBoxColumn colTrangThai;
         private DataGridViewButtonColumn colChiTiet;
         private DataGridViewButtonColumn colHuyDon;
+        private TextBox txtTimKiemHD;
     }
 }

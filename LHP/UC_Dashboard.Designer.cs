@@ -32,11 +32,13 @@
             // 
             // UC_Dashboard
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
+            Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "UC_Dashboard";
-            Size = new Size(1546, 986);
+            Size = new Size(1712, 1108);
             ResumeLayout(false);
         }
 

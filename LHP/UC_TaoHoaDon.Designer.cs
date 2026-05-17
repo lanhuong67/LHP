@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
             label1 = new Label();
             label2 = new Label();
             panel1 = new Panel();
@@ -90,7 +90,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(76, 80);
+            label2.Location = new Point(27, 81);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(153, 28);
@@ -106,7 +106,7 @@
             panel1.Controls.Add(label5);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label3);
-            panel1.Location = new Point(76, 137);
+            panel1.Location = new Point(27, 138);
             panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
             panel1.Size = new Size(594, 183);
@@ -174,7 +174,7 @@
             panel2.Controls.Add(txtSDTKhachHang);
             panel2.Controls.Add(label7);
             panel2.Controls.Add(label8);
-            panel2.Location = new Point(769, 137);
+            panel2.Location = new Point(720, 138);
             panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
             panel2.Size = new Size(641, 183);
@@ -259,7 +259,7 @@
             panel3.Controls.Add(cboSanPham);
             panel3.Controls.Add(cboHangSX);
             panel3.Controls.Add(numSoLuong);
-            panel3.Location = new Point(76, 339);
+            panel3.Location = new Point(27, 340);
             panel3.Margin = new Padding(4, 4, 4, 4);
             panel3.Name = "panel3";
             panel3.Size = new Size(1334, 156);
@@ -342,10 +342,10 @@
             panel4.Controls.Add(lblTongSoSP);
             panel4.Controls.Add(label12);
             panel4.Controls.Add(label11);
-            panel4.Location = new Point(905, 824);
+            panel4.Location = new Point(887, 771);
             panel4.Margin = new Padding(4, 4, 4, 4);
             panel4.Name = "panel4";
-            panel4.Size = new Size(474, 141);
+            panel4.Size = new Size(474, 102);
             panel4.TabIndex = 15;
             // 
             // lblTongTien
@@ -353,7 +353,7 @@
             lblTongTien.AutoSize = true;
             lblTongTien.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             lblTongTien.ForeColor = SystemColors.HotTrack;
-            lblTongTien.Location = new Point(335, 85);
+            lblTongTien.Location = new Point(330, 57);
             lblTongTien.Margin = new Padding(4, 0, 4, 0);
             lblTongTien.Name = "lblTongTien";
             lblTongTien.Size = new Size(117, 31);
@@ -365,7 +365,7 @@
             // 
             lblTongSoSP.AutoSize = true;
             lblTongSoSP.Font = new Font("Segoe UI", 13.8F);
-            lblTongSoSP.Location = new Point(301, 24);
+            lblTongSoSP.Location = new Point(296, 13);
             lblTongSoSP.Margin = new Padding(4, 0, 4, 0);
             lblTongSoSP.Name = "lblTongSoSP";
             lblTongSoSP.Size = new Size(145, 31);
@@ -377,7 +377,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            label12.Location = new Point(22, 85);
+            label12.Location = new Point(17, 57);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(117, 31);
@@ -388,7 +388,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 13.8F);
-            label11.Location = new Point(22, 24);
+            label11.Location = new Point(17, 13);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(145, 31);
@@ -403,11 +403,11 @@
             dgvGioHang.BackgroundColor = Color.White;
             dgvGioHang.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvGioHang.Columns.AddRange(new DataGridViewColumn[] { colSTT, colTenSP, colĐonGia, colSL, colThanhTien, colXoa });
-            dgvGioHang.Location = new Point(76, 513);
+            dgvGioHang.Location = new Point(27, 514);
             dgvGioHang.Margin = new Padding(4, 4, 4, 4);
             dgvGioHang.Name = "dgvGioHang";
             dgvGioHang.RowHeadersWidth = 51;
-            dgvGioHang.Size = new Size(1334, 256);
+            dgvGioHang.Size = new Size(1334, 210);
             dgvGioHang.TabIndex = 16;
             dgvGioHang.CellContentClick += dgvGioHang_CellContentClick;
             dgvGioHang.CellFormatting += dgvGioHang_CellFormatting;
@@ -429,8 +429,8 @@
             // colĐonGia
             // 
             colĐonGia.DataPropertyName = "DonGiaBan";
-            dataGridViewCellStyle1.Format = "N0";
-            colĐonGia.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Format = "N0";
+            colĐonGia.DefaultCellStyle = dataGridViewCellStyle13;
             colĐonGia.HeaderText = "Đơn giá";
             colĐonGia.MinimumWidth = 6;
             colĐonGia.Name = "colĐonGia";
@@ -445,8 +445,8 @@
             // colThanhTien
             // 
             colThanhTien.DataPropertyName = "ThanhTien";
-            dataGridViewCellStyle2.Format = "N0";
-            colThanhTien.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Format = "N0";
+            colThanhTien.DefaultCellStyle = dataGridViewCellStyle14;
             colThanhTien.HeaderText = "Thành tiền";
             colThanhTien.MinimumWidth = 6;
             colThanhTien.Name = "colThanhTien";
@@ -466,10 +466,10 @@
             btnThanhToan.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             btnThanhToan.ForeColor = Color.White;
             btnThanhToan.ImageAlign = ContentAlignment.MiddleRight;
-            btnThanhToan.Location = new Point(903, 43);
+            btnThanhToan.Location = new Point(854, 44);
             btnThanhToan.Margin = new Padding(4, 4, 4, 4);
             btnThanhToan.Name = "btnThanhToan";
-            btnThanhToan.Size = new Size(210, 72);
+            btnThanhToan.Size = new Size(210, 65);
             btnThanhToan.TabIndex = 12;
             btnThanhToan.Text = "Thanh toán";
             btnThanhToan.UseVisualStyleBackColor = false;
@@ -482,10 +482,10 @@
             btnHuyDon.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             btnHuyDon.ForeColor = Color.Red;
             btnHuyDon.ImageAlign = ContentAlignment.MiddleRight;
-            btnHuyDon.Location = new Point(1151, 43);
+            btnHuyDon.Location = new Point(1102, 44);
             btnHuyDon.Margin = new Padding(4, 4, 4, 4);
             btnHuyDon.Name = "btnHuyDon";
-            btnHuyDon.Size = new Size(210, 72);
+            btnHuyDon.Size = new Size(210, 65);
             btnHuyDon.TabIndex = 17;
             btnHuyDon.Text = "Hủy đơn";
             btnHuyDon.UseVisualStyleBackColor = false;
@@ -493,7 +493,7 @@
             // 
             // txtMaHD
             // 
-            txtMaHD.Location = new Point(275, 85);
+            txtMaHD.Location = new Point(226, 86);
             txtMaHD.Margin = new Padding(4, 4, 4, 4);
             txtMaHD.Name = "txtMaHD";
             txtMaHD.Size = new Size(223, 31);
@@ -517,7 +517,7 @@
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 4, 4, 4);
             Name = "UC_TaoHoaDon";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             Load += UC_TaoHoaDon_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

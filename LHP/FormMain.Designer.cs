@@ -109,7 +109,7 @@ namespace GUI
             pnlTitlebar.Dock = DockStyle.Top;
             pnlTitlebar.Location = new Point(0, 0);
             pnlTitlebar.Name = "pnlTitlebar";
-            pnlTitlebar.Size = new Size(1920, 72);
+            pnlTitlebar.Size = new Size(1731, 72);
             pnlTitlebar.TabIndex = 0;
             // 
             // label9
@@ -118,7 +118,7 @@ namespace GUI
             label9.BackColor = Color.Red;
             label9.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             label9.ForeColor = Color.Black;
-            label9.Location = new Point(1683, 23);
+            label9.Location = new Point(1528, 22);
             label9.Name = "label9";
             label9.Size = new Size(20, 25);
             label9.TabIndex = 26;
@@ -130,7 +130,7 @@ namespace GUI
             btnDangXuat.FlatStyle = FlatStyle.Flat;
             btnDangXuat.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             btnDangXuat.ForeColor = SystemColors.ButtonFace;
-            btnDangXuat.Location = new Point(1729, 12);
+            btnDangXuat.Location = new Point(1574, 11);
             btnDangXuat.Name = "btnDangXuat";
             btnDangXuat.Size = new Size(142, 45);
             btnDangXuat.TabIndex = 10;
@@ -143,7 +143,7 @@ namespace GUI
             lblTenNV.AutoSize = true;
             lblTenNV.Font = new Font("Segoe UI", 13.8F);
             lblTenNV.ForeColor = Color.White;
-            lblTenNV.Location = new Point(1228, 18);
+            lblTenNV.Location = new Point(1142, 22);
             lblTenNV.Name = "lblTenNV";
             lblTenNV.Size = new Size(166, 31);
             lblTenNV.TabIndex = 9;
@@ -694,7 +694,7 @@ namespace GUI
             pnlContainer.Controls.Add(lblDT);
             pnlContainer.Location = new Point(347, 82);
             pnlContainer.Name = "pnlContainer";
-            pnlContainer.Size = new Size(1546, 986);
+            pnlContainer.Size = new Size(1370, 886);
             pnlContainer.TabIndex = 2;
             // 
             // FormMain
@@ -702,7 +702,7 @@ namespace GUI
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1920, 1080);
+            ClientSize = new Size(1731, 1080);
             Controls.Add(pnlContainer);
             Controls.Add(pnlSidebar);
             Controls.Add(pnlTitlebar);

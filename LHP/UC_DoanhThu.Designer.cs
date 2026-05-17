@@ -41,11 +41,11 @@
             panel4 = new Panel();
             label4 = new Label();
             panel10 = new Panel();
+            label6 = new Label();
             dgvDoanhThu = new DataGridView();
             colNgay = new DataGridViewTextBoxColumn();
             colSoHoaDon = new DataGridViewTextBoxColumn();
             colDoanhThu = new DataGridViewTextBoxColumn();
-            label6 = new Label();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
             panel9.SuspendLayout();
@@ -74,9 +74,9 @@
             panel1.Controls.Add(cboThang);
             panel1.Controls.Add(cboNgay);
             panel1.Location = new Point(45, 80);
-            panel1.Margin = new Padding(4, 4, 4, 4);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(386, 297);
+            panel1.Size = new Size(386, 249);
             panel1.TabIndex = 2;
             // 
             // btnXem
@@ -84,8 +84,8 @@
             btnXem.BackColor = SystemColors.HotTrack;
             btnXem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnXem.ForeColor = Color.White;
-            btnXem.Location = new Point(66, 229);
-            btnXem.Margin = new Padding(4, 4, 4, 4);
+            btnXem.Location = new Point(71, 181);
+            btnXem.Margin = new Padding(4);
             btnXem.Name = "btnXem";
             btnXem.Size = new Size(239, 49);
             btnXem.TabIndex = 7;
@@ -96,8 +96,8 @@
             // 
             cboNam.Font = new Font("Segoe UI", 10.8F);
             cboNam.FormattingEnabled = true;
-            cboNam.Location = new Point(21, 169);
-            cboNam.Margin = new Padding(4, 4, 4, 4);
+            cboNam.Location = new Point(21, 125);
+            cboNam.Margin = new Padding(4);
             cboNam.Name = "cboNam";
             cboNam.Size = new Size(342, 33);
             cboNam.TabIndex = 2;
@@ -107,19 +107,20 @@
             // 
             cboThang.Font = new Font("Segoe UI", 10.8F);
             cboThang.FormattingEnabled = true;
-            cboThang.Location = new Point(21, 95);
-            cboThang.Margin = new Padding(4, 4, 4, 4);
+            cboThang.Location = new Point(21, 71);
+            cboThang.Margin = new Padding(4);
             cboThang.Name = "cboThang";
             cboThang.Size = new Size(342, 33);
             cboThang.TabIndex = 1;
             cboThang.Text = "Theo Tháng";
+            cboThang.SelectedIndexChanged += cboThang_SelectedIndexChanged;
             // 
             // cboNgay
             // 
             cboNgay.Font = new Font("Segoe UI", 10.8F);
             cboNgay.FormattingEnabled = true;
             cboNgay.Location = new Point(21, 20);
-            cboNgay.Margin = new Padding(4, 4, 4, 4);
+            cboNgay.Margin = new Padding(4);
             cboNgay.Name = "cboNgay";
             cboNgay.Size = new Size(342, 33);
             cboNgay.TabIndex = 0;
@@ -130,8 +131,8 @@
             panel3.BackColor = Color.White;
             panel3.BorderStyle = BorderStyle.FixedSingle;
             panel3.Controls.Add(label2);
-            panel3.Location = new Point(45, 409);
-            panel3.Margin = new Padding(4, 4, 4, 4);
+            panel3.Location = new Point(45, 359);
+            panel3.Margin = new Padding(4);
             panel3.Name = "panel3";
             panel3.Size = new Size(386, 156);
             panel3.TabIndex = 4;
@@ -152,8 +153,8 @@
             panel9.BackColor = Color.White;
             panel9.BorderStyle = BorderStyle.FixedSingle;
             panel9.Controls.Add(label3);
-            panel9.Location = new Point(593, 409);
-            panel9.Margin = new Padding(4, 4, 4, 4);
+            panel9.Location = new Point(489, 359);
+            panel9.Margin = new Padding(4);
             panel9.Name = "panel9";
             panel9.Size = new Size(386, 156);
             panel9.TabIndex = 10;
@@ -174,8 +175,8 @@
             panel4.BackColor = Color.White;
             panel4.BorderStyle = BorderStyle.FixedSingle;
             panel4.Controls.Add(label4);
-            panel4.Location = new Point(1105, 409);
-            panel4.Margin = new Padding(4, 4, 4, 4);
+            panel4.Location = new Point(958, 359);
+            panel4.Margin = new Padding(4);
             panel4.Name = "panel4";
             panel4.Size = new Size(386, 156);
             panel4.TabIndex = 5;
@@ -197,10 +198,21 @@
             panel10.BorderStyle = BorderStyle.FixedSingle;
             panel10.Controls.Add(label6);
             panel10.Location = new Point(489, 80);
-            panel10.Margin = new Padding(4, 4, 4, 4);
+            panel10.Margin = new Padding(4);
             panel10.Name = "panel10";
-            panel10.Size = new Size(832, 297);
+            panel10.Size = new Size(855, 256);
             panel10.TabIndex = 11;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            label6.Location = new Point(255, 130);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(264, 28);
+            label6.TabIndex = 2;
+            label6.Text = "//này là dashboard á nha ;))";
             // 
             // dgvDoanhThu
             // 
@@ -208,11 +220,11 @@
             dgvDoanhThu.BackgroundColor = Color.White;
             dgvDoanhThu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDoanhThu.Columns.AddRange(new DataGridViewColumn[] { colNgay, colSoHoaDon, colDoanhThu });
-            dgvDoanhThu.Location = new Point(45, 604);
-            dgvDoanhThu.Margin = new Padding(4, 4, 4, 4);
+            dgvDoanhThu.Location = new Point(45, 537);
+            dgvDoanhThu.Margin = new Padding(4);
             dgvDoanhThu.Name = "dgvDoanhThu";
             dgvDoanhThu.RowHeadersWidth = 51;
-            dgvDoanhThu.Size = new Size(1481, 365);
+            dgvDoanhThu.Size = new Size(1299, 345);
             dgvDoanhThu.TabIndex = 12;
             // 
             // colNgay
@@ -233,17 +245,6 @@
             colDoanhThu.MinimumWidth = 6;
             colDoanhThu.Name = "colDoanhThu";
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            label6.Location = new Point(255, 130);
-            label6.Margin = new Padding(4, 0, 4, 0);
-            label6.Name = "label6";
-            label6.Size = new Size(264, 28);
-            label6.TabIndex = 2;
-            label6.Text = "//này là dashboard á nha ;))";
-            // 
             // UC_DoanhThu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -257,9 +258,9 @@
             Controls.Add(panel1);
             Controls.Add(label1);
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "UC_DoanhThu";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel3.PerformLayout();

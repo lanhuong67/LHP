@@ -136,11 +136,11 @@
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Font = new Font("Segoe UI", 10.8F);
-            tabControl1.ItemSize = new Size(482, 40);
-            tabControl1.Location = new Point(32, 62);
+            tabControl1.ItemSize = new Size(434, 40);
+            tabControl1.Location = new Point(32, 51);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1480, 910);
+            tabControl1.Size = new Size(1335, 832);
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.TabIndex = 6;
             // 
@@ -157,7 +157,7 @@
             tabPage1.Location = new Point(4, 44);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1472, 862);
+            tabPage1.Size = new Size(1327, 784);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Danh sách chăm sóc";
             // 
@@ -167,10 +167,10 @@
             dgvDsChamSoc.BackgroundColor = Color.White;
             dgvDsChamSoc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDsChamSoc.Columns.AddRange(new DataGridViewColumn[] { colMaKH, colTenKH, colLoaiChamSoc, colNoiDung, colNgayHen, colTrangThai, colGoi, colXong });
-            dgvDsChamSoc.Location = new Point(6, 239);
+            dgvDsChamSoc.Location = new Point(6, 228);
             dgvDsChamSoc.Name = "dgvDsChamSoc";
             dgvDsChamSoc.RowHeadersWidth = 51;
-            dgvDsChamSoc.Size = new Size(1458, 615);
+            dgvDsChamSoc.Size = new Size(1313, 548);
             dgvDsChamSoc.TabIndex = 5;
             // 
             // colMaKH
@@ -231,9 +231,9 @@
             panel10.Controls.Add(cboTrangThai);
             panel10.Controls.Add(cboLoai);
             panel10.Controls.Add(txtTimKiem);
-            panel10.Location = new Point(6, 146);
+            panel10.Location = new Point(6, 149);
             panel10.Name = "panel10";
-            panel10.Size = new Size(1458, 73);
+            panel10.Size = new Size(1313, 73);
             panel10.TabIndex = 4;
             // 
             // btnTim
@@ -242,7 +242,7 @@
             btnTim.FlatStyle = FlatStyle.Flat;
             btnTim.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             btnTim.ForeColor = Color.White;
-            btnTim.Location = new Point(1303, 20);
+            btnTim.Location = new Point(1162, 20);
             btnTim.Name = "btnTim";
             btnTim.Size = new Size(128, 38);
             btnTim.TabIndex = 9;
@@ -252,9 +252,9 @@
             // cboTrangThai
             // 
             cboTrangThai.FormattingEnabled = true;
-            cboTrangThai.Location = new Point(463, 23);
+            cboTrangThai.Location = new Point(406, 23);
             cboTrangThai.Name = "cboTrangThai";
-            cboTrangThai.Size = new Size(357, 33);
+            cboTrangThai.Size = new Size(293, 33);
             cboTrangThai.TabIndex = 2;
             cboTrangThai.Text = "--Tất cả trạng thái--";
             // 
@@ -263,15 +263,15 @@
             cboLoai.FormattingEnabled = true;
             cboLoai.Location = new Point(18, 25);
             cboLoai.Name = "cboLoai";
-            cboLoai.Size = new Size(357, 33);
+            cboLoai.Size = new Size(293, 33);
             cboLoai.TabIndex = 1;
             cboLoai.Text = "--Tất cả loại--";
             // 
             // txtTimKiem
             // 
-            txtTimKiem.Location = new Point(911, 23);
+            txtTimKiem.Location = new Point(773, 20);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(357, 31);
+            txtTimKiem.Size = new Size(293, 31);
             txtTimKiem.TabIndex = 0;
             txtTimKiem.Text = "Tìm tên KH, SĐT...";
             // 
@@ -282,7 +282,7 @@
             panel4.Controls.Add(lblDaXuLy);
             panel4.Controls.Add(label9);
             panel4.Font = new Font("Segoe UI", 12F);
-            panel4.Location = new Point(1209, 6);
+            panel4.Location = new Point(1064, 6);
             panel4.Name = "panel4";
             panel4.Size = new Size(255, 125);
             panel4.TabIndex = 3;
@@ -315,7 +315,7 @@
             panel3.Controls.Add(lblChuaLienHe);
             panel3.Controls.Add(label7);
             panel3.Font = new Font("Segoe UI", 12F);
-            panel3.Location = new Point(847, 6);
+            panel3.Location = new Point(740, 6);
             panel3.Name = "panel3";
             panel3.Size = new Size(255, 125);
             panel3.TabIndex = 3;
@@ -348,7 +348,7 @@
             panel2.Controls.Add(lblSapHetHan);
             panel2.Controls.Add(label5);
             panel2.Font = new Font("Segoe UI", 12F);
-            panel2.Location = new Point(388, 6);
+            panel2.Location = new Point(360, 6);
             panel2.Name = "panel2";
             panel2.Size = new Size(255, 125);
             panel2.TabIndex = 3;
@@ -417,7 +417,7 @@
             tabPage2.Location = new Point(4, 44);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1472, 862);
+            tabPage2.Size = new Size(1327, 784);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Tạo lịch nhắc";
             // 
@@ -430,7 +430,7 @@
             panel6.Controls.Add(btnLuu);
             panel6.Controls.Add(label19);
             panel6.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            panel6.Location = new Point(771, 10);
+            panel6.Location = new Point(680, 10);
             panel6.Name = "panel6";
             panel6.Size = new Size(627, 848);
             panel6.TabIndex = 34;
@@ -690,7 +690,7 @@
             panel5.Controls.Add(label11);
             panel5.Controls.Add(label10);
             panel5.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            panel5.Location = new Point(64, 10);
+            panel5.Location = new Point(16, 10);
             panel5.Name = "panel5";
             panel5.Size = new Size(617, 848);
             panel5.TabIndex = 0;
@@ -814,7 +814,7 @@
             tabPage3.Location = new Point(4, 44);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(1472, 862);
+            tabPage3.Size = new Size(1327, 784);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Lịch sử liên hệ";
             // 
@@ -824,10 +824,10 @@
             dataGridView2.BackgroundColor = Color.White;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Columns.AddRange(new DataGridViewColumn[] { colMaKhCS, colTenKhCs, colLoaiCs, colNoiDungGhiCHu, colNgayLienHe, colNhanVien });
-            dataGridView2.Location = new Point(7, 100);
+            dataGridView2.Location = new Point(7, 107);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.Size = new Size(1457, 754);
+            dataGridView2.Size = new Size(1312, 669);
             dataGridView2.TabIndex = 1;
             // 
             // colMaKhCS
@@ -873,9 +873,9 @@
             panel9.Controls.Add(btnTimKH);
             panel9.Controls.Add(cboLoaiKH);
             panel9.Controls.Add(txtTimKH);
-            panel9.Location = new Point(7, 7);
+            panel9.Location = new Point(6, 6);
             panel9.Name = "panel9";
-            panel9.Size = new Size(1457, 87);
+            panel9.Size = new Size(1313, 87);
             panel9.TabIndex = 0;
             // 
             // btnLamTrong
@@ -884,7 +884,7 @@
             btnLamTrong.FlatStyle = FlatStyle.Flat;
             btnLamTrong.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamTrong.ForeColor = Color.Black;
-            btnLamTrong.Location = new Point(1284, 20);
+            btnLamTrong.Location = new Point(1168, 22);
             btnLamTrong.Name = "btnLamTrong";
             btnLamTrong.Size = new Size(128, 38);
             btnLamTrong.TabIndex = 10;
@@ -898,7 +898,7 @@
             btnTimKH.FlatStyle = FlatStyle.Flat;
             btnTimKH.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnTimKH.ForeColor = Color.White;
-            btnTimKH.Location = new Point(1088, 19);
+            btnTimKH.Location = new Point(1004, 22);
             btnTimKH.Name = "btnTimKH";
             btnTimKH.Size = new Size(128, 38);
             btnTimKH.TabIndex = 9;
@@ -908,17 +908,17 @@
             // cboLoaiKH
             // 
             cboLoaiKH.FormattingEnabled = true;
-            cboLoaiKH.Location = new Point(585, 23);
+            cboLoaiKH.Location = new Point(542, 26);
             cboLoaiKH.Name = "cboLoaiKH";
-            cboLoaiKH.Size = new Size(395, 33);
+            cboLoaiKH.Size = new Size(326, 33);
             cboLoaiKH.TabIndex = 1;
             cboLoaiKH.Text = "--Tất cả loại--";
             // 
             // txtTimKH
             // 
-            txtTimKH.Location = new Point(36, 25);
+            txtTimKH.Location = new Point(22, 25);
             txtTimKH.Name = "txtTimKH";
-            txtTimKH.Size = new Size(490, 31);
+            txtTimKH.Size = new Size(395, 31);
             txtTimKH.TabIndex = 0;
             txtTimKH.Text = "Tìm tên KH, SĐT......";
             // 
@@ -941,7 +941,7 @@
             Controls.Add(label1);
             Font = new Font("Segoe UI", 10.2F);
             Name = "UC_ChamSocKH";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             Load += UC_ChamSocKH_Load;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);

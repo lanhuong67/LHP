@@ -74,7 +74,7 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(1343, 14);
+            btnLamMoi.Location = new Point(1205, 14);
             btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
             btnLamMoi.Size = new Size(144, 58);
@@ -88,11 +88,11 @@
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, colMaSP, colTenSP, colHang, colTonKho, colMucCanhBao, colThaoTac });
-            dataGridView1.Location = new Point(39, 408);
+            dataGridView1.Location = new Point(45, 402);
             dataGridView1.Margin = new Padding(4, 4, 4, 4);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1448, 558);
+            dataGridView1.Size = new Size(1304, 480);
             dataGridView1.TabIndex = 7;
             // 
             // Column1
@@ -145,7 +145,7 @@
             panel1.BackColor = Color.LavenderBlush;
             panel1.Controls.Add(label7);
             panel1.Controls.Add(label4);
-            panel1.Location = new Point(240, 110);
+            panel1.Location = new Point(133, 99);
             panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
             panel1.Size = new Size(317, 125);
@@ -180,7 +180,7 @@
             panel2.BackColor = Color.Honeydew;
             panel2.Controls.Add(label9);
             panel2.Controls.Add(label6);
-            panel2.Location = new Point(1170, 110);
+            panel2.Location = new Point(912, 99);
             panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
             panel2.Size = new Size(317, 125);
@@ -215,7 +215,7 @@
             panel3.BackColor = Color.LightYellow;
             panel3.Controls.Add(label8);
             panel3.Controls.Add(label5);
-            panel3.Location = new Point(694, 110);
+            panel3.Location = new Point(527, 99);
             panel3.Margin = new Padding(4, 4, 4, 4);
             panel3.Name = "panel3";
             panel3.Size = new Size(317, 125);
@@ -251,7 +251,7 @@
             btnNhapKho.FlatStyle = FlatStyle.Flat;
             btnNhapKho.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnNhapKho.ForeColor = Color.White;
-            btnNhapKho.Location = new Point(149, 334);
+            btnNhapKho.Location = new Point(133, 294);
             btnNhapKho.Margin = new Padding(4, 4, 4, 4);
             btnNhapKho.Name = "btnNhapKho";
             btnNhapKho.Size = new Size(266, 66);
@@ -263,7 +263,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(149, 280);
+            label2.Location = new Point(80, 252);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(820, 28);
@@ -274,7 +274,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(1145, 353);
+            label3.Location = new Point(1043, 353);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(42, 28);
@@ -285,7 +285,7 @@
             // 
             comboBox1.Font = new Font("Segoe UI", 12F);
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(1205, 349);
+            comboBox1.Location = new Point(1103, 349);
             comboBox1.Margin = new Padding(4, 4, 4, 4);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(188, 36);
@@ -310,7 +310,7 @@
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 4, 4, 4);
             Name = "UC_CanhBaoKho";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             Load += UC_CanhBaoKho_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel1.ResumeLayout(false);

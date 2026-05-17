@@ -82,10 +82,10 @@
             btnXoa.FlatStyle = FlatStyle.Flat;
             btnXoa.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnXoa.ForeColor = Color.Red;
-            btnXoa.Location = new Point(519, 239);
+            btnXoa.Location = new Point(529, 212);
             btnXoa.Margin = new Padding(4, 4, 4, 4);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(158, 64);
+            btnXoa.Size = new Size(158, 54);
             btnXoa.TabIndex = 24;
             btnXoa.Text = "✖ Xóa";
             btnXoa.UseVisualStyleBackColor = false;
@@ -97,10 +97,10 @@
             btnSua.FlatStyle = FlatStyle.Flat;
             btnSua.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnSua.ForeColor = Color.Black;
-            btnSua.Location = new Point(308, 239);
+            btnSua.Location = new Point(318, 212);
             btnSua.Margin = new Padding(4, 4, 4, 4);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(158, 64);
+            btnSua.Size = new Size(158, 54);
             btnSua.TabIndex = 23;
             btnSua.Text = "✎ Sửa";
             btnSua.UseVisualStyleBackColor = false;
@@ -113,12 +113,12 @@
             dgvKhachHang.BackgroundColor = Color.White;
             dgvKhachHang.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvKhachHang.Columns.AddRange(new DataGridViewColumn[] { colMaKH, colHoTen, colSĐT, colDiaChi });
-            dgvKhachHang.Location = new Point(19, 328);
+            dgvKhachHang.Location = new Point(20, 274);
             dgvKhachHang.Margin = new Padding(4, 4, 4, 4);
             dgvKhachHang.Name = "dgvKhachHang";
             dgvKhachHang.RowHeadersVisible = false;
             dgvKhachHang.RowHeadersWidth = 51;
-            dgvKhachHang.Size = new Size(752, 798);
+            dgvKhachHang.Size = new Size(769, 594);
             dgvKhachHang.TabIndex = 22;
             dgvKhachHang.CellClick += dgvKhachHang_CellClick;
             // 
@@ -166,15 +166,15 @@
             panel2.Controls.Add(label6);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label3);
-            panel2.Location = new Point(848, 14);
+            panel2.Location = new Point(810, 56);
             panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(682, 949);
+            panel2.Size = new Size(542, 812);
             panel2.TabIndex = 21;
             // 
             // txtMaKH
             // 
-            txtMaKH.Location = new Point(299, 58);
+            txtMaKH.Location = new Point(216, 58);
             txtMaKH.Margin = new Padding(4, 4, 4, 4);
             txtMaKH.Name = "txtMaKH";
             txtMaKH.Size = new Size(182, 31);
@@ -188,7 +188,7 @@
             panel3.Controls.Add(label11);
             panel3.Controls.Add(label10);
             panel3.Controls.Add(label9);
-            panel3.Location = new Point(105, 448);
+            panel3.Location = new Point(22, 448);
             panel3.Margin = new Padding(4, 4, 4, 4);
             panel3.Name = "panel3";
             panel3.Size = new Size(488, 156);
@@ -253,10 +253,10 @@
             btnLamTrong.FlatStyle = FlatStyle.Flat;
             btnLamTrong.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamTrong.ForeColor = Color.Black;
-            btnLamTrong.Location = new Point(292, 719);
+            btnLamTrong.Location = new Point(318, 676);
             btnLamTrong.Margin = new Padding(4, 4, 4, 4);
             btnLamTrong.Name = "btnLamTrong";
-            btnLamTrong.Size = new Size(178, 80);
+            btnLamTrong.Size = new Size(178, 52);
             btnLamTrong.TabIndex = 7;
             btnLamTrong.Text = "Làm trống";
             btnLamTrong.UseVisualStyleBackColor = false;
@@ -268,10 +268,10 @@
             btnLuu.FlatStyle = FlatStyle.Flat;
             btnLuu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
-            btnLuu.Location = new Point(70, 719);
+            btnLuu.Location = new Point(96, 676);
             btnLuu.Margin = new Padding(4, 4, 4, 4);
             btnLuu.Name = "btnLuu";
-            btnLuu.Size = new Size(178, 80);
+            btnLuu.Size = new Size(178, 52);
             btnLuu.TabIndex = 8;
             btnLuu.Text = "Lưu";
             btnLuu.UseVisualStyleBackColor = false;
@@ -280,7 +280,7 @@
             // txtDiaChi
             // 
             txtDiaChi.Font = new Font("Segoe UI", 10.8F);
-            txtDiaChi.Location = new Point(105, 338);
+            txtDiaChi.Location = new Point(22, 338);
             txtDiaChi.Margin = new Padding(4, 4, 4, 4);
             txtDiaChi.Multiline = true;
             txtDiaChi.Name = "txtDiaChi";
@@ -291,7 +291,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 10.8F);
-            label8.Location = new Point(105, 304);
+            label8.Location = new Point(22, 304);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(65, 25);
@@ -301,7 +301,7 @@
             // txtSDT
             // 
             txtSDT.Font = new Font("Segoe UI", 10.8F);
-            txtSDT.Location = new Point(105, 247);
+            txtSDT.Location = new Point(22, 247);
             txtSDT.Margin = new Padding(4, 4, 4, 4);
             txtSDT.Name = "txtSDT";
             txtSDT.Size = new Size(486, 31);
@@ -311,7 +311,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 10.8F);
-            label7.Location = new Point(105, 212);
+            label7.Location = new Point(22, 212);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(117, 25);
@@ -321,7 +321,7 @@
             // txtHoTen
             // 
             txtHoTen.Font = new Font("Segoe UI", 10.8F);
-            txtHoTen.Location = new Point(105, 152);
+            txtHoTen.Location = new Point(22, 152);
             txtHoTen.Margin = new Padding(4, 4, 4, 4);
             txtHoTen.Name = "txtHoTen";
             txtHoTen.Size = new Size(486, 31);
@@ -331,7 +331,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 10.8F);
-            label6.Location = new Point(105, 117);
+            label6.Location = new Point(22, 117);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(66, 25);
@@ -342,7 +342,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 10.8F);
-            label4.Location = new Point(105, 57);
+            label4.Location = new Point(22, 57);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(133, 25);
@@ -354,7 +354,7 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             label3.ForeColor = Color.MediumBlue;
-            label3.Location = new Point(70, 9);
+            label3.Location = new Point(22, 9);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(199, 25);
@@ -368,10 +368,10 @@
             btnThemKH.FlatStyle = FlatStyle.Flat;
             btnThemKH.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnThemKH.ForeColor = Color.White;
-            btnThemKH.Location = new Point(82, 239);
+            btnThemKH.Location = new Point(92, 212);
             btnThemKH.Margin = new Padding(4, 4, 4, 4);
             btnThemKH.Name = "btnThemKH";
-            btnThemKH.Size = new Size(165, 64);
+            btnThemKH.Size = new Size(165, 54);
             btnThemKH.TabIndex = 20;
             btnThemKH.Text = "➕ Thêm KH";
             btnThemKH.UseVisualStyleBackColor = false;
@@ -387,7 +387,7 @@
             panel1.Location = new Point(20, 72);
             panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(752, 143);
+            panel1.Size = new Size(769, 126);
             panel1.TabIndex = 19;
             // 
             // btnLamMoi
@@ -444,7 +444,7 @@
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 4, 4, 4);
             Name = "UC_KhachHang";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             Load += UC_KhachHang_Load;
             ((System.ComponentModel.ISupportInitialize)dgvKhachHang).EndInit();
             panel2.ResumeLayout(false);

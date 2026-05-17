@@ -46,10 +46,10 @@
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colHang, colSanPham, colTenHang, colSoLuong, colDoanhThu });
-            dataGridView1.Location = new Point(63, 159);
+            dataGridView1.Location = new Point(43, 146);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1433, 781);
+            dataGridView1.Size = new Size(1297, 723);
             dataGridView1.TabIndex = 0;
             // 
             // colHang
@@ -125,7 +125,7 @@
             Controls.Add(dataGridView1);
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "UC_TopBanChay";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

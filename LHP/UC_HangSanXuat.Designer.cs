@@ -78,10 +78,10 @@
             btnXoa.FlatStyle = FlatStyle.Flat;
             btnXoa.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnXoa.ForeColor = Color.Red;
-            btnXoa.Location = new Point(641, 238);
+            btnXoa.Location = new Point(609, 219);
             btnXoa.Margin = new Padding(4, 4, 4, 4);
             btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(158, 64);
+            btnXoa.Size = new Size(158, 45);
             btnXoa.TabIndex = 30;
             btnXoa.Text = "✖ Xóa";
             btnXoa.UseVisualStyleBackColor = false;
@@ -93,10 +93,10 @@
             btnSua.FlatStyle = FlatStyle.Flat;
             btnSua.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnSua.ForeColor = Color.Black;
-            btnSua.Location = new Point(364, 238);
+            btnSua.Location = new Point(332, 219);
             btnSua.Margin = new Padding(4, 4, 4, 4);
             btnSua.Name = "btnSua";
-            btnSua.Size = new Size(158, 64);
+            btnSua.Size = new Size(158, 45);
             btnSua.TabIndex = 29;
             btnSua.Text = "✎ Sửa";
             btnSua.UseVisualStyleBackColor = false;
@@ -109,11 +109,11 @@
             dgvHangSanXuat.BackgroundColor = Color.White;
             dgvHangSanXuat.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvHangSanXuat.Columns.AddRange(new DataGridViewColumn[] { colMaHang, colTenHang, colQuocGia, colMota, Column1 });
-            dgvHangSanXuat.Location = new Point(45, 327);
+            dgvHangSanXuat.Location = new Point(38, 276);
             dgvHangSanXuat.Margin = new Padding(4, 4, 4, 4);
             dgvHangSanXuat.Name = "dgvHangSanXuat";
             dgvHangSanXuat.RowHeadersWidth = 51;
-            dgvHangSanXuat.Size = new Size(868, 644);
+            dgvHangSanXuat.Size = new Size(783, 589);
             dgvHangSanXuat.TabIndex = 28;
             dgvHangSanXuat.CellClick += dgvHangSanXuat_CellClick;
             // 
@@ -169,10 +169,10 @@
             panel2.Controls.Add(label6);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label3);
-            panel2.Location = new Point(939, 14);
+            panel2.Location = new Point(868, 76);
             panel2.Margin = new Padding(4, 4, 4, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(589, 957);
+            panel2.Size = new Size(475, 789);
             panel2.TabIndex = 27;
             // 
             // txtMoTa
@@ -182,7 +182,7 @@
             txtMoTa.Margin = new Padding(4, 4, 4, 4);
             txtMoTa.Multiline = true;
             txtMoTa.Name = "txtMoTa";
-            txtMoTa.Size = new Size(528, 133);
+            txtMoTa.Size = new Size(402, 133);
             txtMoTa.TabIndex = 23;
             // 
             // txtQuocGia
@@ -190,7 +190,7 @@
             txtQuocGia.Location = new Point(34, 312);
             txtQuocGia.Margin = new Padding(4, 4, 4, 4);
             txtQuocGia.Name = "txtQuocGia";
-            txtQuocGia.Size = new Size(520, 31);
+            txtQuocGia.Size = new Size(394, 31);
             txtQuocGia.TabIndex = 22;
             // 
             // cboTrangThai
@@ -200,7 +200,7 @@
             cboTrangThai.Location = new Point(26, 624);
             cboTrangThai.Margin = new Padding(4, 4, 4, 4);
             cboTrangThai.Name = "cboTrangThai";
-            cboTrangThai.Size = new Size(528, 33);
+            cboTrangThai.Size = new Size(402, 33);
             cboTrangThai.TabIndex = 21;
             // 
             // label5
@@ -220,7 +220,7 @@
             txtMaHang.Location = new Point(234, 63);
             txtMaHang.Margin = new Padding(4, 4, 4, 4);
             txtMaHang.Name = "txtMaHang";
-            txtMaHang.Size = new Size(320, 31);
+            txtMaHang.Size = new Size(194, 31);
             txtMaHang.TabIndex = 19;
             // 
             // btnLamTrong
@@ -229,7 +229,7 @@
             btnLamTrong.FlatStyle = FlatStyle.Flat;
             btnLamTrong.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamTrong.ForeColor = Color.Black;
-            btnLamTrong.Location = new Point(328, 715);
+            btnLamTrong.Location = new Point(260, 694);
             btnLamTrong.Margin = new Padding(4, 4, 4, 4);
             btnLamTrong.Name = "btnLamTrong";
             btnLamTrong.Size = new Size(178, 50);
@@ -244,7 +244,7 @@
             btnLuu.FlatStyle = FlatStyle.Flat;
             btnLuu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
-            btnLuu.Location = new Point(106, 715);
+            btnLuu.Location = new Point(38, 694);
             btnLuu.Margin = new Padding(4, 4, 4, 4);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(178, 50);
@@ -281,7 +281,7 @@
             txtTenHang.Location = new Point(26, 177);
             txtTenHang.Margin = new Padding(4, 4, 4, 4);
             txtTenHang.Name = "txtTenHang";
-            txtTenHang.Size = new Size(528, 31);
+            txtTenHang.Size = new Size(402, 31);
             txtTenHang.TabIndex = 7;
             // 
             // label6
@@ -324,10 +324,10 @@
             btnThem.FlatStyle = FlatStyle.Flat;
             btnThem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnThem.ForeColor = Color.White;
-            btnThem.Location = new Point(87, 241);
+            btnThem.Location = new Point(55, 222);
             btnThem.Margin = new Padding(4, 4, 4, 4);
             btnThem.Name = "btnThem";
-            btnThem.Size = new Size(165, 61);
+            btnThem.Size = new Size(165, 42);
             btnThem.TabIndex = 26;
             btnThem.Text = "➕ Thêm Hãng";
             btnThem.UseVisualStyleBackColor = false;
@@ -343,7 +343,7 @@
             panel1.Location = new Point(38, 76);
             panel1.Margin = new Padding(4, 4, 4, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(875, 129);
+            panel1.Size = new Size(783, 124);
             panel1.TabIndex = 25;
             // 
             // btnLamMoi
@@ -352,10 +352,10 @@
             btnLamMoi.FlatStyle = FlatStyle.Flat;
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(703, 56);
+            btnLamMoi.Location = new Point(549, 47);
             btnLamMoi.Margin = new Padding(4, 4, 4, 4);
             btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(142, 49);
+            btnLamMoi.Size = new Size(142, 40);
             btnLamMoi.TabIndex = 5;
             btnLamMoi.Text = "Làm mới";
             btnLamMoi.UseVisualStyleBackColor = false;
@@ -364,10 +364,10 @@
             // txtTimKiem
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
-            txtTimKiem.Location = new Point(48, 65);
+            txtTimKiem.Location = new Point(27, 56);
             txtTimKiem.Margin = new Padding(4, 4, 4, 4);
             txtTimKiem.Name = "txtTimKiem";
-            txtTimKiem.Size = new Size(584, 31);
+            txtTimKiem.Size = new Size(421, 31);
             txtTimKiem.TabIndex = 1;
             txtTimKiem.Text = "Tìm hãng sản xuất...";
             txtTimKiem.TextChanged += txtTimKiem_TextChanged;
@@ -400,7 +400,7 @@
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Margin = new Padding(4, 4, 4, 4);
             Name = "UC_HangSanXuat";
-            Size = new Size(1546, 986);
+            Size = new Size(1370, 886);
             Load += UC_HangSanXuat_Load;
             ((System.ComponentModel.ISupportInitialize)dgvHangSanXuat).EndInit();
             panel2.ResumeLayout(false);
