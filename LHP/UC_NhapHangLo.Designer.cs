@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             label1 = new Label();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
@@ -245,8 +245,8 @@
             // colNhap_GiaNhap
             // 
             colNhap_GiaNhap.DataPropertyName = "GiaNhap";
-            dataGridViewCellStyle9.Format = "N0";
-            colNhap_GiaNhap.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Format = "N0";
+            colNhap_GiaNhap.DefaultCellStyle = dataGridViewCellStyle1;
             colNhap_GiaNhap.HeaderText = "Giá nhập";
             colNhap_GiaNhap.MinimumWidth = 6;
             colNhap_GiaNhap.Name = "colNhap_GiaNhap";
@@ -254,8 +254,8 @@
             // colNhap_ThanhTien
             // 
             colNhap_ThanhTien.DataPropertyName = "ThanhTien";
-            dataGridViewCellStyle10.Format = "N0";
-            colNhap_ThanhTien.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle2.Format = "N0";
+            colNhap_ThanhTien.DefaultCellStyle = dataGridViewCellStyle2;
             colNhap_ThanhTien.HeaderText = "Thành tiền";
             colNhap_ThanhTien.MinimumWidth = 6;
             colNhap_ThanhTien.Name = "colNhap_ThanhTien";
@@ -410,7 +410,7 @@
             lblTongTienNhap.AutoSize = true;
             lblTongTienNhap.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTongTienNhap.ForeColor = Color.MediumBlue;
-            lblTongTienNhap.Location = new Point(495, 156);
+            lblTongTienNhap.Location = new Point(387, 156);
             lblTongTienNhap.Name = "lblTongTienNhap";
             lblTongTienNhap.Size = new Size(23, 25);
             lblTongTienNhap.TabIndex = 22;
@@ -746,7 +746,7 @@
             lblTongChi.AutoSize = true;
             lblTongChi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblTongChi.ForeColor = Color.DarkBlue;
-            lblTongChi.Location = new Point(349, 54);
+            lblTongChi.Location = new Point(262, 54);
             lblTongChi.Name = "lblTongChi";
             lblTongChi.Size = new Size(23, 25);
             lblTongChi.TabIndex = 26;

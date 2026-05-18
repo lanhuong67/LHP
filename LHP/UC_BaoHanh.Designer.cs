@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             label1 = new Label();
             tabPage2 = new TabPage();
             dgvTraCuu = new DataGridView();
@@ -39,9 +39,8 @@
             colTrangThaiBH = new DataGridViewTextBoxColumn();
             colThaoTac = new DataGridViewButtonColumn();
             panel10 = new Panel();
-            button2 = new Button();
-            cboTraCuu = new ComboBox();
-            txtTracCuu = new TextBox();
+            cboTrangThaiTraCuu = new ComboBox();
+            txtTimKiemTraCuu = new TextBox();
             tabPage1 = new TabPage();
             panel5 = new Panel();
             btnInPhieu = new Button();
@@ -85,6 +84,7 @@
             panel3 = new Panel();
             dgvSanPham = new DataGridView();
             colChon = new DataGridViewCheckBoxColumn();
+            colImei = new DataGridViewTextBoxColumn();
             colTenSP = new DataGridViewTextBoxColumn();
             colSoLuong = new DataGridViewTextBoxColumn();
             colDonGia = new DataGridViewTextBoxColumn();
@@ -146,38 +146,44 @@
             dgvTraCuu.BackgroundColor = Color.White;
             dgvTraCuu.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvTraCuu.Columns.AddRange(new DataGridViewColumn[] { colMaPhieuBH, colKhachHang, colSanPhamBH, colHetHan, colTrangThaiBH, colThaoTac });
-            dgvTraCuu.Location = new Point(6, 81);
+            dgvTraCuu.Location = new Point(6, 85);
             dgvTraCuu.Name = "dgvTraCuu";
             dgvTraCuu.RowHeadersWidth = 51;
-            dgvTraCuu.Size = new Size(1524, 849);
+            dgvTraCuu.Size = new Size(1418, 849);
             dgvTraCuu.TabIndex = 2;
+            dgvTraCuu.CellContentClick += dgvTraCuu_CellContentClick;
             // 
             // colMaPhieuBH
             // 
+            colMaPhieuBH.DataPropertyName = "MaPhieuBH";
             colMaPhieuBH.HeaderText = "Mã phiếu BH";
             colMaPhieuBH.MinimumWidth = 6;
             colMaPhieuBH.Name = "colMaPhieuBH";
             // 
             // colKhachHang
             // 
+            colKhachHang.DataPropertyName = "TenKhachHang";
             colKhachHang.HeaderText = "Khách hàng";
             colKhachHang.MinimumWidth = 6;
             colKhachHang.Name = "colKhachHang";
             // 
             // colSanPhamBH
             // 
+            colSanPhamBH.DataPropertyName = "TenSP";
             colSanPhamBH.HeaderText = "Sản phẩm";
             colSanPhamBH.MinimumWidth = 6;
             colSanPhamBH.Name = "colSanPhamBH";
             // 
             // colHetHan
             // 
+            colHetHan.DataPropertyName = "NgayHetHanBH";
             colHetHan.HeaderText = "Hết hạn BH";
             colHetHan.MinimumWidth = 6;
             colHetHan.Name = "colHetHan";
             // 
             // colTrangThaiBH
             // 
+            colTrangThaiBH.DataPropertyName = "TrangThai";
             colTrangThaiBH.HeaderText = "Trạng thái";
             colTrangThaiBH.MinimumWidth = 6;
             colTrangThaiBH.Name = "colTrangThaiBH";
@@ -191,45 +197,31 @@
             // panel10
             // 
             panel10.BackColor = Color.White;
-            panel10.Controls.Add(button2);
-            panel10.Controls.Add(cboTraCuu);
-            panel10.Controls.Add(txtTracCuu);
+            panel10.Controls.Add(cboTrangThaiTraCuu);
+            panel10.Controls.Add(txtTimKiemTraCuu);
             panel10.Location = new Point(6, 6);
             panel10.Name = "panel10";
-            panel10.Size = new Size(1524, 69);
+            panel10.Size = new Size(1418, 69);
             panel10.TabIndex = 1;
             // 
-            // button2
+            // cboTrangThaiTraCuu
             // 
-            button2.BackColor = SystemColors.HotTrack;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            button2.ForeColor = Color.White;
-            button2.Location = new Point(1344, 16);
-            button2.Name = "button2";
-            button2.Size = new Size(161, 31);
-            button2.TabIndex = 33;
-            button2.Text = "Tra cứu";
-            button2.UseVisualStyleBackColor = false;
+            cboTrangThaiTraCuu.Font = new Font("Segoe UI", 10.2F);
+            cboTrangThaiTraCuu.FormattingEnabled = true;
+            cboTrangThaiTraCuu.Location = new Point(675, 15);
+            cboTrangThaiTraCuu.Name = "cboTrangThaiTraCuu";
+            cboTrangThaiTraCuu.Size = new Size(387, 31);
+            cboTrangThaiTraCuu.TabIndex = 1;
+            cboTrangThaiTraCuu.Text = "--Tất cả trạng thái--";
             // 
-            // cboTraCuu
+            // txtTimKiemTraCuu
             // 
-            cboTraCuu.Font = new Font("Segoe UI", 10.2F);
-            cboTraCuu.FormattingEnabled = true;
-            cboTraCuu.Location = new Point(788, 18);
-            cboTraCuu.Name = "cboTraCuu";
-            cboTraCuu.Size = new Size(387, 31);
-            cboTraCuu.TabIndex = 1;
-            cboTraCuu.Text = "--Tất cả trạng thái--";
-            // 
-            // txtTracCuu
-            // 
-            txtTracCuu.Font = new Font("Segoe UI", 10.2F);
-            txtTracCuu.Location = new Point(22, 16);
-            txtTracCuu.Name = "txtTracCuu";
-            txtTracCuu.Size = new Size(527, 30);
-            txtTracCuu.TabIndex = 0;
-            txtTracCuu.Text = "Mã phiếu BH, tên KH, SĐT,..";
+            txtTimKiemTraCuu.Font = new Font("Segoe UI", 10.2F);
+            txtTimKiemTraCuu.Location = new Point(22, 16);
+            txtTimKiemTraCuu.Name = "txtTimKiemTraCuu";
+            txtTimKiemTraCuu.Size = new Size(527, 30);
+            txtTimKiemTraCuu.TabIndex = 0;
+            txtTimKiemTraCuu.Text = "Mã phiếu BH, tên KH, SĐT,..";
             // 
             // tabPage1
             // 
@@ -287,6 +279,7 @@
             btnTaoPhieu.TabIndex = 32;
             btnTaoPhieu.Text = "Tạo phiếu bảo hành";
             btnTaoPhieu.UseVisualStyleBackColor = false;
+            btnTaoPhieu.Click += btnTaoPhieu_Click;
             // 
             // panel7
             // 
@@ -347,7 +340,7 @@
             // 
             lblPrevDieuKien.AutoSize = true;
             lblPrevDieuKien.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevDieuKien.Location = new Point(383, 347);
+            lblPrevDieuKien.Location = new Point(287, 347);
             lblPrevDieuKien.Name = "lblPrevDieuKien";
             lblPrevDieuKien.Size = new Size(86, 23);
             lblPrevDieuKien.TabIndex = 36;
@@ -366,7 +359,7 @@
             // 
             lblPrevHetHan.AutoSize = true;
             lblPrevHetHan.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevHetHan.Location = new Point(383, 312);
+            lblPrevHetHan.Location = new Point(287, 312);
             lblPrevHetHan.Name = "lblPrevHetHan";
             lblPrevHetHan.Size = new Size(34, 23);
             lblPrevHetHan.TabIndex = 34;
@@ -385,7 +378,7 @@
             // 
             lblPrevBatDau.AutoSize = true;
             lblPrevBatDau.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevBatDau.Location = new Point(383, 277);
+            lblPrevBatDau.Location = new Point(287, 277);
             lblPrevBatDau.Name = "lblPrevBatDau";
             lblPrevBatDau.Size = new Size(34, 23);
             lblPrevBatDau.TabIndex = 32;
@@ -404,7 +397,7 @@
             // 
             lblPrevNgayMua.AutoSize = true;
             lblPrevNgayMua.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevNgayMua.Location = new Point(383, 242);
+            lblPrevNgayMua.Location = new Point(287, 242);
             lblPrevNgayMua.Name = "lblPrevNgayMua";
             lblPrevNgayMua.Size = new Size(34, 23);
             lblPrevNgayMua.TabIndex = 30;
@@ -423,7 +416,7 @@
             // 
             lblPrevTenSP.AutoSize = true;
             lblPrevTenSP.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevTenSP.Location = new Point(383, 209);
+            lblPrevTenSP.Location = new Point(287, 209);
             lblPrevTenSP.Name = "lblPrevTenSP";
             lblPrevTenSP.Size = new Size(28, 23);
             lblPrevTenSP.TabIndex = 28;
@@ -450,7 +443,7 @@
             // 
             lblPrevSDT.AutoSize = true;
             lblPrevSDT.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevSDT.Location = new Point(383, 146);
+            lblPrevSDT.Location = new Point(287, 146);
             lblPrevSDT.Name = "lblPrevSDT";
             lblPrevSDT.Size = new Size(43, 23);
             lblPrevSDT.TabIndex = 9;
@@ -470,7 +463,7 @@
             // 
             lblPrevTenKH.AutoSize = true;
             lblPrevTenKH.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
-            lblPrevTenKH.Location = new Point(379, 113);
+            lblPrevTenKH.Location = new Point(283, 113);
             lblPrevTenKH.Name = "lblPrevTenKH";
             lblPrevTenKH.Size = new Size(65, 23);
             lblPrevTenKH.TabIndex = 9;
@@ -490,7 +483,7 @@
             lblPrevMaBH.AutoSize = true;
             lblPrevMaBH.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold);
             lblPrevMaBH.ForeColor = Color.MediumBlue;
-            lblPrevMaBH.Location = new Point(383, 80);
+            lblPrevMaBH.Location = new Point(287, 80);
             lblPrevMaBH.Name = "lblPrevMaBH";
             lblPrevMaBH.Size = new Size(34, 23);
             lblPrevMaBH.TabIndex = 23;
@@ -585,7 +578,7 @@
             cboDieuKien.FormattingEnabled = true;
             cboDieuKien.Location = new Point(475, 172);
             cboDieuKien.Name = "cboDieuKien";
-            cboDieuKien.Size = new Size(351, 31);
+            cboDieuKien.Size = new Size(243, 31);
             cboDieuKien.TabIndex = 18;
             // 
             // label11
@@ -622,7 +615,7 @@
             cboThoiHan.FormattingEnabled = true;
             cboThoiHan.Location = new Point(475, 78);
             cboThoiHan.Name = "cboThoiHan";
-            cboThoiHan.Size = new Size(351, 31);
+            cboThoiHan.Size = new Size(243, 31);
             cboThoiHan.TabIndex = 14;
             // 
             // label9
@@ -682,12 +675,13 @@
             dgvSanPham.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvSanPham.BackgroundColor = Color.White;
             dgvSanPham.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvSanPham.Columns.AddRange(new DataGridViewColumn[] { colChon, colTenSP, colSoLuong, colDonGia });
-            dgvSanPham.Location = new Point(17, 40);
+            dgvSanPham.Columns.AddRange(new DataGridViewColumn[] { colChon, colImei, colTenSP, colSoLuong, colDonGia });
+            dgvSanPham.Location = new Point(17, 49);
             dgvSanPham.Name = "dgvSanPham";
             dgvSanPham.RowHeadersWidth = 51;
-            dgvSanPham.Size = new Size(861, 162);
+            dgvSanPham.Size = new Size(701, 162);
             dgvSanPham.TabIndex = 9;
+            dgvSanPham.CellContentClick += dgvSanPham_CellContentClick;
             // 
             // colChon
             // 
@@ -695,6 +689,13 @@
             colChon.HeaderText = "";
             colChon.MinimumWidth = 6;
             colChon.Name = "colChon";
+            // 
+            // colImei
+            // 
+            colImei.DataPropertyName = "Imei";
+            colImei.HeaderText = "Mã IMEI";
+            colImei.MinimumWidth = 6;
+            colImei.Name = "colImei";
             // 
             // colTenSP
             // 
@@ -714,8 +715,8 @@
             // colDonGia
             // 
             colDonGia.DataPropertyName = "DonGia";
-            dataGridViewCellStyle6.Format = "N0";
-            colDonGia.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Format = "N0";
+            colDonGia.DefaultCellStyle = dataGridViewCellStyle1;
             colDonGia.HeaderText = "Đơn giá";
             colDonGia.MinimumWidth = 6;
             colDonGia.Name = "colDonGia";
@@ -965,19 +966,19 @@
         private Button btnInPhieu;
         private Button btnTaoPhieu;
         private Panel panel10;
-        private TextBox txtTracCuu;
-        private ComboBox cboTraCuu;
-        private Button button2;
+        private TextBox txtTimKiemTraCuu;
+        private ComboBox cboTrangThaiTraCuu;
         private DataGridView dgvTraCuu;
+        private DataGridViewCheckBoxColumn colChon;
+        private DataGridViewTextBoxColumn colImei;
+        private DataGridViewTextBoxColumn colTenSP;
+        private DataGridViewTextBoxColumn colSoLuong;
+        private DataGridViewTextBoxColumn colDonGia;
         private DataGridViewTextBoxColumn colMaPhieuBH;
         private DataGridViewTextBoxColumn colKhachHang;
         private DataGridViewTextBoxColumn colSanPhamBH;
         private DataGridViewTextBoxColumn colHetHan;
         private DataGridViewTextBoxColumn colTrangThaiBH;
         private DataGridViewButtonColumn colThaoTac;
-        private DataGridViewCheckBoxColumn colChon;
-        private DataGridViewTextBoxColumn colTenSP;
-        private DataGridViewTextBoxColumn colSoLuong;
-        private DataGridViewTextBoxColumn colDonGia;
     }
 }

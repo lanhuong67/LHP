@@ -17,6 +17,10 @@ namespace DTO
         [StringLength(50)]
         public string MaSP { get; set; } = string.Empty;
 
+        // 🔴 ĐÂY NÈ: BỔ SUNG CỘT LƯU IMEI ĐỂ TRUY VẾT
+        [StringLength(50)]
+        public string Imei { get; set; } = string.Empty;
+
         public DateTime NgayTiepNhan { get; set; } = DateTime.Now;
         public DateTime NgayBatDauBH { get; set; }
         public DateTime NgayHetHanBH { get; set; }
@@ -42,5 +46,15 @@ namespace DTO
         public int SoLuong { get; set; }
         public decimal DonGia { get; set; }
         public string Imei { get; set; }
+    }
+
+    // THÊM CLASS NÀY CHO TAB 2: TRA CỨU BẢO HÀNH
+    public class TraCuuBaoHanhViewModel
+    {
+        public string MaPhieuBH { get; set; }
+        public string TenKhachHang { get; set; }
+        public string TenSP { get; set; }
+        public DateTime NgayHetHanBH { get; set; }
+        public string TrangThai { get; set; }
     }
 }

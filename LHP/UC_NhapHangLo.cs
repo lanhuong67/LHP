@@ -30,7 +30,7 @@ namespace GUI
             dgvChiTietNhap.AutoGenerateColumns = false;
             dgvChiTietNhap.DataSource = gioHang;
 
-            // 🔴 ĐĂNG KÝ SỰ KIỆN LÀM ĐẸP TIỀN TỆ TRÊN BẢNG LỊCH SỬ NHẬP
+            // ĐĂNG KÝ SỰ KIỆN LÀM ĐẸP TIỀN TỆ TRÊN BẢNG LỊCH SỬ NHẬP
             dgvLichSuNhap.CellFormatting += dgvLichSuNhap_CellFormatting;
 
             ThiếtLapNgayThang(dtpTuNgay);
@@ -108,9 +108,10 @@ namespace GUI
             dtp.Checked = false;
         }
 
+        // 🔴 ĐÃ SỬA: Thêm "ss" vào cuối chuỗi format để mã phiếu lấy chi tiết đến Giây, tránh trùng lặp
         private void SinhMaPhieu()
         {
-            txtMaPhieu.Text = "PN" + DateTime.Now.ToString("yyyyMMdd_HHmm");
+            txtMaPhieu.Text = "PN" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
             txtMaPhieu.ReadOnly = true;
         }
 
@@ -159,7 +160,6 @@ namespace GUI
 
         private void cboSanPham_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // 🔴 HIỂN THỊ DẤU PHẨY TIỀN TỆ TRÊN TEXTBOX
             if (cboSanPham.SelectedItem is SanPham sp)
                 txtGiaNhap.Text = sp.GiaNhap.ToString("N0");
         }
@@ -171,7 +171,6 @@ namespace GUI
             int soLuong = (int)numSoLuong.Value;
             if (soLuong <= 0) { MessageBox.Show("Số lượng phải lớn hơn 0!", "Cảnh báo"); return; }
 
-            // 🔴 LỌC DẤU PHẨY TRƯỚC KHI ÉP KIỂU VÀO DATABASE
             if (!decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out decimal giaNhap))
             {
                 MessageBox.Show("Giá nhập không hợp lệ!", "Lỗi"); return;
@@ -219,7 +218,6 @@ namespace GUI
             if (dgvChiTietNhap.Columns[e.ColumnIndex].Name == "colNhap_STT")
                 e.Value = (e.RowIndex + 1).ToString();
 
-            // 🔴 ĐỊNH DẠNG TIỀN TỆ CHO GIỎ HÀNG NHẬP
             string propName = dgvChiTietNhap.Columns[e.ColumnIndex].DataPropertyName;
             if ((propName == "GiaNhap" || propName == "ThanhTien") && e.Value != null)
             {
@@ -259,51 +257,65 @@ namespace GUI
 
         private void btnXacNhan_Click(object sender, EventArgs e)
         {
-            if (UserSession.ChucVu != "Admin")
+            // 🔴 Bọc thép chống Spam Click để hệ thống không lưu đúp hoặc lỗi form
+            if (_isProcessingClick) return;
+            _isProcessingClick = true;
+
+            try
             {
-                MessageBox.Show("Chỉ quản lý (Admin) mới có quyền xác nhận nhập kho!", "Cảnh báo bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;
-            }
-
-            if (!gioHang.Any()) { MessageBox.Show("Chưa có sản phẩm nào để nhập!", "Cảnh báo"); return; }
-            if (cboNhaCungCap.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Nhà cung cấp!", "Cảnh báo"); return; }
-            if (cboChiNhanh.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Chi nhánh!", "Cảnh báo"); return; }
-
-            if (MessageBox.Show("Xác nhận nhập lô hàng này? Tồn kho sẽ tăng ngay lập tức.", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-            {
-                PhieuNhap pn = new PhieuNhap
+                if (UserSession.ChucVu != "Admin")
                 {
-                    MaPN = txtMaPhieu.Text,
-                    NgayNhap = dtpNgayNhap.Value,
-                    MaNCC = cboNhaCungCap.SelectedValue.ToString(),
-                    MaChiNhanh = cboChiNhanh.SelectedValue.ToString(),
-                    MaNV = UserSession.MaNV ?? "Admin",
-                    SoHoaDonNCC = txtSoHoaDonNCC.Text,
-                    GhiChu = txtGhiChu.Text,
-                    TongTien = gioHang.Sum(x => x.ThanhTien),
-                    TrangThai = "Hoàn thành"
-                };
+                    MessageBox.Show("Chỉ quản lý (Admin) mới có quyền xác nhận nhập kho!", "Cảnh báo bảo mật", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
 
-                var dsChiTiet = gioHang.Select(item => new ChiTietPhieuNhap
-                {
-                    MaSP = item.MaSP,
-                    SoLuong = item.SoLuong,
-                    DonGiaNhap = item.GiaNhap,
-                    ThanhTien = item.ThanhTien,
-                    DanhSachIMEI = item.DanhSachIMEI
-                }).ToList();
+                if (!gioHang.Any()) { MessageBox.Show("Chưa có sản phẩm nào để nhập!", "Cảnh báo"); return; }
+                if (cboNhaCungCap.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Nhà cung cấp!", "Cảnh báo"); return; }
+                if (cboChiNhanh.SelectedValue == null) { MessageBox.Show("Vui lòng chọn Chi nhánh!", "Cảnh báo"); return; }
 
-                try
+                if (MessageBox.Show("Xác nhận nhập lô hàng này? Tồn kho sẽ tăng ngay lập tức.", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                 {
+                    PhieuNhap pn = new PhieuNhap
+                    {
+                        MaPN = txtMaPhieu.Text,
+                        NgayNhap = dtpNgayNhap.Value,
+                        MaNCC = cboNhaCungCap.SelectedValue.ToString(),
+                        MaChiNhanh = cboChiNhanh.SelectedValue.ToString(),
+                        MaNV = UserSession.MaNV ?? "Admin",
+                        SoHoaDonNCC = txtSoHoaDonNCC.Text,
+                        GhiChu = txtGhiChu.Text,
+                        TongTien = gioHang.Sum(x => x.ThanhTien),
+                        TrangThai = "Hoàn thành"
+                    };
+
+                    var dsChiTiet = gioHang.Select(item => new ChiTietPhieuNhap
+                    {
+                        MaSP = item.MaSP,
+                        SoLuong = item.SoLuong,
+                        DonGiaNhap = item.GiaNhap,
+                        ThanhTien = item.ThanhTien,
+                        DanhSachIMEI = item.DanhSachIMEI
+                    }).ToList();
+
                     if (_pnBus.TaoPhieuNhap(pn, dsChiTiet))
                     {
                         MessageBox.Show("Nhập kho thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Form sẽ tự động gọi SinhMaPhieu() có mili-giây bên trong hàm này
                         ResetFormTaoPhieu();
                         LoadLichSuNhap();
                         HienThiLoHang();
                     }
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Giải phóng khóa bảo vệ sau khi lưu xong hoặc thao tác hoàn tất
+                _isProcessingClick = false;
             }
         }
 
@@ -318,7 +330,6 @@ namespace GUI
             lblTongChi.Text = dsLichSu.Sum(x => x.TongTien).ToString("N0") + " đ";
         }
 
-        // 🔴 ĐỊNH DẠNG TIỀN TỆ CHO BẢNG LỊCH SỬ NHẬP HÀNG
         private void dgvLichSuNhap_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dgvLichSuNhap.Columns[e.ColumnIndex].DataPropertyName == "TongTien" && e.Value != null)

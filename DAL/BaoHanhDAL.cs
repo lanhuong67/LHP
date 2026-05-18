@@ -10,25 +10,23 @@ namespace DAL
     {
         private AppDbContext _db = new AppDbContext();
 
-        // 1. Tìm hóa đơn và khách hàng dựa vào Mã HD hoặc SĐT
         public HoaDonViewModel TimHoaDonBaoHanh(string tuKhoa)
         {
             var query = from hd in _db.HoaDons
                         join kh in _db.KhachHangs on hd.SDTKhachHang equals kh.SDT into khGroup
                         from kh in khGroup.DefaultIfEmpty()
                         where (hd.MaHD == tuKhoa || hd.SDTKhachHang == tuKhoa) && hd.TrangThai == "Hoàn thành"
+                        orderby hd.NgayLap descending // 🔴 TUYỆT CHIÊU: Luôn ưu tiên bốc hóa đơn mới mua nhất của khách hàng đó lên trước
                         select new HoaDonViewModel
                         {
                             MaHD = hd.MaHD,
                             NgayLap = hd.NgayLap,
                             TenKhachHang = kh != null ? kh.HoTen : "Khách vãng lai",
-                            // Lợi dụng biến này để truyền SĐT hiển thị lên UI tạm thời
                             TenNhanVien = hd.SDTKhachHang
                         };
-            return query.FirstOrDefault(); // Lấy hóa đơn đầu tiên khớp
+            return query.FirstOrDefault();
         }
 
-        // 2. Lấy danh sách sản phẩm của Hóa đơn đó đẩy lên Bảng B2
         public List<SanPhamBaoHanhViewModel> GetSanPhamTuHoaDon(string maHD)
         {
             var query = from ct in _db.ChiTietHoaDons
@@ -46,7 +44,6 @@ namespace DAL
             return query.ToList();
         }
 
-        // 3. Lưu phiếu bảo hành vào Database
         public bool TaoPhieuBaoHanh(PhieuBaoHanh pbh)
         {
             try
@@ -56,6 +53,49 @@ namespace DAL
                 return true;
             }
             catch { return false; }
+        }
+
+        public List<TraCuuBaoHanhViewModel> GetDanhSachBaoHanh()
+        {
+            var query = from p in _db.PhieuBaoHanhs
+                        join hd in _db.HoaDons on p.MaHD equals hd.MaHD
+                        join kh in _db.KhachHangs on hd.SDTKhachHang equals kh.SDT into khGroup
+                        from kh in khGroup.DefaultIfEmpty()
+                        join sp in _db.SanPhams on p.MaSP equals sp.MaSP
+                        select new TraCuuBaoHanhViewModel
+                        {
+                            MaPhieuBH = p.MaPhieuBH,
+                            TenKhachHang = kh != null ? kh.HoTen : hd.SDTKhachHang,
+                            TenSP = sp.TenSP,
+                            NgayHetHanBH = p.NgayHetHanBH,
+                            TrangThai = p.TrangThai
+                        };
+            return query.OrderByDescending(x => x.MaPhieuBH).ToList();
+        }
+
+        public bool CapNhatTrangThai(string maPhieu, string trangThaiMoi)
+        {
+            try
+            {
+                var pbh = _db.PhieuBaoHanhs.Find(maPhieu);
+                if (pbh != null)
+                {
+                    pbh.TrangThai = trangThaiMoi;
+                    _db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+
+        // 🔴 ĐÃ THÊM HÀM NÀY ĐỂ TÌM CÁC IMEI ĐÃ BỊ BẢO HÀNH
+        public List<string> GetImeiDaBaoHanh(string maHD)
+        {
+            return _db.PhieuBaoHanhs
+                      .Where(x => x.MaHD == maHD && !string.IsNullOrEmpty(x.Imei))
+                      .Select(x => x.Imei)
+                      .ToList();
         }
     }
 }
