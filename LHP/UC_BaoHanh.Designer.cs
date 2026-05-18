@@ -102,6 +102,7 @@
             txtTimKiemHD = new TextBox();
             label3 = new Label();
             tabBaoHanh = new TabControl();
+            picQRCode = new PictureBox();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvTraCuu).BeginInit();
             panel10.SuspendLayout();
@@ -114,6 +115,7 @@
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             tabBaoHanh.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picQRCode).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -292,6 +294,7 @@
             // panel6
             // 
             panel6.BorderStyle = BorderStyle.FixedSingle;
+            panel6.Controls.Add(picQRCode);
             panel6.Controls.Add(label33);
             panel6.Controls.Add(panel9);
             panel6.Controls.Add(lblPrevDieuKien);
@@ -874,6 +877,15 @@
             tabBaoHanh.SizeMode = TabSizeMode.Fixed;
             tabBaoHanh.TabIndex = 6;
             // 
+            // picQRCode
+            // 
+            picQRCode.Location = new Point(156, 399);
+            picQRCode.Name = "picQRCode";
+            picQRCode.Size = new Size(217, 111);
+            picQRCode.SizeMode = PictureBoxSizeMode.Zoom;
+            picQRCode.TabIndex = 38;
+            picQRCode.TabStop = false;
+            // 
             // UC_BaoHanh
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -902,6 +914,7 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             tabBaoHanh.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picQRCode).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -980,5 +993,6 @@
         private DataGridViewTextBoxColumn colHetHan;
         private DataGridViewTextBoxColumn colTrangThaiBH;
         private DataGridViewButtonColumn colThaoTac;
+        private PictureBox picQRCode;
     }
 }
