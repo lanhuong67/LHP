@@ -26,7 +26,8 @@ namespace DAL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.;Database=QL_CuaHangDienThoai;User Id=sa;Password=123123;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=LANHUOW;Database=QL_CuaHangDienThoai;Trusted_Connection=True;TrustServerCertificate=True;");
+                //optionsBuilder.UseSqlServer("Server=.;Database=QL_CuaHangDienThoai;User Id=sa;Password=123123;TrustServerCertificate=True;");
             }
         }
 
