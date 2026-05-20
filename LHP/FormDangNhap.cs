@@ -111,7 +111,7 @@ namespace GUI
                 // Từ giờ trở đi, bất cứ form nào cần biết "Ai đang dùng máy" chỉ cần gọi UserSession ra hỏi
                 UserSession.MaNV = tk.MaNV;
                 UserSession.HoTen = tk.HoTen;
-                UserSession.ChucVu = tk.VaiTro;
+                UserSession.VaiTro = tk.VaiTro;
 
                 lblError.Visible = false;
                 FormMain frm = new FormMain();

@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260520120501_ThemMaChiNhanhChoSanPham")]
+    partial class ThemMaChiNhanhChoSanPham
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,11 +222,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MaChiNhanh")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("MaNV")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -246,8 +244,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("MaHD");
-
-                    b.HasIndex("MaChiNhanh");
 
                     b.ToTable("HoaDon");
                 });
@@ -559,17 +555,6 @@ namespace DAL.Migrations
                     b.Navigation("PhieuNhap");
 
                     b.Navigation("SanPham");
-                });
-
-            modelBuilder.Entity("DTO.HoaDon", b =>
-                {
-                    b.HasOne("DTO.ChiNhanh", "ChiNhanh")
-                        .WithMany()
-                        .HasForeignKey("MaChiNhanh")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("ChiNhanh");
                 });
 
             modelBuilder.Entity("DTO.NhanVien", b =>

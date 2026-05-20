@@ -1,7 +1,8 @@
-﻿using DTO;
+﻿using System;
+using DTO;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore; // Thêm thư viện này để dùng .Include()
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
@@ -11,8 +12,19 @@ namespace DAL
 
         public List<SanPham> GetAll()
         {
-            // Dùng Include để lấy luôn thông tin Tên Hãng đi kèm với Sản phẩm
-            return _db.SanPhams.Include(s => s.HangSanXuat).ToList();
+            // Lấy toàn bộ sản phẩm kèm thông tin hãng
+            return _db.SanPhams
+                .Include(s => s.HangSanXuat)
+                .ToList();
+        }
+
+        public List<SanPham> GetByBranch(string maCN)
+        {
+            // Lấy sản phẩm theo chi nhánh kèm thông tin hãng
+            return _db.SanPhams
+                .Include(s => s.HangSanXuat)
+                .Where(s => s.MaChiNhanh == maCN)
+                .ToList();
         }
 
         public List<HangSanXuat> GetAllHang()
@@ -22,7 +34,16 @@ namespace DAL
 
         public bool Them(SanPham sp)
         {
-            try { _db.SanPhams.Add(sp); _db.SaveChanges(); return true; } catch { return false; }
+            try
+            {
+                _db.SanPhams.Add(sp);
+                _db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         public bool Sua(SanPham spUpdate)
@@ -30,6 +51,7 @@ namespace DAL
             try
             {
                 var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == spUpdate.MaSP);
+
                 if (sp != null)
                 {
                     sp.TenSP = spUpdate.TenSP;
@@ -37,16 +59,19 @@ namespace DAL
                     sp.GiaNhap = spUpdate.GiaNhap;
                     sp.GiaBan = spUpdate.GiaBan;
                     sp.CauHinh = spUpdate.CauHinh;
-
-                    // 🔴 ĐÂY CHÍNH LÀ DÒNG BẠN BỊ THIẾU NÀY:
                     sp.TrangThai = spUpdate.TrangThai;
+                    sp.MaChiNhanh = spUpdate.MaChiNhanh;
 
                     _db.SaveChanges();
                     return true;
                 }
+
                 return false;
             }
-            catch { return false; }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
+            }
         }
 
         public bool Xoa(string maSP)
@@ -54,10 +79,20 @@ namespace DAL
             try
             {
                 var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == maSP);
-                if (sp != null) { _db.SanPhams.Remove(sp); _db.SaveChanges(); return true; }
+
+                if (sp != null)
+                {
+                    _db.SanPhams.Remove(sp);
+                    _db.SaveChanges();
+                    return true;
+                }
+
                 return false;
             }
-            catch { return false; }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ using DTO;
 
 namespace GUI
 {
-    public partial class UC_SanPham : UserControl
+    public partial class UC_SanPham : UserControl, IBranchRefreshable
     {
         private SanPhamBUS _bus = new SanPhamBUS();
         private bool isAdding = false;
@@ -16,13 +16,13 @@ namespace GUI
         public UC_SanPham()
         {
             InitializeComponent();
+            // 🔴 Đăng ký sự kiện tự động refresh dữ liệu khi Admin đổi chi nhánh ở FormMain
+            this.VisibleChanged += UC_SanPham_VisibleChanged;
         }
 
         private void UC_SanPham_Load(object sender, EventArgs e)
         {
             dgvSanPham.AutoGenerateColumns = false;
-
-            // 🔴 ĐĂNG KÝ SỰ KIỆN ĐỊNH DẠNG TIỀN TỆ TRÊN BẢNG
             dgvSanPham.CellFormatting += dgvSanPham_CellFormatting;
 
             if (cboTrangThai.Items.Count == 0)
@@ -37,7 +37,12 @@ namespace GUI
             SetPlaceholderTimKiem();
         }
 
-        // 🔴 HÀM XỬ LÝ ĐỊNH DẠNG TIỀN TỆ
+        private void UC_SanPham_VisibleChanged(object sender, EventArgs e)
+        {
+            // Khi màn hình hiển thị lại, tự động tải dữ liệu của chi nhánh mới
+            if (this.Visible) LoadData();
+        }
+
         private void dgvSanPham_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex >= 0 && e.Value != null)
@@ -83,7 +88,8 @@ namespace GUI
             try
             {
                 dgvSanPham.DataSource = null;
-                dgvSanPham.DataSource = _bus.GetAll();
+                // 🔴 ĐÃ SỬA: Lấy dữ liệu theo chi nhánh đang được chọn
+                dgvSanPham.DataSource = _bus.GetByBranch(UserSession.ChiNhanhDuocChon);
             }
             catch (Exception ex)
             {
@@ -101,11 +107,8 @@ namespace GUI
                     txtMaSP.Text = sp.MaSP;
                     txtTenSP.Text = sp.TenSP;
                     cboHangSanXuat.SelectedValue = sp.MaHang;
-
-                    // 🔴 THÊM FORMAT TIỀN LÊN TEXTBOX KHI CLICK
                     txtGiaNhap.Text = sp.GiaNhap.ToString("N0");
                     txtGiaBan.Text = sp.GiaBan.ToString("N0");
-
                     txtTonKho.Text = sp.TonKho.ToString();
                     txtCauHinh.Text = sp.CauHinh;
                     cboTrangThai.Text = sp.TrangThai;
@@ -152,7 +155,13 @@ namespace GUI
                 return;
             }
 
-            // 🔴 XÓA BỎ DẤU PHẨY TRƯỚC KHI ÉP KIỂU VÀO DATABASE
+            // 🔴 BƯỚC CHẶN QUAN TRỌNG: Đảm bảo đã có chi nhánh
+            if (string.IsNullOrEmpty(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show("Lỗi hệ thống: Chưa xác định được Chi nhánh đang làm việc. Vui lòng chọn lại Chi nhánh ở góc trái trên cùng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             decimal giaNhap = 0, giaBan = 0;
             if (!decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out giaNhap) ||
                 !decimal.TryParse(txtGiaBan.Text.Replace(",", ""), out giaBan))
@@ -170,7 +179,8 @@ namespace GUI
                 GiaBan = giaBan,
                 CauHinh = txtCauHinh.Text.Trim(),
                 TonKho = 0,
-                TrangThai = cboTrangThai.Text
+                TrangThai = cboTrangThai.Text,
+                MaChiNhanh = UserSession.ChiNhanhDuocChon // Đã được đảm bảo không rỗng nhờ bước chặn ở trên
             };
 
             if (isAdding)
@@ -184,8 +194,16 @@ namespace GUI
                         isAdding = false;
                         txtMaSP.ReadOnly = true;
                     }
+                    else // 🔴 BỔ SUNG ELSE ĐỂ TRÁNH IM LẶNG
+                    {
+                        MessageBox.Show("Thêm thất bại! Vui lòng kiểm tra lại thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch (Exception ex)
+                {
+                    // 🔴 HIỂN THỊ CHÍNH XÁC LỖI TỪ SQL LÊN MÀN HÌNH
+                    MessageBox.Show("Lỗi Database: " + ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
@@ -201,7 +219,6 @@ namespace GUI
                 return;
             }
 
-            // 🔴 XÓA BỎ DẤU PHẨY TRƯỚC KHI ÉP KIỂU VÀO DATABASE
             decimal giaNhap = 0, giaBan = 0;
             decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out giaNhap);
             decimal.TryParse(txtGiaBan.Text.Replace(",", ""), out giaBan);
@@ -218,7 +235,9 @@ namespace GUI
                 GiaNhap = giaNhap,
                 GiaBan = giaBan,
                 CauHinh = txtCauHinh.Text.Trim(),
-                TrangThai = trangThaiChon
+                TrangThai = trangThaiChon,
+                // 🔴 ĐÃ SỬA: Gán chi nhánh để lúc Cập nhật DB không báo lỗi NULL
+                MaChiNhanh = UserSession.ChiNhanhDuocChon
             };
 
             if (MessageBox.Show($"Bạn có chắc chắn muốn cập nhật SP [{spCapNhat.TenSP}]?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -278,7 +297,6 @@ namespace GUI
         // ==========================================
         // CÁC HÀM XỬ LÝ THANH TÌM KIẾM MỚI (REAL-TIME)
         // ==========================================
-
         private void SetPlaceholderTimKiem()
         {
             if (string.IsNullOrWhiteSpace(txtTimKiem.Text))
@@ -317,9 +335,7 @@ namespace GUI
                     stringBuilder.Append(c);
                 }
             }
-
-            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC)
-                                .Replace("đ", "d").Replace("Đ", "D");
+            return stringBuilder.ToString().Normalize(System.Text.NormalizationForm.FormC).Replace("đ", "d").Replace("Đ", "D");
         }
 
         private void ThucHienLocDuLieu()
@@ -331,7 +347,8 @@ namespace GUI
 
             try
             {
-                var ds = _bus.GetAll();
+                // 🔴 ĐÃ SỬA: Chỉ tìm kiếm trong các sản phẩm của chi nhánh hiện tại
+                var ds = _bus.GetByBranch(UserSession.ChiNhanhDuocChon);
 
                 if (!string.IsNullOrEmpty(keyword) && keyword != "Tên sản phẩm...")
                 {
@@ -353,14 +370,23 @@ namespace GUI
             catch (Exception) { }
         }
 
-        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        private void txtTimKiem_TextChanged(object sender, EventArgs e) { ThucHienLocDuLieu(); }
+        private void cboTimKiemHang_SelectedIndexChanged(object sender, EventArgs e) { ThucHienLocDuLieu(); }
+        public void RefreshByBranch()
         {
-            ThucHienLocDuLieu();
-        }
+            // Làm trống form bên phải
+            btnLamTrong_Click(null, null);
 
-        private void cboTimKiemHang_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ThucHienLocDuLieu();
+            // Reset ô tìm kiếm
+            txtTimKiem.Clear();
+            SetPlaceholderTimKiem();
+
+            // Reset lọc hãng
+            if (cboTimKiemHang.Items.Count > 0)
+                cboTimKiemHang.SelectedIndex = 0;
+
+            // Load lại dữ liệu theo chi nhánh mới
+            LoadData();
         }
     }
 }

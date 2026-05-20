@@ -9,7 +9,7 @@ using DTO;
 
 namespace GUI
 {
-    public partial class UC_DanhSachHoaDon : UserControl
+    public partial class UC_DanhSachHoaDon : UserControl, IBranchRefreshable
     {
         private HoaDonBUS _bus = new HoaDonBUS();
         private readonly string _placeholderTimKiem = "Nhập Mã HĐ hoặc Tên khách...";
@@ -19,10 +19,20 @@ namespace GUI
         {
             InitializeComponent();
 
+            // Khi UC được hiển thị lại thì tự cập nhật danh sách
+            this.VisibleChanged -= UC_DanhSachHoaDon_VisibleChanged;
+            this.VisibleChanged += UC_DanhSachHoaDon_VisibleChanged;
+
+            dtpTuNgay.ValueChanged -= dtp_ValueChanged;
+            dtpDenNgay.ValueChanged -= dtp_ValueChanged;
+            cboTrangThai.SelectedIndexChanged -= cboTrangThai_SelectedIndexChanged;
+
             dtpTuNgay.ValueChanged += dtp_ValueChanged;
             dtpDenNgay.ValueChanged += dtp_ValueChanged;
             cboTrangThai.SelectedIndexChanged += cboTrangThai_SelectedIndexChanged;
 
+            cboTrangThai.Click -= Cbo_AutoDropDown;
+            cboTrangThai.Enter -= Cbo_AutoDropDown;
             cboTrangThai.Click += Cbo_AutoDropDown;
             cboTrangThai.Enter += Cbo_AutoDropDown;
 
@@ -35,6 +45,13 @@ namespace GUI
         private void UC_DanhSachHoaDon_Load(object sender, EventArgs e)
         {
             dgvDanhSachHoaDon.AutoGenerateColumns = false;
+            if (dgvDanhSachHoaDon.Columns.Contains("colLyDoHuy"))
+            {
+                dgvDanhSachHoaDon.Columns["colLyDoHuy"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dgvDanhSachHoaDon.Columns["colLyDoHuy"].Width = 250;
+            }
+
+            dgvDanhSachHoaDon.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             SetupVietnameseDatePicker(dtpTuNgay, DateTime.Now.AddDays(-30));
             SetupVietnameseDatePicker(dtpDenNgay, DateTime.Now);
@@ -48,6 +65,7 @@ namespace GUI
             }
 
             SetPlaceholderTimKiem();
+
             if (txtTimKiemHD != null)
             {
                 txtTimKiemHD.Enter -= txtTimKiemHD_Enter;
@@ -62,8 +80,48 @@ namespace GUI
             HienThiDanhSach();
         }
 
-        private void dtp_ValueChanged(object sender, EventArgs e) { HienThiDanhSach(); }
-        private void cboTrangThai_SelectedIndexChanged(object sender, EventArgs e) { HienThiDanhSach(); }
+        private void UC_DanhSachHoaDon_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                HienThiDanhSach();
+            }
+        }
+
+        // ============================================================
+        // HÀM BẮT BUỘC CỦA IBranchRefreshable
+        // FormMain sẽ gọi hàm này khi đổi chi nhánh ở ComboBox góc trái
+        // ============================================================
+        public void RefreshByBranch()
+        {
+            // Reset ô tìm kiếm
+            if (txtTimKiemHD != null)
+            {
+                txtTimKiemHD.Text = "";
+                SetPlaceholderTimKiem();
+            }
+
+            // Reset trạng thái lọc
+            if (cboTrangThai.Items.Count > 0)
+                cboTrangThai.SelectedIndex = 0;
+
+            // Reset ngày về 30 ngày gần nhất
+            dtpTuNgay.Value = DateTime.Now.AddDays(-30);
+            dtpDenNgay.Value = DateTime.Now;
+
+            // Load lại danh sách hóa đơn theo chi nhánh mới
+            HienThiDanhSach();
+        }
+
+        private void dtp_ValueChanged(object sender, EventArgs e)
+        {
+            HienThiDanhSach();
+        }
+
+        private void cboTrangThai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HienThiDanhSach();
+        }
 
         private void SetPlaceholderTimKiem()
         {
@@ -102,60 +160,100 @@ namespace GUI
 
         private void Cbo_AutoDropDown(object sender, EventArgs e)
         {
-            if (sender is ComboBox cbo && !cbo.DroppedDown) cbo.DroppedDown = true;
+            if (sender is ComboBox cbo && !cbo.DroppedDown)
+                cbo.DroppedDown = true;
         }
 
         private void HienThiDanhSach()
         {
             try
             {
-                var dsFull = _bus.GetDanhSachHoaDon();
+                string maCN = UserSession.ChiNhanhDuocChon;
+
+                if (string.IsNullOrWhiteSpace(maCN))
+                    return;
+
+                // Lấy hóa đơn theo chi nhánh hiện tại
+                var dsFull = _bus.GetDanhSachHoaDon(maCN);
+
                 DateTime tuNgay = dtpTuNgay.Value.Date;
                 DateTime denNgay = dtpDenNgay.Value.Date;
-                var dsLoc = dsFull.Where(x => x.NgayLap.Date >= tuNgay && x.NgayLap.Date <= denNgay).ToList();
 
+                var dsLoc = dsFull
+                    .Where(x => x.NgayLap.Date >= tuNgay && x.NgayLap.Date <= denNgay)
+                    .ToList();
+
+                // Lọc trạng thái
                 if (cboTrangThai.SelectedIndex > 0 && cboTrangThai.Text != "--Tất cả trạng thái--")
                 {
                     string status = cboTrangThai.Text;
                     dsLoc = dsLoc.Where(x => x.TrangThai == status).ToList();
                 }
 
-                if (txtTimKiemHD != null && txtTimKiemHD.Text != _placeholderTimKiem && !string.IsNullOrWhiteSpace(txtTimKiemHD.Text))
+                // Tìm kiếm theo mã hóa đơn hoặc tên khách hàng
+                if (txtTimKiemHD != null &&
+                    txtTimKiemHD.Text != _placeholderTimKiem &&
+                    !string.IsNullOrWhiteSpace(txtTimKiemHD.Text))
                 {
                     string keyword = txtTimKiemHD.Text.Trim().ToLower();
-                    dsLoc = dsLoc.Where(x => x.MaHD.ToLower().Contains(keyword) ||
-                                            (x.TenKhachHang != null && x.TenKhachHang.ToLower().Contains(keyword))).ToList();
+
+                    dsLoc = dsLoc
+                        .Where(x =>
+                            x.MaHD.ToLower().Contains(keyword) ||
+                            (x.TenKhachHang != null &&
+                             x.TenKhachHang.ToLower().Contains(keyword)))
+                        .ToList();
                 }
 
+                dgvDanhSachHoaDon.DataSource = null;
                 dgvDanhSachHoaDon.DataSource = dsLoc;
             }
-            catch (Exception ex) { Console.WriteLine("Lỗi nạp danh sách: " + ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi nạp danh sách hóa đơn: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             dtpTuNgay.Value = DateTime.Now.AddDays(-30);
             dtpDenNgay.Value = DateTime.Now;
-            if (cboTrangThai.Items.Count > 0) cboTrangThai.SelectedIndex = 0;
+
+            if (cboTrangThai.Items.Count > 0)
+                cboTrangThai.SelectedIndex = 0;
+
             if (txtTimKiemHD != null)
             {
                 txtTimKiemHD.Text = "";
                 SetPlaceholderTimKiem();
             }
+
+            HienThiDanhSach();
         }
 
         private void dgvDanhSachHoaDon_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colSTT") e.Value = (e.RowIndex + 1).ToString();
+            if (e.RowIndex < 0)
+                return;
+
+            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colSTT")
+            {
+                e.Value = (e.RowIndex + 1).ToString();
+                e.FormattingApplied = true;
+                return;
+            }
 
             if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colTrangThai" && e.Value != null)
             {
                 string status = e.Value.ToString();
-                if (status == "Hoàn thành") e.CellStyle.ForeColor = Color.Green;
-                else if (status == "Đã hủy") e.CellStyle.ForeColor = Color.Red;
+
+                if (status == "Hoàn thành")
+                    e.CellStyle.ForeColor = Color.Green;
+                else if (status == "Đã hủy")
+                    e.CellStyle.ForeColor = Color.Red;
             }
 
-            // 🔴 ĐỊNH DẠNG TIỀN TỆ (Thêm dấu phẩy)
             if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].DataPropertyName == "TongTien" && e.Value != null)
             {
                 if (decimal.TryParse(e.Value.ToString(), out decimal val))
@@ -164,28 +262,46 @@ namespace GUI
                     e.FormattingApplied = true;
                 }
             }
+            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colLyDoHuy" && e.Value != null)
+            {
+                string lyDo = e.Value.ToString();
+
+                if (!string.IsNullOrWhiteSpace(lyDo))
+                {
+                    e.CellStyle.ForeColor = Color.DarkRed;
+                }
+            }
         }
 
         private void dgvDanhSachHoaDon_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || _isProcessingClick) return;
+            if (e.RowIndex < 0 || _isProcessingClick)
+                return;
 
             _isProcessingClick = true;
+
             try
             {
                 var hd = dgvDanhSachHoaDon.Rows[e.RowIndex].DataBoundItem as HoaDonViewModel;
-                if (hd == null) return;
+
+                if (hd == null)
+                    return;
 
                 if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colChiTiet")
                 {
                     var dsChiTiet = _bus.GetChiTietHoaDon(hd.MaHD);
-                    using (FormChiTietHoaDon frm = new FormChiTietHoaDon(hd.MaHD, dsChiTiet)) { frm.ShowDialog(); }
+
+                    using (FormChiTietHoaDon frm = new FormChiTietHoaDon(hd.MaHD, dsChiTiet))
+                    {
+                        frm.ShowDialog();
+                    }
                 }
                 else if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colHuyDon")
                 {
                     if (hd.TrangThai == "Đã hủy")
                     {
-                        MessageBox.Show("Hóa đơn này đã được hủy trước đó, không thể hủy lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Hóa đơn này đã được hủy trước đó, không thể hủy lại!",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -195,7 +311,8 @@ namespace GUI
                     {
                         if (string.IsNullOrWhiteSpace(lyDo))
                         {
-                            MessageBox.Show("Theo quy định, bắt buộc phải ghi rõ lý do hủy hóa đơn!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            MessageBox.Show("Theo quy định, bắt buộc phải ghi rõ lý do hủy hóa đơn!",
+                                "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                             return;
                         }
 
@@ -203,24 +320,29 @@ namespace GUI
 
                         if (_bus.HuyHoaDonThongTu78(hd.MaHD, lyDo, maNhanVien))
                         {
-                            MessageBox.Show("Hủy hóa đơn thành công!\nSố lượng máy đã tự động được hoàn lại vào kho.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Hủy hóa đơn thành công!\nSố lượng máy đã tự động được hoàn lại vào kho.",
+                                "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                             HienThiDanhSach();
                         }
                         else
                         {
-                            MessageBox.Show("Xử lý thất bại. Vui lòng kiểm tra lại Database.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Xử lý thất bại. Vui lòng kiểm tra lại Database.",
+                                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi hệ thống: " + ex.Message,
+                    "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 _isProcessingClick = false;
             }
+
         }
 
         private string PromptLyDoHuy(string maHD)
@@ -235,14 +357,57 @@ namespace GUI
                 MaximizeBox = false,
                 MinimizeBox = false
             };
-            Label textLabel = new Label() { Left = 20, Top = 15, Width = 400, AutoSize = true, Font = new Font("Segoe UI", 10, FontStyle.Bold), Text = $"XÁC NHẬN HỦY HÓA ĐƠN: {maHD}\n\nVui lòng nhập lý do hủy/hoàn trả (Bắt buộc):" };
-            TextBox textBox = new TextBox() { Left = 20, Top = 80, Width = 410, Multiline = true, Height = 60 };
 
-            Button cancel = new Button() { Text = "Quay lại", Left = 130, Width = 120, Height = 35, Top = 170, DialogResult = DialogResult.Cancel, FlatStyle = FlatStyle.Flat };
-            Button confirmation = new Button() { Text = "Xác nhận hủy", Left = 260, Width = 150, Height = 35, Top = 170, DialogResult = DialogResult.OK, BackColor = Color.Red, ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+            Label textLabel = new Label()
+            {
+                Left = 20,
+                Top = 15,
+                Width = 400,
+                AutoSize = true,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                Text = $"XÁC NHẬN HỦY HÓA ĐƠN: {maHD}\n\nVui lòng nhập lý do hủy/hoàn trả (Bắt buộc):"
+            };
 
-            prompt.Controls.Add(textLabel); prompt.Controls.Add(textBox); prompt.Controls.Add(confirmation); prompt.Controls.Add(cancel);
-            prompt.AcceptButton = confirmation; prompt.CancelButton = cancel;
+            TextBox textBox = new TextBox()
+            {
+                Left = 20,
+                Top = 80,
+                Width = 410,
+                Multiline = true,
+                Height = 60
+            };
+
+            Button cancel = new Button()
+            {
+                Text = "Quay lại",
+                Left = 130,
+                Width = 120,
+                Height = 35,
+                Top = 170,
+                DialogResult = DialogResult.Cancel,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            Button confirmation = new Button()
+            {
+                Text = "Xác nhận hủy",
+                Left = 260,
+                Width = 150,
+                Height = 35,
+                Top = 170,
+                DialogResult = DialogResult.OK,
+                BackColor = Color.Red,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(cancel);
+
+            prompt.AcceptButton = confirmation;
+            prompt.CancelButton = cancel;
 
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text.Trim() : null;
         }
@@ -259,7 +424,15 @@ namespace GUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            Label lblTieuDe = new Label() { Text = $"DANH SÁCH SẢN PHẨM CỦA {maHD}", Left = 20, Top = 15, AutoSize = true, Font = new Font("Segoe UI", 12, FontStyle.Bold), ForeColor = Color.Navy };
+            Label lblTieuDe = new Label()
+            {
+                Text = $"DANH SÁCH SẢN PHẨM CỦA {maHD}",
+                Left = 20,
+                Top = 15,
+                AutoSize = true,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                ForeColor = Color.Navy
+            };
 
             DataGridView dgvChiTiet = new DataGridView()
             {
@@ -276,12 +449,46 @@ namespace GUI
                 AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
             };
 
-            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Sản phẩm", DataPropertyName = "TenSP", Width = 150 });
-            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "SL", DataPropertyName = "SoLuong", Width = 50 });
-            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Đơn giá", DataPropertyName = "DonGia", DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }, Width = 100 });
-            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Thành tiền", DataPropertyName = "ThanhTien", DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }, Width = 100 });
+            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Sản phẩm",
+                DataPropertyName = "TenSP",
+                Width = 150
+            });
 
-            var colImei = new DataGridViewTextBoxColumn { HeaderText = "Danh sách IMEI đã bán", DataPropertyName = "GhiChuImei", DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True } };
+            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "SL",
+                DataPropertyName = "SoLuong",
+                Width = 50
+            });
+
+            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Đơn giá",
+                DataPropertyName = "DonGia",
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" },
+                Width = 100
+            });
+
+            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Thành tiền",
+                DataPropertyName = "ThanhTien",
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" },
+                Width = 100
+            });
+
+            var colImei = new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Danh sách IMEI đã bán",
+                DataPropertyName = "GhiChuImei",
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    WrapMode = DataGridViewTriState.True
+                }
+            };
+
             dgvChiTiet.Columns.Add(colImei);
 
             var formattedList = dsChiTiet.Select(x => new ChiTietHoaDonViewModel
@@ -290,15 +497,29 @@ namespace GUI
                 SoLuong = x.SoLuong,
                 DonGia = x.DonGia,
                 ThanhTien = x.ThanhTien,
-                GhiChuImei = string.IsNullOrEmpty(x.GhiChuImei) ? "" : x.GhiChuImei.Replace(", ", "\n")
+                GhiChuImei = string.IsNullOrEmpty(x.GhiChuImei)
+                    ? ""
+                    : x.GhiChuImei.Replace(", ", "\n")
             }).ToList();
 
             dgvChiTiet.DataSource = formattedList;
 
-            Button btnDong = new Button() { Text = "Đóng", Left = 660, Top = 360, Width = 100, Height = 35, BackColor = Color.LightGray, FlatStyle = FlatStyle.Flat };
+            Button btnDong = new Button()
+            {
+                Text = "Đóng",
+                Left = 660,
+                Top = 360,
+                Width = 100,
+                Height = 35,
+                BackColor = Color.LightGray,
+                FlatStyle = FlatStyle.Flat
+            };
+
             btnDong.Click += (s, e) => this.Close();
 
-            this.Controls.Add(lblTieuDe); this.Controls.Add(dgvChiTiet); this.Controls.Add(btnDong);
+            this.Controls.Add(lblTieuDe);
+            this.Controls.Add(dgvChiTiet);
+            this.Controls.Add(btnDong);
         }
     }
 }

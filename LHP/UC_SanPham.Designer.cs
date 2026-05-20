@@ -56,17 +56,18 @@
             label4 = new Label();
             label3 = new Label();
             dgvSanPham = new DataGridView();
+            btnSua = new Button();
+            btnXoa = new Button();
+            btnNhapKho = new Button();
             colMaSP = new DataGridViewTextBoxColumn();
             colTenHang = new DataGridViewTextBoxColumn();
+            MaChiNhanh = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column1 = new DataGridViewTextBoxColumn();
             colTrangThai = new DataGridViewTextBoxColumn();
             colTonKho = new DataGridViewTextBoxColumn();
             colGiaNhap = new DataGridViewTextBoxColumn();
             colGiaBan = new DataGridViewTextBoxColumn();
-            btnSua = new Button();
-            btnXoa = new Button();
-            btnNhapKho = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSanPham).BeginInit();
@@ -92,7 +93,7 @@
             panel1.Controls.Add(txtTimKiem);
             panel1.Controls.Add(label2);
             panel1.Location = new Point(15, 66);
-            panel1.Margin = new Padding(4, 4, 4, 4);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
             panel1.Size = new Size(841, 121);
             panel1.TabIndex = 1;
@@ -104,7 +105,7 @@
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
             btnLamMoi.Location = new Point(668, 65);
-            btnLamMoi.Margin = new Padding(4, 4, 4, 4);
+            btnLamMoi.Margin = new Padding(4);
             btnLamMoi.Name = "btnLamMoi";
             btnLamMoi.Size = new Size(159, 40);
             btnLamMoi.TabIndex = 5;
@@ -118,7 +119,7 @@
             cboTimKiemHang.Font = new Font("Segoe UI", 10.8F);
             cboTimKiemHang.FormattingEnabled = true;
             cboTimKiemHang.Location = new Point(345, 67);
-            cboTimKiemHang.Margin = new Padding(4, 4, 4, 4);
+            cboTimKiemHang.Margin = new Padding(4);
             cboTimKiemHang.Name = "cboTimKiemHang";
             cboTimKiemHang.Size = new Size(278, 33);
             cboTimKiemHang.TabIndex = 2;
@@ -128,7 +129,7 @@
             // 
             txtTimKiem.Font = new Font("Segoe UI", 10.8F);
             txtTimKiem.Location = new Point(21, 65);
-            txtTimKiem.Margin = new Padding(4, 4, 4, 4);
+            txtTimKiem.Margin = new Padding(4);
             txtTimKiem.Name = "txtTimKiem";
             txtTimKiem.Size = new Size(278, 31);
             txtTimKiem.TabIndex = 1;
@@ -155,7 +156,7 @@
             btnThem.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnThem.ForeColor = Color.White;
             btnThem.Location = new Point(47, 212);
-            btnThem.Margin = new Padding(4, 4, 4, 4);
+            btnThem.Margin = new Padding(4);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(174, 55);
             btnThem.TabIndex = 7;
@@ -187,7 +188,7 @@
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label3);
             panel2.Location = new Point(864, 66);
-            panel2.Margin = new Padding(4, 4, 4, 4);
+            panel2.Margin = new Padding(4);
             panel2.Name = "panel2";
             panel2.Size = new Size(490, 780);
             panel2.TabIndex = 8;
@@ -195,7 +196,7 @@
             // txtCauHinh
             // 
             txtCauHinh.Location = new Point(17, 528);
-            txtCauHinh.Margin = new Padding(4, 4, 4, 4);
+            txtCauHinh.Margin = new Padding(4);
             txtCauHinh.Multiline = true;
             txtCauHinh.Name = "txtCauHinh";
             txtCauHinh.Size = new Size(455, 76);
@@ -205,7 +206,7 @@
             // 
             cboHangSanXuat.FormattingEnabled = true;
             cboHangSanXuat.Location = new Point(189, 214);
-            cboHangSanXuat.Margin = new Padding(4, 4, 4, 4);
+            cboHangSanXuat.Margin = new Padding(4);
             cboHangSanXuat.Name = "cboHangSanXuat";
             cboHangSanXuat.Size = new Size(283, 33);
             cboHangSanXuat.TabIndex = 25;
@@ -213,7 +214,7 @@
             // txtMaSP
             // 
             txtMaSP.Location = new Point(189, 57);
-            txtMaSP.Margin = new Padding(4, 4, 4, 4);
+            txtMaSP.Margin = new Padding(4);
             txtMaSP.Name = "txtMaSP";
             txtMaSP.ReadOnly = true;
             txtMaSP.Size = new Size(155, 31);
@@ -224,7 +225,7 @@
             cboTrangThai.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTrangThai.FormattingEnabled = true;
             cboTrangThai.Location = new Point(174, 658);
-            cboTrangThai.Margin = new Padding(4, 4, 4, 4);
+            cboTrangThai.Margin = new Padding(4);
             cboTrangThai.Name = "cboTrangThai";
             cboTrangThai.Size = new Size(188, 33);
             cboTrangThai.TabIndex = 22;
@@ -236,7 +237,7 @@
             btnLamTrong.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamTrong.ForeColor = Color.Black;
             btnLamTrong.Location = new Point(291, 717);
-            btnLamTrong.Margin = new Padding(4, 4, 4, 4);
+            btnLamTrong.Margin = new Padding(4);
             btnLamTrong.Name = "btnLamTrong";
             btnLamTrong.Size = new Size(178, 44);
             btnLamTrong.TabIndex = 7;
@@ -251,7 +252,7 @@
             btnLuu.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLuu.ForeColor = Color.White;
             btnLuu.Location = new Point(24, 717);
-            btnLuu.Margin = new Padding(4, 4, 4, 4);
+            btnLuu.Margin = new Padding(4);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(178, 44);
             btnLuu.TabIndex = 8;
@@ -274,7 +275,7 @@
             // 
             txtTonKho.Font = new Font("Segoe UI", 10.8F);
             txtTonKho.Location = new Point(17, 434);
-            txtTonKho.Margin = new Padding(4, 4, 4, 4);
+            txtTonKho.Margin = new Padding(4);
             txtTonKho.Name = "txtTonKho";
             txtTonKho.ReadOnly = true;
             txtTonKho.Size = new Size(455, 31);
@@ -295,7 +296,7 @@
             // 
             txtGiaBan.Font = new Font("Segoe UI", 10.8F);
             txtGiaBan.Location = new Point(273, 338);
-            txtGiaBan.Margin = new Padding(4, 4, 4, 4);
+            txtGiaBan.Margin = new Padding(4);
             txtGiaBan.Name = "txtGiaBan";
             txtGiaBan.Size = new Size(199, 31);
             txtGiaBan.TabIndex = 15;
@@ -315,7 +316,7 @@
             // 
             txtGiaNhap.Font = new Font("Segoe UI", 10.8F);
             txtGiaNhap.Location = new Point(17, 338);
-            txtGiaNhap.Margin = new Padding(4, 4, 4, 4);
+            txtGiaNhap.Margin = new Padding(4);
             txtGiaNhap.Name = "txtGiaNhap";
             txtGiaNhap.Size = new Size(214, 31);
             txtGiaNhap.TabIndex = 13;
@@ -346,7 +347,7 @@
             // 
             txtTenSP.Font = new Font("Segoe UI", 10.8F);
             txtTenSP.Location = new Point(17, 152);
-            txtTenSP.Margin = new Padding(4, 4, 4, 4);
+            txtTenSP.Margin = new Padding(4);
             txtTenSP.Name = "txtTenSP";
             txtTenSP.Size = new Size(455, 31);
             txtTenSP.TabIndex = 7;
@@ -402,14 +403,59 @@
             dgvSanPham.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvSanPham.BackgroundColor = Color.White;
             dgvSanPham.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvSanPham.Columns.AddRange(new DataGridViewColumn[] { colMaSP, colTenHang, Column2, Column1, colTrangThai, colTonKho, colGiaNhap, colGiaBan });
+            dgvSanPham.Columns.AddRange(new DataGridViewColumn[] { colMaSP, colTenHang, MaChiNhanh, Column2, Column1, colTrangThai, colTonKho, colGiaNhap, colGiaBan });
             dgvSanPham.Location = new Point(15, 286);
-            dgvSanPham.Margin = new Padding(4, 4, 4, 4);
+            dgvSanPham.Margin = new Padding(4);
             dgvSanPham.Name = "dgvSanPham";
             dgvSanPham.RowHeadersWidth = 51;
             dgvSanPham.Size = new Size(841, 560);
             dgvSanPham.TabIndex = 9;
             dgvSanPham.CellClick += dgvSanPham_CellClick;
+            // 
+            // btnSua
+            // 
+            btnSua.BackColor = Color.White;
+            btnSua.FlatStyle = FlatStyle.Flat;
+            btnSua.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            btnSua.ForeColor = Color.Black;
+            btnSua.Location = new Point(249, 212);
+            btnSua.Margin = new Padding(4);
+            btnSua.Name = "btnSua";
+            btnSua.Size = new Size(158, 55);
+            btnSua.TabIndex = 10;
+            btnSua.Text = "✎ Sửa";
+            btnSua.UseVisualStyleBackColor = false;
+            btnSua.Click += btnSua_Click;
+            // 
+            // btnXoa
+            // 
+            btnXoa.BackColor = Color.White;
+            btnXoa.FlatStyle = FlatStyle.Flat;
+            btnXoa.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            btnXoa.ForeColor = Color.Red;
+            btnXoa.Location = new Point(436, 212);
+            btnXoa.Margin = new Padding(4);
+            btnXoa.Name = "btnXoa";
+            btnXoa.Size = new Size(158, 55);
+            btnXoa.TabIndex = 11;
+            btnXoa.Text = "✖ Xóa";
+            btnXoa.UseVisualStyleBackColor = false;
+            btnXoa.Click += btnXoa_Click;
+            // 
+            // btnNhapKho
+            // 
+            btnNhapKho.BackColor = Color.White;
+            btnNhapKho.FlatStyle = FlatStyle.Flat;
+            btnNhapKho.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            btnNhapKho.ForeColor = Color.Black;
+            btnNhapKho.Location = new Point(602, 212);
+            btnNhapKho.Margin = new Padding(4);
+            btnNhapKho.Name = "btnNhapKho";
+            btnNhapKho.Size = new Size(165, 55);
+            btnNhapKho.TabIndex = 12;
+            btnNhapKho.Text = "➜ Nhập kho";
+            btnNhapKho.UseVisualStyleBackColor = false;
+            btnNhapKho.Click += btnNhapKho_Click;
             // 
             // colMaSP
             // 
@@ -424,6 +470,13 @@
             colTenHang.HeaderText = "Tên SP";
             colTenHang.MinimumWidth = 6;
             colTenHang.Name = "colTenHang";
+            // 
+            // MaChiNhanh
+            // 
+            MaChiNhanh.DataPropertyName = "MaChiNhanh";
+            MaChiNhanh.HeaderText = "Chi nhánh";
+            MaChiNhanh.MinimumWidth = 6;
+            MaChiNhanh.Name = "MaChiNhanh";
             // 
             // Column2
             // 
@@ -467,51 +520,6 @@
             colGiaBan.MinimumWidth = 6;
             colGiaBan.Name = "colGiaBan";
             // 
-            // btnSua
-            // 
-            btnSua.BackColor = Color.White;
-            btnSua.FlatStyle = FlatStyle.Flat;
-            btnSua.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnSua.ForeColor = Color.Black;
-            btnSua.Location = new Point(249, 212);
-            btnSua.Margin = new Padding(4, 4, 4, 4);
-            btnSua.Name = "btnSua";
-            btnSua.Size = new Size(158, 55);
-            btnSua.TabIndex = 10;
-            btnSua.Text = "✎ Sửa";
-            btnSua.UseVisualStyleBackColor = false;
-            btnSua.Click += btnSua_Click;
-            // 
-            // btnXoa
-            // 
-            btnXoa.BackColor = Color.White;
-            btnXoa.FlatStyle = FlatStyle.Flat;
-            btnXoa.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnXoa.ForeColor = Color.Red;
-            btnXoa.Location = new Point(436, 212);
-            btnXoa.Margin = new Padding(4, 4, 4, 4);
-            btnXoa.Name = "btnXoa";
-            btnXoa.Size = new Size(158, 55);
-            btnXoa.TabIndex = 11;
-            btnXoa.Text = "✖ Xóa";
-            btnXoa.UseVisualStyleBackColor = false;
-            btnXoa.Click += btnXoa_Click;
-            // 
-            // btnNhapKho
-            // 
-            btnNhapKho.BackColor = Color.White;
-            btnNhapKho.FlatStyle = FlatStyle.Flat;
-            btnNhapKho.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnNhapKho.ForeColor = Color.Black;
-            btnNhapKho.Location = new Point(602, 212);
-            btnNhapKho.Margin = new Padding(4, 4, 4, 4);
-            btnNhapKho.Name = "btnNhapKho";
-            btnNhapKho.Size = new Size(165, 55);
-            btnNhapKho.TabIndex = 12;
-            btnNhapKho.Text = "➜ Nhập kho";
-            btnNhapKho.UseVisualStyleBackColor = false;
-            btnNhapKho.Click += btnNhapKho_Click;
-            // 
             // UC_SanPham
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -526,7 +534,7 @@
             Controls.Add(panel1);
             Controls.Add(label1);
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "UC_SanPham";
             Size = new Size(1370, 886);
             Load += UC_SanPham_Load;
@@ -574,6 +582,7 @@
         private TextBox txtCauHinh;
         private DataGridViewTextBoxColumn colMaSP;
         private DataGridViewTextBoxColumn colTenHang;
+        private DataGridViewTextBoxColumn MaChiNhanh;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn colTrangThai;

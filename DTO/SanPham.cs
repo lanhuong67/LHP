@@ -35,5 +35,14 @@ namespace DTO
 
         [StringLength(50)]
         public string TrangThai { get; set; } = "Đang kinh doanh";
+
+        [Required]
+        [StringLength(20)]
+        public string MaChiNhanh { get; set; } = string.Empty;
+
+        [ForeignKey("MaChiNhanh")]
+        public virtual ChiNhanh? ChiNhanh { get; set; }
+
     }
+
 }

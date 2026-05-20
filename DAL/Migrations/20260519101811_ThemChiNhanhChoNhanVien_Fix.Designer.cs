@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260519101811_ThemChiNhanhChoNhanVien_Fix")]
+    partial class ThemChiNhanhChoNhanVien_Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,11 +222,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MaChiNhanh")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("MaNV")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -246,8 +244,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("MaHD");
-
-                    b.HasIndex("MaChiNhanh");
 
                     b.ToTable("HoaDon");
                 });
@@ -480,11 +476,6 @@ namespace DAL.Migrations
                     b.Property<decimal>("GiaNhap")
                         .HasColumnType("decimal(18,0)");
 
-                    b.Property<string>("MaChiNhanh")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("MaHang")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -504,8 +495,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("MaSP");
-
-                    b.HasIndex("MaChiNhanh");
 
                     b.HasIndex("MaHang");
 
@@ -561,17 +550,6 @@ namespace DAL.Migrations
                     b.Navigation("SanPham");
                 });
 
-            modelBuilder.Entity("DTO.HoaDon", b =>
-                {
-                    b.HasOne("DTO.ChiNhanh", "ChiNhanh")
-                        .WithMany()
-                        .HasForeignKey("MaChiNhanh")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("ChiNhanh");
-                });
-
             modelBuilder.Entity("DTO.NhanVien", b =>
                 {
                     b.HasOne("DTO.ChiNhanh", "ChiNhanh")
@@ -612,19 +590,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DTO.SanPham", b =>
                 {
-                    b.HasOne("DTO.ChiNhanh", "ChiNhanh")
-                        .WithMany()
-                        .HasForeignKey("MaChiNhanh")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("DTO.HangSanXuat", "HangSanXuat")
                         .WithMany("SanPhams")
                         .HasForeignKey("MaHang")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ChiNhanh");
 
                     b.Navigation("HangSanXuat");
                 });

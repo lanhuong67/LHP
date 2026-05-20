@@ -13,7 +13,7 @@ namespace BUS
 
         public bool TaoPhieuNhap(PhieuNhap pn, List<ChiTietPhieuNhap> ds) => _dal.TaoPhieuNhap(pn, ds);
 
-        public List<LichSuNhapViewModel> GetLichSuNhap() => _dal.GetLichSuNhap();
+        public List<LichSuNhapViewModel> GetLichSuNhap(string maCN) => _dal.GetLichSuNhap(maCN);
 
         // CẬP NHẬT: Thêm tham số lyDoHuy
         public bool HuyPhieuNhap(string maPN, string lyDoHuy)
@@ -21,6 +21,6 @@ namespace BUS
             return _dal.HuyPhieuNhap(maPN, lyDoHuy);
         }
 
-        public List<LoHangViewModel> GetDanhSachLoHang() => _dal.GetDanhSachLoHang();
+        public List<LoHangViewModel> GetDanhSachLoHang(string maCN) => _dal.GetDanhSachLoHang(maCN);
     }
 }

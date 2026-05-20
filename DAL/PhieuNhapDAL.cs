@@ -41,7 +41,9 @@ namespace DAL
                         if (pn.TrangThai == "Hoàn thành")
                         {
                             // 1. Cập nhật tồn kho tổng trong bảng SanPham
-                            var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == ct.MaSP);
+                            var sp = _db.SanPhams.FirstOrDefault(s =>
+                            s.MaSP == ct.MaSP &&
+                            s.MaChiNhanh == pn.MaChiNhanh);                            
                             if (sp != null)
                             {
                                 sp.TonKho += ct.SoLuong;
@@ -106,7 +108,9 @@ namespace DAL
                     // Trừ tồn kho và đổi trạng thái IMEI thành "Lỗi trả NCC"
                     foreach (var ct in chiTietList)
                     {
-                        var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == ct.MaSP);
+                        var sp = _db.SanPhams.FirstOrDefault(s =>
+                        s.MaSP == ct.MaSP &&
+                        s.MaChiNhanh == pn.MaChiNhanh);
                         if (sp != null)
                         {
                             sp.TonKho -= ct.SoLuong;
@@ -133,11 +137,13 @@ namespace DAL
             }
         }
 
-        public List<LichSuNhapViewModel> GetLichSuNhap()
+        // Thêm tham số maCN và điều kiện lọc
+        public List<LichSuNhapViewModel> GetLichSuNhap(string maCN)
         {
             var result = (from pn in _db.PhieuNhaps
                           join ncc in _db.NhaCungCaps on pn.MaNCC equals ncc.MaNCC
                           join nv in _db.NhanViens on pn.MaNV equals nv.MaNV
+                          where pn.MaChiNhanh == maCN // 🔴 CHỈ LẤY PHIẾU CỦA CHI NHÁNH NÀY
                           select new LichSuNhapViewModel
                           {
                               MaPN = pn.MaPN,
@@ -152,12 +158,13 @@ namespace DAL
             return result;
         }
 
-        public List<LoHangViewModel> GetDanhSachLoHang()
+        // Thêm tham số maCN và điều kiện lọc
+        public List<LoHangViewModel> GetDanhSachLoHang(string maCN)
         {
             var query = from ct in _db.ChiTietPhieuNhaps
                         join pn in _db.PhieuNhaps on ct.MaPN equals pn.MaPN
                         join sp in _db.SanPhams on ct.MaSP equals sp.MaSP
-                        where pn.TrangThai == "Hoàn thành"
+                        where pn.TrangThai == "Hoàn thành" && pn.MaChiNhanh == maCN // 🔴 CHỈ LẤY LÔ HÀNG CỦA CHI NHÁNH NÀY
                         select new LoHangViewModel
                         {
                             MaLo = pn.MaPN + "_" + sp.MaSP,

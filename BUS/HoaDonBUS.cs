@@ -8,9 +8,16 @@ namespace BUS
     {
         private HoaDonDAL _dal = new HoaDonDAL();
 
+        // Bản cũ: giữ lại để không làm hỏng các code cũ nếu còn gọi 1 tham số
         public List<string> GetImeiTonKho(string maSP)
         {
             return _dal.GetImeiTonKho(maSP);
+        }
+
+        // Bản mới: dùng cho đa chi nhánh
+        public List<string> GetImeiTonKho(string maSP, string maCN)
+        {
+            return _dal.GetImeiTonKho(maSP, maCN);
         }
 
         public bool TaoHoaDon(HoaDon hd, List<ChiTietHoaDon> dsChiTiet)
@@ -18,9 +25,9 @@ namespace BUS
             return _dal.TaoHoaDon(hd, dsChiTiet);
         }
 
-        public List<HoaDonViewModel> GetDanhSachHoaDon()
+        public List<HoaDonViewModel> GetDanhSachHoaDon(string maCN)
         {
-            return _dal.GetDanhSachHoaDon();
+            return _dal.GetDanhSachHoaDon(maCN);
         }
 
         public List<ChiTietHoaDonViewModel> GetChiTietHoaDon(string maHD)

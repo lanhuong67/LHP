@@ -31,5 +31,14 @@ namespace DTO
         [Required]
         [StringLength(255)]
         public string MatKhau { get; set; } = string.Empty;
+
+        // 1. Lưu mã chi nhánh nơi nhân viên đang làm việc
+        [Required]
+        [StringLength(20)]
+        public string MaChiNhanh { get; set; } = string.Empty;
+
+        // 2. Thuộc tính điều hướng (Navigation Property) kết nối đến bảng ChiNhanh
+        [ForeignKey("MaChiNhanh")]
+        public virtual ChiNhanh? ChiNhanh { get; set; }
     }
 }

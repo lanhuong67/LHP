@@ -30,6 +30,17 @@ namespace DTO
         // 🔴 ĐÃ ĐƯỢC CHUYỂN VỀ ĐÚNG VỊ TRÍ NÀY ĐỂ LƯU XUỐNG DATABASE
         public string LyDoHuy { get; set; } = string.Empty;
 
+        // ===============================================
+        // 🔴 BỔ SUNG KHÓA NGOẠI CHI NHÁNH (BẮT BUỘC PHẢI CÓ)
+        // ===============================================
+        [Required]
+        [StringLength(20)]
+        public string MaChiNhanh { get; set; } = string.Empty;
+
+        [ForeignKey("MaChiNhanh")]
+        public virtual ChiNhanh? ChiNhanh { get; set; }
+        // ===============================================
+
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; } = new List<ChiTietHoaDon>();
     }
 
@@ -82,6 +93,7 @@ namespace DTO
         public string TenKhachHang { get; set; }
         public decimal TongTien { get; set; }
         public string TrangThai { get; set; }
+        public string LyDoHuy { get; set; }
     }
 
     public class ChiTietHoaDonViewModel

@@ -65,7 +65,7 @@ namespace GUI
             picTaoHoaDon = new PictureBox();
             picDanhSachHD = new PictureBox();
             picDashBoard = new PictureBox();
-            comboBox1 = new ComboBox();
+            cboGlobalChiNhanh = new ComboBox();
             lblDanhSachHD = new Label();
             lblTaoHoaDon = new Label();
             lblCanhBaoTonKho = new Label();
@@ -203,7 +203,7 @@ namespace GUI
             pnlSidebar.Controls.Add(picTaoHoaDon);
             pnlSidebar.Controls.Add(picDanhSachHD);
             pnlSidebar.Controls.Add(picDashBoard);
-            pnlSidebar.Controls.Add(comboBox1);
+            pnlSidebar.Controls.Add(cboGlobalChiNhanh);
             pnlSidebar.Controls.Add(lblDanhSachHD);
             pnlSidebar.Controls.Add(lblTaoHoaDon);
             pnlSidebar.Controls.Add(lblCanhBaoTonKho);
@@ -215,7 +215,7 @@ namespace GUI
             pnlSidebar.Dock = DockStyle.Left;
             pnlSidebar.Location = new Point(0, 72);
             pnlSidebar.Name = "pnlSidebar";
-            pnlSidebar.Size = new Size(338, 1008);
+            pnlSidebar.Size = new Size(338, 940);
             pnlSidebar.TabIndex = 1;
             // 
             // picTopBanChay
@@ -558,14 +558,15 @@ namespace GUI
             picDashBoard.TabStop = false;
             picDashBoard.Click += picDashBoard_Click;
             // 
-            // comboBox1
+            // cboGlobalChiNhanh
             // 
-            comboBox1.Font = new Font("Segoe UI", 10.8F);
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(12, 43);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(301, 33);
-            comboBox1.TabIndex = 6;
+            cboGlobalChiNhanh.Font = new Font("Segoe UI", 10.8F);
+            cboGlobalChiNhanh.FormattingEnabled = true;
+            cboGlobalChiNhanh.Location = new Point(12, 43);
+            cboGlobalChiNhanh.Name = "cboGlobalChiNhanh";
+            cboGlobalChiNhanh.Size = new Size(301, 33);
+            cboGlobalChiNhanh.TabIndex = 6;
+            cboGlobalChiNhanh.SelectedIndexChanged += CboGlobalChiNhanh_SelectedIndexChanged;
             // 
             // lblDanhSachHD
             // 
@@ -702,7 +703,7 @@ namespace GUI
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1731, 1080);
+            ClientSize = new Size(1731, 1012);
             Controls.Add(pnlContainer);
             Controls.Add(pnlSidebar);
             Controls.Add(pnlTitlebar);
@@ -765,7 +766,7 @@ namespace GUI
         private Label lblCanhBaoTonKho;
         private Label lblHangSanXuat;
         private PictureBox picDashBoard;
-        private ComboBox comboBox1;
+        private ComboBox cboGlobalChiNhanh;
         private Label lblDashBoard;
         private Label label9;
         private Label label10;

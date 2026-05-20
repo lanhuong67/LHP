@@ -30,6 +30,7 @@
         {
             label1 = new Label();
             panel1 = new Panel();
+            txtTimKiemHD = new TextBox();
             btnLamMoi = new Button();
             cboTrangThai = new ComboBox();
             label2 = new Label();
@@ -42,9 +43,9 @@
             colTenKhachHang = new DataGridViewTextBoxColumn();
             colTongTien = new DataGridViewTextBoxColumn();
             colTrangThai = new DataGridViewTextBoxColumn();
+            colLyDoHuy = new DataGridViewTextBoxColumn();
             colChiTiet = new DataGridViewButtonColumn();
             colHuyDon = new DataGridViewButtonColumn();
-            txtTimKiemHD = new TextBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDanhSachHoaDon).BeginInit();
             SuspendLayout();
@@ -71,10 +72,19 @@
             panel1.Controls.Add(dtpTuNgay);
             panel1.Font = new Font("Segoe UI", 10.8F);
             panel1.Location = new Point(45, 53);
-            panel1.Margin = new Padding(4, 4, 4, 4);
+            panel1.Margin = new Padding(4);
             panel1.Name = "panel1";
             panel1.Size = new Size(1291, 281);
             panel1.TabIndex = 3;
+            // 
+            // txtTimKiemHD
+            // 
+            txtTimKiemHD.Location = new Point(853, 213);
+            txtTimKiemHD.Margin = new Padding(4);
+            txtTimKiemHD.Multiline = true;
+            txtTimKiemHD.Name = "txtTimKiemHD";
+            txtTimKiemHD.Size = new Size(155, 48);
+            txtTimKiemHD.TabIndex = 8;
             // 
             // btnLamMoi
             // 
@@ -83,7 +93,7 @@
             btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             btnLamMoi.ForeColor = Color.Black;
             btnLamMoi.Location = new Point(155, 213);
-            btnLamMoi.Margin = new Padding(4, 4, 4, 4);
+            btnLamMoi.Margin = new Padding(4);
             btnLamMoi.Name = "btnLamMoi";
             btnLamMoi.Size = new Size(201, 49);
             btnLamMoi.TabIndex = 7;
@@ -95,7 +105,7 @@
             // 
             cboTrangThai.FormattingEnabled = true;
             cboTrangThai.Location = new Point(42, 149);
-            cboTrangThai.Margin = new Padding(4, 4, 4, 4);
+            cboTrangThai.Margin = new Padding(4);
             cboTrangThai.Name = "cboTrangThai";
             cboTrangThai.Size = new Size(1175, 33);
             cboTrangThai.TabIndex = 3;
@@ -115,7 +125,7 @@
             // dtpDenNgay
             // 
             dtpDenNgay.Location = new Point(42, 94);
-            dtpDenNgay.Margin = new Padding(4, 4, 4, 4);
+            dtpDenNgay.Margin = new Padding(4);
             dtpDenNgay.Name = "dtpDenNgay";
             dtpDenNgay.Size = new Size(1175, 31);
             dtpDenNgay.TabIndex = 1;
@@ -123,7 +133,7 @@
             // dtpTuNgay
             // 
             dtpTuNgay.Location = new Point(42, 25);
-            dtpTuNgay.Margin = new Padding(4, 4, 4, 4);
+            dtpTuNgay.Margin = new Padding(4);
             dtpTuNgay.Name = "dtpTuNgay";
             dtpTuNgay.Size = new Size(1175, 31);
             dtpTuNgay.TabIndex = 0;
@@ -134,9 +144,9 @@
             dgvDanhSachHoaDon.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDanhSachHoaDon.BackgroundColor = Color.White;
             dgvDanhSachHoaDon.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDanhSachHoaDon.Columns.AddRange(new DataGridViewColumn[] { colMaHD, colNgayLap, colTenNhanVien, colTenKhachHang, colTongTien, colTrangThai, colChiTiet, colHuyDon });
+            dgvDanhSachHoaDon.Columns.AddRange(new DataGridViewColumn[] { colMaHD, colNgayLap, colTenNhanVien, colTenKhachHang, colTongTien, colTrangThai, colLyDoHuy, colChiTiet, colHuyDon });
             dgvDanhSachHoaDon.Location = new Point(45, 356);
-            dgvDanhSachHoaDon.Margin = new Padding(4, 4, 4, 4);
+            dgvDanhSachHoaDon.Margin = new Padding(4);
             dgvDanhSachHoaDon.Name = "dgvDanhSachHoaDon";
             dgvDanhSachHoaDon.RowHeadersVisible = false;
             dgvDanhSachHoaDon.RowHeadersWidth = 51;
@@ -187,6 +197,14 @@
             colTrangThai.MinimumWidth = 6;
             colTrangThai.Name = "colTrangThai";
             // 
+            // colLyDoHuy
+            // 
+            colLyDoHuy.DataPropertyName = "LyDoHuy";
+            colLyDoHuy.HeaderText = "Lý do hủy";
+            colLyDoHuy.MinimumWidth = 6;
+            colLyDoHuy.Name = "colLyDoHuy";
+            colLyDoHuy.ReadOnly = true;
+            // 
             // colChiTiet
             // 
             colChiTiet.HeaderText = "Chi tiết";
@@ -203,15 +221,6 @@
             colHuyDon.Text = "Hủy";
             colHuyDon.UseColumnTextForButtonValue = true;
             // 
-            // txtTimKiemHD
-            // 
-            txtTimKiemHD.Location = new Point(853, 213);
-            txtTimKiemHD.Margin = new Padding(4, 4, 4, 4);
-            txtTimKiemHD.Multiline = true;
-            txtTimKiemHD.Name = "txtTimKiemHD";
-            txtTimKiemHD.Size = new Size(155, 48);
-            txtTimKiemHD.TabIndex = 8;
-            // 
             // UC_DanhSachHoaDon
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -221,7 +230,7 @@
             Controls.Add(panel1);
             Controls.Add(label1);
             Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "UC_DanhSachHoaDon";
             Size = new Size(1370, 886);
             Load += UC_DanhSachHoaDon_Load;
@@ -242,14 +251,15 @@
         private DateTimePicker dtpTuNgay;
         private Button btnLamMoi;
         private DataGridView dgvDanhSachHoaDon;
+        private TextBox txtTimKiemHD;
         private DataGridViewTextBoxColumn colMaHD;
         private DataGridViewTextBoxColumn colNgayLap;
         private DataGridViewTextBoxColumn colTenNhanVien;
         private DataGridViewTextBoxColumn colTenKhachHang;
         private DataGridViewTextBoxColumn colTongTien;
         private DataGridViewTextBoxColumn colTrangThai;
+        private DataGridViewTextBoxColumn colLyDoHuy;
         private DataGridViewButtonColumn colChiTiet;
         private DataGridViewButtonColumn colHuyDon;
-        private TextBox txtTimKiemHD;
     }
 }

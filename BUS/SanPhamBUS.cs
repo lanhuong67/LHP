@@ -10,6 +10,7 @@ namespace BUS
 
         public List<SanPham> GetAll() => _dal.GetAll();
         public List<HangSanXuat> GetAllHang() => _dal.GetAllHang(); // Lấy danh sách hãng cho ComboBox
+        public List<SanPham> GetByBranch(string maCN) => _dal.GetByBranch(maCN);
         public bool Them(SanPham sp) => _dal.Them(sp);
         public bool Sua(SanPham sp) => _dal.Sua(sp);
         public bool Xoa(string maSP) => _dal.Xoa(maSP);

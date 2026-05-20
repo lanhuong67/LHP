@@ -10,13 +10,29 @@ namespace DAL
     {
         private AppDbContext _db = new AppDbContext();
 
-        // 1. LẤY DANH SÁCH IMEI SẴN SÀNG BÁN (ĐÃ ÁP DỤNG FIFO - CŨ NHẤT LÊN ĐẦU)
+        // 1. LẤY DANH SÁCH IMEI SẴN SÀNG BÁN
+        // BẢN CŨ: dùng cho các UC cũ nếu vẫn đang gọi GetImeiTonKho(maSP)
         public List<string> GetImeiTonKho(string maSP)
         {
             var query = from imei in _db.ChiTietIMEIs
                         join pn in _db.PhieuNhaps on imei.MaPN equals pn.MaPN
-                        where imei.MaSP == maSP && imei.TrangThai == "Trong kho"
-                        orderby pn.NgayNhap ascending // 🔴 Sắp xếp Ngày nhập tăng dần (Máy cũ nằm trên)
+                        where imei.MaSP == maSP
+                              && imei.TrangThai == "Trong kho"
+                        orderby pn.NgayNhap ascending
+                        select imei.IMEI;
+
+            return query.ToList();
+        }
+
+        // BẢN MỚI: dùng cho đa chi nhánh, nên ưu tiên dùng khi sửa UC_TaoHoaDon sau này
+        public List<string> GetImeiTonKho(string maSP, string maCN)
+        {
+            var query = from imei in _db.ChiTietIMEIs
+                        join pn in _db.PhieuNhaps on imei.MaPN equals pn.MaPN
+                        where imei.MaSP == maSP
+                              && imei.TrangThai == "Trong kho"
+                              && pn.MaChiNhanh == maCN
+                        orderby pn.NgayNhap ascending
                         select imei.IMEI;
 
             return query.ToList();
@@ -29,6 +45,11 @@ namespace DAL
             {
                 try
                 {
+                    if (string.IsNullOrWhiteSpace(hd.MaChiNhanh))
+                    {
+                        throw new Exception("Hóa đơn chưa có mã chi nhánh. Vui lòng kiểm tra UserSession.ChiNhanhDuocChon.");
+                    }
+
                     _db.HoaDons.Add(hd);
                     _db.SaveChanges();
 
@@ -37,29 +58,47 @@ namespace DAL
                         ct.MaHD = hd.MaHD;
                         _db.ChiTietHoaDons.Add(ct);
 
-                        // A. TRỪ TỒN KHO TRONG BẢNG SẢN PHẨM CHUNG
-                        var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == ct.MaSP);
+                        // A. TRỪ TỒN KHO ĐÚNG CHI NHÁNH
+                        var sp = _db.SanPhams.FirstOrDefault(s =>
+                            s.MaSP == ct.MaSP &&
+                            s.MaChiNhanh == hd.MaChiNhanh
+                        );
+
                         if (sp != null)
                         {
                             sp.TonKho -= ct.SoLuong;
                             if (sp.TonKho < 0) sp.TonKho = 0;
                         }
+                        else
+                        {
+                            throw new Exception($"Không tìm thấy sản phẩm [{ct.MaSP}] trong chi nhánh [{hd.MaChiNhanh}].");
+                        }
 
                         // B. CẬP NHẬT TRẠNG THÁI IMEI VÀ LIÊN KẾT VỚI LÔ HÀNG
                         if (!string.IsNullOrEmpty(ct.GhiChuImei))
                         {
-                            var listImei = ct.GhiChuImei.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                                                        .Select(i => i.Trim())
-                                                        .ToList();
+                            var listImei = ct.GhiChuImei
+                                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(i => i.Trim())
+                                .ToList();
 
-                            var imeisToUpdate = _db.ChiTietIMEIs.Where(i => listImei.Contains(i.IMEI)).ToList();
+                            var imeisToUpdate = (
+                                from imei in _db.ChiTietIMEIs
+                                join pn in _db.PhieuNhaps on imei.MaPN equals pn.MaPN
+                                where listImei.Contains(imei.IMEI)
+                                      && pn.MaChiNhanh == hd.MaChiNhanh
+                                select imei
+                            ).ToList();
+
                             foreach (var imei in imeisToUpdate)
                             {
-                                // B1. Đổi trạng thái máy thành Đã bán
                                 imei.TrangThai = "Đã bán";
 
-                                // B2. [LIÊN KẾT LÔ HÀNG] - Tăng số lượng đã bán của lô đó lên 1
-                                var loHang = _db.ChiTietPhieuNhaps.FirstOrDefault(pn => pn.MaPN == imei.MaPN && pn.MaSP == imei.MaSP);
+                                var loHang = _db.ChiTietPhieuNhaps.FirstOrDefault(pn =>
+                                    pn.MaPN == imei.MaPN &&
+                                    pn.MaSP == imei.MaSP
+                                );
+
                                 if (loHang != null)
                                 {
                                     loHang.SoLuongDaBan += 1;
@@ -68,10 +107,11 @@ namespace DAL
                         }
                     }
 
-                    // C. [LIÊN KẾT KHÁCH HÀNG] - Tích lũy số lần mua và tổng tiền chi tiêu
+                    // C. CẬP NHẬT KHÁCH HÀNG
                     if (!string.IsNullOrEmpty(hd.SDTKhachHang))
                     {
                         var khachHang = _db.KhachHangs.FirstOrDefault(k => k.SDT == hd.SDTKhachHang);
+
                         if (khachHang != null)
                         {
                             khachHang.SoLanMua += 1;
@@ -91,25 +131,34 @@ namespace DAL
             }
         }
 
-        // 3. LẤY DANH SÁCH HÓA ĐƠN
-        public List<HoaDonViewModel> GetDanhSachHoaDon()
+        // 3. LẤY DANH SÁCH HÓA ĐƠN THEO CHI NHÁNH
+        public List<HoaDonViewModel> GetDanhSachHoaDon(string maCN)
         {
-            var query = from hd in _db.HoaDons
-                        join nv in _db.NhanViens on hd.MaNV equals nv.MaNV
-                        join kh in _db.KhachHangs on hd.SDTKhachHang equals kh.SDT into khGroup
-                        from kh in khGroup.DefaultIfEmpty()
-                        select new HoaDonViewModel
-                        {
-                            MaHD = hd.MaHD,
-                            NgayLap = hd.NgayLap,
-                            TenNhanVien = nv.HoTen,
-                            TenKhachHang = kh != null ? kh.HoTen : "Khách vãng lai",
-                            TongTien = hd.TongTien,
-                            TrangThai = hd.TrangThai
-                        };
-            return query.OrderByDescending(x => x.NgayLap).ToList();
+            using (var db = new AppDbContext())
+            {
+                var query = from hd in db.HoaDons
+                            join nv in db.NhanViens on hd.MaNV equals nv.MaNV
+                            join kh in db.KhachHangs on hd.SDTKhachHang equals kh.SDT into khGroup
+                            from kh in khGroup.DefaultIfEmpty()
+                            where hd.MaChiNhanh == maCN
+                            select new HoaDonViewModel
+                            {
+                                MaHD = hd.MaHD,
+                                NgayLap = hd.NgayLap,
+                                TenNhanVien = nv.HoTen,
+                                TenKhachHang = kh != null ? kh.HoTen : "Khách vãng lai",
+                                TongTien = hd.TongTien,
+                                TrangThai = hd.TrangThai,
+
+                                // Thêm dòng này
+                                LyDoHuy = hd.LyDoHuy
+                            };
+
+                return query.OrderByDescending(x => x.NgayLap).ToList();
+            }
         }
 
+        // 4. XEM CHI TIẾT HÓA ĐƠN
         public List<ChiTietHoaDonViewModel> GetChiTietHoaDon(string maHD)
         {
             var query = from ct in _db.ChiTietHoaDons
@@ -123,10 +172,11 @@ namespace DAL
                             ThanhTien = ct.ThanhTien,
                             GhiChuImei = ct.GhiChuImei
                         };
+
             return query.ToList();
         }
 
-        // 4. HỦY HÓA ĐƠN VÀ HOÀN KHO
+        // 5. HỦY HÓA ĐƠN VÀ HOÀN KHO ĐÚNG CHI NHÁNH
         public bool HuyHoaDonThongTu78(string maHD, string lyDo, string maNhanVienHuy)
         {
             using (var transaction = _db.Database.BeginTransaction())
@@ -134,37 +184,61 @@ namespace DAL
                 try
                 {
                     var hd = _db.HoaDons.FirstOrDefault(x => x.MaHD == maHD);
-                    if (hd == null || hd.TrangThai == "Đã hủy") return false;
 
-                    // Cập nhật trạng thái và Lý do hủy (KHÔNG XÓA THEO TT78)
+                    if (hd == null || hd.TrangThai == "Đã hủy")
+                        return false;
+
                     hd.TrangThai = "Đã hủy";
-                    hd.LyDoHuy = $"[{DateTime.Now.ToString("dd/MM/yyyy HH:mm")}] NV {maNhanVienHuy} hủy: {lyDo}";
+                    hd.LyDoHuy = $"[{DateTime.Now:dd/MM/yyyy HH:mm}] NV {maNhanVienHuy} hủy: {lyDo}";
 
-                    var chiTiets = _db.ChiTietHoaDons.Where(x => x.MaHD == maHD).ToList();
+                    var chiTiets = _db.ChiTietHoaDons
+                        .Where(x => x.MaHD == maHD)
+                        .ToList();
+
                     foreach (var ct in chiTiets)
                     {
-                        var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == ct.MaSP);
+                        // A. HOÀN TỒN KHO ĐÚNG CHI NHÁNH
+                        var sp = _db.SanPhams.FirstOrDefault(s =>
+                            s.MaSP == ct.MaSP &&
+                            s.MaChiNhanh == hd.MaChiNhanh
+                        );
+
                         if (sp != null)
                         {
-                            sp.TonKho += ct.SoLuong; // Cộng lại kho
+                            sp.TonKho += ct.SoLuong;
                         }
 
-                        // Hoàn lại trạng thái IMEI để bán tiếp
+                        // B. NHẢ IMEI VỀ TRẠNG THÁI TRONG KHO
                         if (!string.IsNullOrEmpty(ct.GhiChuImei))
                         {
-                            var listImei = ct.GhiChuImei.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                                                        .Select(i => i.Trim()).ToList();
+                            var listImei = ct.GhiChuImei
+                                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(i => i.Trim())
+                                .ToList();
 
-                            var imeisToUpdate = _db.ChiTietIMEIs.Where(i => listImei.Contains(i.IMEI)).ToList();
+                            var imeisToUpdate = (
+                                from imei in _db.ChiTietIMEIs
+                                join pn in _db.PhieuNhaps on imei.MaPN equals pn.MaPN
+                                where listImei.Contains(imei.IMEI)
+                                      && pn.MaChiNhanh == hd.MaChiNhanh
+                                select imei
+                            ).ToList();
+
                             foreach (var imei in imeisToUpdate)
                             {
-                                imei.TrangThai = "Trong kho"; // Nhả IMEI
+                                imei.TrangThai = "Trong kho";
 
-                                var loHang = _db.ChiTietPhieuNhaps.FirstOrDefault(pn => pn.MaPN == imei.MaPN && pn.MaSP == imei.MaSP);
+                                var loHang = _db.ChiTietPhieuNhaps.FirstOrDefault(pn =>
+                                    pn.MaPN == imei.MaPN &&
+                                    pn.MaSP == imei.MaSP
+                                );
+
                                 if (loHang != null)
                                 {
                                     loHang.SoLuongDaBan -= 1;
-                                    if (loHang.SoLuongDaBan < 0) loHang.SoLuongDaBan = 0;
+
+                                    if (loHang.SoLuongDaBan < 0)
+                                        loHang.SoLuongDaBan = 0;
                                 }
                             }
                         }
@@ -174,10 +248,10 @@ namespace DAL
                     transaction.Commit();
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
                     transaction.Rollback();
-                    return false;
+                    throw new Exception("Lỗi khi hủy hóa đơn: " + (ex.InnerException?.Message ?? ex.Message));
                 }
             }
         }
