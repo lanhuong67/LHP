@@ -49,34 +49,34 @@
             pnlDoanhThu = new Panel();
             picDashBoard = new PictureBox();
             panel4 = new Panel();
-            lblDoanhThuHienTai = new Label();
+            lblDoanhThuThangNay = new Label();
             label1 = new Label();
             panel2 = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             panel11 = new Panel();
-            dgvTopSanPham = new DataGridView();
+            dgvTopSanPhamDashboard = new DataGridView();
             label2 = new Label();
             panel12 = new Panel();
-            pnlBieuDo = new Panel();
+            pnlDoanhThuTheoThang = new Panel();
             listBox1 = new ListBox();
             label4 = new Label();
             panel3 = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
             panel15 = new Panel();
-            lstHoatDong = new ListBox();
             panel16 = new Panel();
             label11 = new Label();
             panel17 = new Panel();
-            dgvBaoHanhSapHet = new DataGridView();
+            dgvBaoHanhSapHetDashboard = new DataGridView();
             panel14 = new Panel();
             label13 = new Label();
             panel19 = new Panel();
-            dgvCanhBaoKho = new DataGridView();
+            dgvCanhBaoTonKhoDashboard = new DataGridView();
             panel13 = new Panel();
             label15 = new Label();
             label6 = new Label();
-            lblNgay = new Label();
-            btnLamMoi = new Button();
+            lblNgayHienTai = new Label();
+            btnLamMoiDashboard = new Button();
+            dgvHoatDongGanDayDashboard = new DataGridView();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel9.SuspendLayout();
@@ -90,16 +90,17 @@
             panel2.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel11.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvTopSanPham).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTopSanPhamDashboard).BeginInit();
             panel12.SuspendLayout();
-            pnlBieuDo.SuspendLayout();
+            pnlDoanhThuTheoThang.SuspendLayout();
             panel3.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             panel15.SuspendLayout();
             panel17.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvBaoHanhSapHet).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvBaoHanhSapHetDashboard).BeginInit();
             panel19.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvCanhBaoKho).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvCanhBaoTonKhoDashboard).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvHoatDongGanDayDashboard).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -171,9 +172,9 @@
             lblSanPhamSapHet.ForeColor = Color.Red;
             lblSanPhamSapHet.Location = new Point(32, 106);
             lblSanPhamSapHet.Name = "lblSanPhamSapHet";
-            lblSanPhamSapHet.Size = new Size(191, 28);
+            lblSanPhamSapHet.Size = new Size(24, 28);
             lblSanPhamSapHet.TabIndex = 1;
-            lblSanPhamSapHet.Text = "lblSanPhamSapHet";
+            lblSanPhamSapHet.Text = "0";
             // 
             // label7
             // 
@@ -228,9 +229,9 @@
             lblTongKhachHang.ForeColor = Color.DimGray;
             lblTongKhachHang.Location = new Point(32, 106);
             lblTongKhachHang.Name = "lblTongKhachHang";
-            lblTongKhachHang.Size = new Size(190, 28);
+            lblTongKhachHang.Size = new Size(24, 28);
             lblTongKhachHang.TabIndex = 1;
-            lblTongKhachHang.Text = "lblTongKhachHang";
+            lblTongKhachHang.Text = "0";
             // 
             // label5
             // 
@@ -285,9 +286,9 @@
             lblDonHangHomNay.ForeColor = Color.LimeGreen;
             lblDonHangHomNay.Location = new Point(32, 106);
             lblDonHangHomNay.Name = "lblDonHangHomNay";
-            lblDonHangHomNay.Size = new Size(208, 28);
+            lblDonHangHomNay.Size = new Size(24, 28);
             lblDonHangHomNay.TabIndex = 1;
-            lblDonHangHomNay.Text = "lblDonHangHomNay";
+            lblDonHangHomNay.Text = "0";
             // 
             // label3
             // 
@@ -305,7 +306,7 @@
             pnlDoanhThu.BackColor = Color.White;
             pnlDoanhThu.Controls.Add(picDashBoard);
             pnlDoanhThu.Controls.Add(panel4);
-            pnlDoanhThu.Controls.Add(lblDoanhThuHienTai);
+            pnlDoanhThu.Controls.Add(lblDoanhThuThangNay);
             pnlDoanhThu.Controls.Add(label1);
             pnlDoanhThu.Dock = DockStyle.Fill;
             pnlDoanhThu.Location = new Point(10, 10);
@@ -335,16 +336,16 @@
             panel4.Size = new Size(5, 152);
             panel4.TabIndex = 2;
             // 
-            // lblDoanhThuHienTai
+            // lblDoanhThuThangNay
             // 
-            lblDoanhThuHienTai.AutoSize = true;
-            lblDoanhThuHienTai.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDoanhThuHienTai.ForeColor = Color.DodgerBlue;
-            lblDoanhThuHienTai.Location = new Point(32, 106);
-            lblDoanhThuHienTai.Name = "lblDoanhThuHienTai";
-            lblDoanhThuHienTai.Size = new Size(25, 28);
-            lblDoanhThuHienTai.TabIndex = 1;
-            lblDoanhThuHienTai.Text = "đ";
+            lblDoanhThuThangNay.AutoSize = true;
+            lblDoanhThuThangNay.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDoanhThuThangNay.ForeColor = Color.DodgerBlue;
+            lblDoanhThuThangNay.Location = new Point(32, 106);
+            lblDoanhThuThangNay.Name = "lblDoanhThuThangNay";
+            lblDoanhThuThangNay.Size = new Size(37, 28);
+            lblDoanhThuThangNay.TabIndex = 1;
+            lblDoanhThuThangNay.Text = "0đ";
             // 
             // label1
             // 
@@ -383,7 +384,7 @@
             // panel11
             // 
             panel11.BackColor = Color.White;
-            panel11.Controls.Add(dgvTopSanPham);
+            panel11.Controls.Add(dgvTopSanPhamDashboard);
             panel11.Controls.Add(label2);
             panel11.Dock = DockStyle.Fill;
             panel11.Location = new Point(10, 10);
@@ -392,17 +393,17 @@
             panel11.Size = new Size(391, 327);
             panel11.TabIndex = 0;
             // 
-            // dgvTopSanPham
+            // dgvTopSanPhamDashboard
             // 
-            dgvTopSanPham.BackgroundColor = Color.White;
-            dgvTopSanPham.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvTopSanPham.Dock = DockStyle.Bottom;
-            dgvTopSanPham.Location = new Point(0, 54);
-            dgvTopSanPham.Name = "dgvTopSanPham";
-            dgvTopSanPham.RowHeadersVisible = false;
-            dgvTopSanPham.RowHeadersWidth = 51;
-            dgvTopSanPham.Size = new Size(391, 273);
-            dgvTopSanPham.TabIndex = 4;
+            dgvTopSanPhamDashboard.BackgroundColor = Color.White;
+            dgvTopSanPhamDashboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvTopSanPhamDashboard.Dock = DockStyle.Bottom;
+            dgvTopSanPhamDashboard.Location = new Point(0, 54);
+            dgvTopSanPhamDashboard.Name = "dgvTopSanPhamDashboard";
+            dgvTopSanPhamDashboard.RowHeadersVisible = false;
+            dgvTopSanPhamDashboard.RowHeadersWidth = 51;
+            dgvTopSanPhamDashboard.Size = new Size(391, 273);
+            dgvTopSanPhamDashboard.TabIndex = 4;
             // 
             // label2
             // 
@@ -417,7 +418,7 @@
             // panel12
             // 
             panel12.BackColor = Color.White;
-            panel12.Controls.Add(pnlBieuDo);
+            panel12.Controls.Add(pnlDoanhThuTheoThang);
             panel12.Controls.Add(label4);
             panel12.Dock = DockStyle.Fill;
             panel12.Location = new Point(421, 10);
@@ -426,14 +427,14 @@
             panel12.Size = new Size(939, 327);
             panel12.TabIndex = 1;
             // 
-            // pnlBieuDo
+            // pnlDoanhThuTheoThang
             // 
-            pnlBieuDo.Controls.Add(listBox1);
-            pnlBieuDo.Dock = DockStyle.Bottom;
-            pnlBieuDo.Location = new Point(0, 54);
-            pnlBieuDo.Name = "pnlBieuDo";
-            pnlBieuDo.Size = new Size(939, 273);
-            pnlBieuDo.TabIndex = 6;
+            pnlDoanhThuTheoThang.Controls.Add(listBox1);
+            pnlDoanhThuTheoThang.Dock = DockStyle.Bottom;
+            pnlDoanhThuTheoThang.Location = new Point(0, 54);
+            pnlDoanhThuTheoThang.Name = "pnlDoanhThuTheoThang";
+            pnlDoanhThuTheoThang.Size = new Size(939, 273);
+            pnlDoanhThuTheoThang.TabIndex = 6;
             // 
             // listBox1
             // 
@@ -482,7 +483,7 @@
             // panel15
             // 
             panel15.BackColor = Color.White;
-            panel15.Controls.Add(lstHoatDong);
+            panel15.Controls.Add(dgvHoatDongGanDayDashboard);
             panel15.Controls.Add(panel16);
             panel15.Controls.Add(label11);
             panel15.Dock = DockStyle.Fill;
@@ -491,16 +492,6 @@
             panel15.Name = "panel15";
             panel15.Size = new Size(438, 253);
             panel15.TabIndex = 2;
-            // 
-            // lstHoatDong
-            // 
-            lstHoatDong.Dock = DockStyle.Bottom;
-            lstHoatDong.FormattingEnabled = true;
-            lstHoatDong.ItemHeight = 25;
-            lstHoatDong.Location = new Point(0, 49);
-            lstHoatDong.Name = "lstHoatDong";
-            lstHoatDong.Size = new Size(438, 204);
-            lstHoatDong.TabIndex = 4;
             // 
             // panel16
             // 
@@ -524,7 +515,7 @@
             // panel17
             // 
             panel17.BackColor = Color.White;
-            panel17.Controls.Add(dgvBaoHanhSapHet);
+            panel17.Controls.Add(dgvBaoHanhSapHetDashboard);
             panel17.Controls.Add(panel14);
             panel17.Controls.Add(label13);
             panel17.Dock = DockStyle.Fill;
@@ -534,16 +525,16 @@
             panel17.Size = new Size(436, 253);
             panel17.TabIndex = 1;
             // 
-            // dgvBaoHanhSapHet
+            // dgvBaoHanhSapHetDashboard
             // 
-            dgvBaoHanhSapHet.BackgroundColor = Color.White;
-            dgvBaoHanhSapHet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvBaoHanhSapHet.Dock = DockStyle.Bottom;
-            dgvBaoHanhSapHet.Location = new Point(0, 48);
-            dgvBaoHanhSapHet.Name = "dgvBaoHanhSapHet";
-            dgvBaoHanhSapHet.RowHeadersWidth = 51;
-            dgvBaoHanhSapHet.Size = new Size(436, 205);
-            dgvBaoHanhSapHet.TabIndex = 4;
+            dgvBaoHanhSapHetDashboard.BackgroundColor = Color.White;
+            dgvBaoHanhSapHetDashboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvBaoHanhSapHetDashboard.Dock = DockStyle.Bottom;
+            dgvBaoHanhSapHetDashboard.Location = new Point(0, 48);
+            dgvBaoHanhSapHetDashboard.Name = "dgvBaoHanhSapHetDashboard";
+            dgvBaoHanhSapHetDashboard.RowHeadersWidth = 51;
+            dgvBaoHanhSapHetDashboard.Size = new Size(436, 205);
+            dgvBaoHanhSapHetDashboard.TabIndex = 4;
             // 
             // panel14
             // 
@@ -567,7 +558,7 @@
             // panel19
             // 
             panel19.BackColor = Color.White;
-            panel19.Controls.Add(dgvCanhBaoKho);
+            panel19.Controls.Add(dgvCanhBaoTonKhoDashboard);
             panel19.Controls.Add(panel13);
             panel19.Controls.Add(label15);
             panel19.Dock = DockStyle.Fill;
@@ -577,17 +568,17 @@
             panel19.Size = new Size(436, 253);
             panel19.TabIndex = 0;
             // 
-            // dgvCanhBaoKho
+            // dgvCanhBaoTonKhoDashboard
             // 
-            dgvCanhBaoKho.BackgroundColor = Color.White;
-            dgvCanhBaoKho.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCanhBaoKho.Dock = DockStyle.Bottom;
-            dgvCanhBaoKho.Location = new Point(0, 48);
-            dgvCanhBaoKho.Name = "dgvCanhBaoKho";
-            dgvCanhBaoKho.RowHeadersVisible = false;
-            dgvCanhBaoKho.RowHeadersWidth = 51;
-            dgvCanhBaoKho.Size = new Size(436, 205);
-            dgvCanhBaoKho.TabIndex = 5;
+            dgvCanhBaoTonKhoDashboard.BackgroundColor = Color.White;
+            dgvCanhBaoTonKhoDashboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvCanhBaoTonKhoDashboard.Dock = DockStyle.Bottom;
+            dgvCanhBaoTonKhoDashboard.Location = new Point(0, 48);
+            dgvCanhBaoTonKhoDashboard.Name = "dgvCanhBaoTonKhoDashboard";
+            dgvCanhBaoTonKhoDashboard.RowHeadersVisible = false;
+            dgvCanhBaoTonKhoDashboard.RowHeadersWidth = 51;
+            dgvCanhBaoTonKhoDashboard.Size = new Size(436, 205);
+            dgvCanhBaoTonKhoDashboard.TabIndex = 5;
             // 
             // panel13
             // 
@@ -618,37 +609,48 @@
             label6.TabIndex = 3;
             label6.Text = "DASHBOAD - TỔNG QUAN CỬA HÀNG";
             // 
-            // lblNgay
+            // lblNgayHienTai
             // 
-            lblNgay.AutoSize = true;
-            lblNgay.Location = new Point(905, 33);
-            lblNgay.Name = "lblNgay";
-            lblNgay.Size = new Size(146, 25);
-            lblNgay.TabIndex = 4;
-            lblNgay.Text = "ngày/tháng/năm";
+            lblNgayHienTai.AutoSize = true;
+            lblNgayHienTai.Location = new Point(905, 33);
+            lblNgayHienTai.Name = "lblNgayHienTai";
+            lblNgayHienTai.Size = new Size(146, 25);
+            lblNgayHienTai.TabIndex = 4;
+            lblNgayHienTai.Text = "ngày/tháng/năm";
             // 
-            // btnLamMoi
+            // btnLamMoiDashboard
             // 
-            btnLamMoi.BackColor = Color.Gainsboro;
-            btnLamMoi.FlatStyle = FlatStyle.Flat;
-            btnLamMoi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
-            btnLamMoi.ForeColor = Color.Black;
-            btnLamMoi.Location = new Point(1182, 20);
-            btnLamMoi.Margin = new Padding(4);
-            btnLamMoi.Name = "btnLamMoi";
-            btnLamMoi.Size = new Size(142, 49);
-            btnLamMoi.TabIndex = 6;
-            btnLamMoi.Text = "Làm mới";
-            btnLamMoi.UseVisualStyleBackColor = false;
+            btnLamMoiDashboard.BackColor = Color.Gainsboro;
+            btnLamMoiDashboard.FlatStyle = FlatStyle.Flat;
+            btnLamMoiDashboard.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
+            btnLamMoiDashboard.ForeColor = Color.Black;
+            btnLamMoiDashboard.Location = new Point(1182, 20);
+            btnLamMoiDashboard.Margin = new Padding(4);
+            btnLamMoiDashboard.Name = "btnLamMoiDashboard";
+            btnLamMoiDashboard.Size = new Size(142, 49);
+            btnLamMoiDashboard.TabIndex = 6;
+            btnLamMoiDashboard.Text = "Làm mới";
+            btnLamMoiDashboard.UseVisualStyleBackColor = false;
+            // 
+            // dgvHoatDongGanDayDashboard
+            // 
+            dgvHoatDongGanDayDashboard.BackgroundColor = Color.White;
+            dgvHoatDongGanDayDashboard.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvHoatDongGanDayDashboard.Dock = DockStyle.Bottom;
+            dgvHoatDongGanDayDashboard.Location = new Point(0, 48);
+            dgvHoatDongGanDayDashboard.Name = "dgvHoatDongGanDayDashboard";
+            dgvHoatDongGanDayDashboard.RowHeadersWidth = 51;
+            dgvHoatDongGanDayDashboard.Size = new Size(438, 205);
+            dgvHoatDongGanDayDashboard.TabIndex = 5;
             // 
             // UC_Dashboard
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
-            Controls.Add(btnLamMoi);
+            Controls.Add(btnLamMoiDashboard);
             Controls.Add(panel3);
-            Controls.Add(lblNgay);
+            Controls.Add(lblNgayHienTai);
             Controls.Add(label6);
             Controls.Add(panel2);
             Controls.Add(panel1);
@@ -674,20 +676,21 @@
             tableLayoutPanel2.ResumeLayout(false);
             panel11.ResumeLayout(false);
             panel11.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvTopSanPham).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTopSanPhamDashboard).EndInit();
             panel12.ResumeLayout(false);
             panel12.PerformLayout();
-            pnlBieuDo.ResumeLayout(false);
+            pnlDoanhThuTheoThang.ResumeLayout(false);
             panel3.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             panel15.ResumeLayout(false);
             panel15.PerformLayout();
             panel17.ResumeLayout(false);
             panel17.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvBaoHanhSapHet).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvBaoHanhSapHetDashboard).EndInit();
             panel19.ResumeLayout(false);
             panel19.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvCanhBaoKho).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvCanhBaoTonKhoDashboard).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvHoatDongGanDayDashboard).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -700,7 +703,7 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Panel pnlDoanhThu;
         private Panel panel4;
-        private Label lblDoanhThuHienTai;
+        private Label lblDoanhThuThangNay;
         private Label label1;
         private Panel panel9;
         private Panel panel10;
@@ -716,10 +719,10 @@
         private Label label3;
         private TableLayoutPanel tableLayoutPanel2;
         private Panel panel11;
-        private DataGridView dgvTopSanPham;
+        private DataGridView dgvTopSanPhamDashboard;
         private Label label2;
         private Panel panel12;
-        private Panel pnlBieuDo;
+        private Panel pnlDoanhThuTheoThang;
         private Label label4;
         private TableLayoutPanel tableLayoutPanel3;
         private Panel panel15;
@@ -731,17 +734,17 @@
         private Panel panel14;
         private ListBox listBox1;
         //private DataGridView dgvBaoHanhSapHet;
-        private Label lblNgay;
+        private Label lblNgayHienTai;
         private PictureBox picDashBoard;
         private PictureBox pictureBox3;
         private PictureBox pictureBox2;
         private PictureBox pictureBox1;
-        private Button btnLamMoi;
+        private Button btnLamMoiDashboard;
         private Panel panel19;
-        private DataGridView dgvCanhBaoKho;
+        private DataGridView dgvCanhBaoTonKhoDashboard;
         private Panel panel13;
         private Label label15;
-        private ListBox lstHoatDong;
-        private DataGridView dgvBaoHanhSapHet;
+        private DataGridView dgvBaoHanhSapHetDashboard;
+        private DataGridView dgvHoatDongGanDayDashboard;
     }
 }

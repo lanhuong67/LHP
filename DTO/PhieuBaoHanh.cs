@@ -12,12 +12,11 @@ namespace DTO
         public string MaPhieuBH { get; set; } = string.Empty;
 
         [StringLength(20)]
-        public string MaHD { get; set; } = string.Empty; // Tham chiếu đến Hóa đơn gốc
+        public string MaHD { get; set; } = string.Empty;
 
         [StringLength(50)]
         public string MaSP { get; set; } = string.Empty;
 
-        // 🔴 ĐÂY NÈ: BỔ SUNG CỘT LƯU IMEI ĐỂ TRUY VẾT
         [StringLength(50)]
         public string Imei { get; set; } = string.Empty;
 
@@ -28,19 +27,18 @@ namespace DTO
         [StringLength(100)]
         public string DieuKienBaoHanh { get; set; } = string.Empty;
 
-        public string TinhTrangMay { get; set; } = string.Empty; // Ghi chú lúc nhận máy
+        public string TinhTrangMay { get; set; } = string.Empty;
 
         [StringLength(50)]
-        public string TrangThai { get; set; } = "Đang xử lý"; // Đang xử lý, Đã xong, Từ chối...
+        public string TrangThai { get; set; } = "Đang hiệu lực";
 
         [StringLength(20)]
         public string MaNVTiepNhan { get; set; } = string.Empty;
     }
 
-    // Class dùng để hiển thị lưới Sản phẩm Bảo Hành (Phần B2 trên giao diện)
     public class SanPhamBaoHanhViewModel
     {
-        public bool Chon { get; set; } // Cột Checkbox
+        public bool Chon { get; set; }
         public string MaSP { get; set; }
         public string TenSP { get; set; }
         public int SoLuong { get; set; }
@@ -48,11 +46,14 @@ namespace DTO
         public string Imei { get; set; }
     }
 
-    // THÊM CLASS NÀY CHO TAB 2: TRA CỨU BẢO HÀNH
     public class TraCuuBaoHanhViewModel
     {
         public string MaPhieuBH { get; set; }
         public string TenKhachHang { get; set; }
+
+        // Thêm dòng này để tra cứu theo SĐT
+        public string SDTKhachHang { get; set; }
+
         public string TenSP { get; set; }
         public DateTime NgayHetHanBH { get; set; }
         public string TrangThai { get; set; }
