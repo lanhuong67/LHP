@@ -41,6 +41,8 @@ namespace GUI
 
             SinhMaHoaDon();
             KhoiTaoTraiNghiemNguoiDung();
+            KhoiTaoPhuongThucThanhToan();
+            KhoiTaoMaGiamGia();
             LoadComboBoxes();
 
             txtNhanVien.Text = UserSession.HoTen;
@@ -61,12 +63,8 @@ namespace GUI
             }
         }
 
-        // ============================================================
-        // HÀM NÀY ĐỂ FORMMAIN GỌI KHI ĐỔI CHI NHÁNH
-        // ============================================================
         public void RefreshByBranch()
         {
-            // Khi đổi chi nhánh, nên xóa giỏ hàng để tránh bán nhầm SP/IMEI của chi nhánh cũ
             if (gioHang.Count > 0)
             {
                 gioHang.Clear();
@@ -84,6 +82,149 @@ namespace GUI
             numSoLuong.Value = numSoLuong.Minimum;
 
             LoadComboBoxes();
+            ResetPhuongThucThanhToan();
+            ResetMaGiamGia();
+        }
+
+        // ============================================================
+        // 0. PHƯƠNG THỨC THANH TOÁN
+        // Designer cần có ComboBox tên: cboPhuongThucThanhToan
+        // ============================================================
+        private void KhoiTaoPhuongThucThanhToan()
+        {
+            cboPhuongThucThanhToan.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            cboPhuongThucThanhToan.Items.Clear();
+            cboPhuongThucThanhToan.Items.Add("Tiền mặt");
+            cboPhuongThucThanhToan.Items.Add("Chuyển khoản");
+
+            cboPhuongThucThanhToan.SelectedIndex = 0;
+
+            cboPhuongThucThanhToan.Click -= Cbo_AutoDropDown;
+            cboPhuongThucThanhToan.Enter -= Cbo_AutoDropDown;
+
+            cboPhuongThucThanhToan.Click += Cbo_AutoDropDown;
+            cboPhuongThucThanhToan.Enter += Cbo_AutoDropDown;
+        }
+
+        private void ResetPhuongThucThanhToan()
+        {
+            if (cboPhuongThucThanhToan != null && cboPhuongThucThanhToan.Items.Count > 0)
+            {
+                cboPhuongThucThanhToan.SelectedIndex = 0;
+            }
+        }
+
+        private string LayPhuongThucThanhToan()
+        {
+            if (cboPhuongThucThanhToan == null ||
+                cboPhuongThucThanhToan.SelectedItem == null ||
+                string.IsNullOrWhiteSpace(cboPhuongThucThanhToan.SelectedItem.ToString()))
+            {
+                return "Tiền mặt";
+            }
+
+            return cboPhuongThucThanhToan.SelectedItem.ToString();
+        }
+        // ============================================================
+        // 0.1 MÃ GIẢM GIÁ
+        // Designer cần có ComboBox tên: cboMaGiamGia
+        // ============================================================
+        private class MaGiamGiaOption
+        {
+            public string Ma { get; set; } = "";
+            public string TenHienThi { get; set; } = "";
+        }
+
+        private void KhoiTaoMaGiamGia()
+        {
+            cboMaGiamGia.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            var dsMa = new List<MaGiamGiaOption>
+    {
+        new MaGiamGiaOption { Ma = "", TenHienThi = "--Không áp dụng--" },
+        new MaGiamGiaOption { Ma = "LHP50K", TenHienThi = "LHP50K - Giảm 50,000đ từ đơn 500,000đ" },
+        new MaGiamGiaOption { Ma = "LHP10", TenHienThi = "LHP10 - Giảm 10%, tối đa 500,000đ từ đơn 1,000,000đ" },
+        new MaGiamGiaOption { Ma = "VIP100K", TenHienThi = "VIP100K - Giảm 100,000đ từ đơn 2,000,000đ" }
+    };
+
+            cboMaGiamGia.SelectedIndexChanged -= cboMaGiamGia_SelectedIndexChanged;
+
+            cboMaGiamGia.DataSource = dsMa;
+            cboMaGiamGia.DisplayMember = "TenHienThi";
+            cboMaGiamGia.ValueMember = "Ma";
+
+            cboMaGiamGia.SelectedIndexChanged += cboMaGiamGia_SelectedIndexChanged;
+
+            cboMaGiamGia.Click -= Cbo_AutoDropDown;
+            cboMaGiamGia.Enter -= Cbo_AutoDropDown;
+
+            cboMaGiamGia.Click += Cbo_AutoDropDown;
+            cboMaGiamGia.Enter += Cbo_AutoDropDown;
+        }
+
+        private void cboMaGiamGia_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CapNhatTongTien();
+        }
+
+        private string LayMaGiamGia()
+        {
+            if (cboMaGiamGia == null || cboMaGiamGia.SelectedValue == null)
+                return "";
+
+            return cboMaGiamGia.SelectedValue.ToString() ?? "";
+        }
+
+        private decimal TinhGiamGia(decimal tongTienGoc)
+        {
+            string ma = LayMaGiamGia();
+
+            if (string.IsNullOrWhiteSpace(ma))
+                return 0;
+
+            ma = ma.Trim().ToUpper();
+
+            if (ma == "LHP50K")
+            {
+                if (tongTienGoc >= 500000)
+                    return 50000;
+
+                return 0;
+            }
+
+            if (ma == "LHP10")
+            {
+                if (tongTienGoc >= 1000000)
+                {
+                    decimal giam = tongTienGoc * 0.10m;
+
+                    if (giam > 500000)
+                        giam = 500000;
+
+                    return giam;
+                }
+
+                return 0;
+            }
+
+            if (ma == "VIP100K")
+            {
+                if (tongTienGoc >= 2000000)
+                    return 100000;
+
+                return 0;
+            }
+
+            return 0;
+        }
+
+        private void ResetMaGiamGia()
+        {
+            if (cboMaGiamGia != null && cboMaGiamGia.Items.Count > 0)
+            {
+                cboMaGiamGia.SelectedIndex = 0;
+            }
         }
 
         // ============================================================
@@ -187,7 +328,6 @@ namespace GUI
             }
         }
 
-        // Nếu Designer đang gắn event TextChanged vào tên hàm cũ thì vẫn giữ hàm này để không lỗi
         private void TxtSDTKhachHang_TextChanged(object sender, EventArgs e, bool dummy = false)
         {
             TxtSDTKhachHang_TextChanged(sender, e);
@@ -269,7 +409,6 @@ namespace GUI
                     return;
                 }
 
-                // CHỈ LẤY SẢN PHẨM THUỘC CHI NHÁNH ĐANG CHỌN
                 var dsSP = _spBus.GetByBranch(maCN)
                     .Where(s =>
                         s.MaHang == maHang &&
@@ -322,10 +461,8 @@ namespace GUI
                 return;
             }
 
-            // Lấy IMEI tồn kho đúng chi nhánh
             List<string> danhSachImeiKho = _hdBus.GetImeiTonKho(sp.MaSP, UserSession.ChiNhanhDuocChon);
 
-            // Loại bỏ các IMEI đã nằm trong giỏ hàng để tránh chọn trùng khi thêm nhiều lần
             var imeiDaNamTrongGio = gioHang
                 .SelectMany(x => x.ImeiDaChon)
                 .ToList();
@@ -379,8 +516,18 @@ namespace GUI
 
         private void CapNhatTongTien()
         {
+            decimal tongTienGoc = gioHang.Sum(x => x.ThanhTien);
+            decimal giamGia = TinhGiamGia(tongTienGoc);
+            decimal thanhTienSauGiam = tongTienGoc - giamGia;
+
+            if (thanhTienSauGiam < 0)
+                thanhTienSauGiam = 0;
+
             lblTongSoSP.Text = gioHang.Sum(x => x.SoLuong).ToString();
-            lblTongTien.Text = gioHang.Sum(x => x.ThanhTien).ToString("N0") + " đ";
+
+            lblTongTienGoc.Text = tongTienGoc.ToString("N0") + " đ";
+            lblSoTienGiam.Text = giamGia.ToString("N0") + " đ";
+            lblThanhTienSauGiam.Text = thanhTienSauGiam.ToString("N0") + " đ";
         }
 
         private void dgvGioHang_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -435,50 +582,114 @@ namespace GUI
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
+            if (!KiemTraDuLieuTruocThanhToan())
+                return;
+
+            decimal tongTienGoc = gioHang.Sum(x => x.ThanhTien);
+            decimal giamGia = TinhGiamGia(tongTienGoc);
+            decimal thanhTienSauGiam = tongTienGoc - giamGia;
+
+            if (thanhTienSauGiam < 0)
+                thanhTienSauGiam = 0;
+
+            string phuongThucThanhToan = LayPhuongThucThanhToan();
+
+            if (phuongThucThanhToan == "Tiền mặt")
+            {
+                XuLyThanhToanTienMat(tongTienGoc, giamGia, thanhTienSauGiam);
+            }
+            else if (phuongThucThanhToan == "Chuyển khoản")
+            {
+                XuLyThanhToanChuyenKhoan(tongTienGoc, giamGia, thanhTienSauGiam);
+            }
+            else
+            {
+                MessageBox.Show("Phương thức thanh toán không hợp lệ.",
+                    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private bool KiemTraDuLieuTruocThanhToan()
+        {
             if (!gioHang.Any())
             {
                 MessageBox.Show("Giỏ hàng đang trống!",
                     "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
             {
                 MessageBox.Show("Chưa xác định được chi nhánh đang làm việc.",
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
-            string sdtLuu = txtSDTKhachHang.Text == _placeholderSDT ? "" : txtSDTKhachHang.Text.Trim();
+            return true;
+        }
 
-            if (!string.IsNullOrEmpty(sdtLuu) &&
-                txtTenKhachHang.ReadOnly == false &&
-                !string.IsNullOrWhiteSpace(txtTenKhachHang.Text))
+        private void XuLyThanhToanTienMat(decimal tongTienGoc, decimal giamGia, decimal thanhTienSauGiam)
+        {
+            string noiDungXacNhan =
+                $"Xác nhận thanh toán tiền mặt và xuất kho hóa đơn này?\n\n" +
+                $"Tổng tiền gốc: {tongTienGoc:N0} đ\n" +
+                $"Giảm giá: {giamGia:N0} đ\n" +
+                $"Thành tiền: {thanhTienSauGiam:N0} đ\n" +
+                $"Phương thức thanh toán: Tiền mặt\n" +
+                $"Trạng thái thanh toán: Đã thanh toán";
+
+            if (MessageBox.Show(noiDungXacNhan,
+                "Xác nhận thanh toán tiền mặt", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
             {
-                KhachHang khMoi = new KhachHang
+                TaoVaLuuHoaDon("Tiền mặt", "Đã thanh toán", tongTienGoc, giamGia, thanhTienSauGiam);
+            }
+        }
+
+        private void XuLyThanhToanChuyenKhoan(decimal tongTienGoc, decimal giamGia, decimal thanhTienSauGiam)
+        {
+            using (FormThanhToanChuyenKhoan frm = new FormThanhToanChuyenKhoan(
+                txtMaHD.Text,
+                thanhTienSauGiam,
+                "LE HUU PHUC",
+                "970422",
+                "0123456789"))
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    MaKH = "KH" + DateTime.Now.ToString("yyMMddHHmmss"),
-                    HoTen = txtTenKhachHang.Text.Trim(),
-                    SDT = sdtLuu
-                };
-
-                _khBus.Them(khMoi);
+                    TaoVaLuuHoaDon("Chuyển khoản", "Đã thanh toán", tongTienGoc, giamGia, thanhTienSauGiam);
+                }
             }
+        }
 
-            if (MessageBox.Show("Xác nhận thanh toán và xuất kho lô hàng này?",
-                "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+        private void TaoVaLuuHoaDon(string phuongThucThanhToan, string trangThaiThanhToan, decimal tongTienGoc, decimal giamGia, decimal thanhTienSauGiam)
+        {
+            try
             {
+                string sdtLuu = txtSDTKhachHang.Text == _placeholderSDT ? "" : txtSDTKhachHang.Text.Trim();
+
+                TaoKhachHangMoiNeuCan(sdtLuu);
+
                 HoaDon hd = new HoaDon
                 {
                     MaHD = txtMaHD.Text,
                     NgayLap = dtpNgayLap.Value,
                     MaNV = string.IsNullOrWhiteSpace(UserSession.MaNV) ? "NV01" : UserSession.MaNV,
                     SDTKhachHang = sdtLuu,
-                    TongTien = gioHang.Sum(x => x.ThanhTien),
-                    TrangThai = "Hoàn thành",
 
-                    // CỰC KỲ QUAN TRỌNG: GẮN HÓA ĐƠN VÀO CHI NHÁNH ĐANG CHỌN
-                    MaChiNhanh = UserSession.ChiNhanhDuocChon
+                    TongTienGoc = tongTienGoc,
+                    GiamGia = giamGia,
+                    ThanhTienSauGiam = thanhTienSauGiam,
+                    TongTien = thanhTienSauGiam,
+
+                    TrangThai = "Hoàn thành",
+                    MaChiNhanh = UserSession.ChiNhanhDuocChon,
+
+                    HinhThucNhanHang = "Mua tại cửa hàng",
+                    DiaChiGiaoHang = "",
+                    GhiChuDonHang = "",
+
+                    PhuongThucThanhToan = phuongThucThanhToan,
+                    TrangThaiThanhToan = trangThaiThanhToan
                 };
 
                 var dsChiTiet = gioHang.Select(item => new ChiTietHoaDon
@@ -490,21 +701,37 @@ namespace GUI
                     GhiChuImei = string.Join(", ", item.ImeiDaChon)
                 }).ToList();
 
-                try
+                if (_hdBus.TaoHoaDon(hd, dsChiTiet))
                 {
-                    if (_hdBus.TaoHoaDon(hd, dsChiTiet))
-                    {
-                        MessageBox.Show("Thanh toán thành công! Đã trừ tồn kho đúng chi nhánh.",
-                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Thanh toán thành công! Đã trừ tồn kho đúng chi nhánh.",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        ResetFormSauThanhToan();
-                    }
+                    ResetFormSauThanhToan();
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,
+                    "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TaoKhachHangMoiNeuCan(string sdtLuu)
+        {
+            if (!string.IsNullOrEmpty(sdtLuu) &&
+                txtTenKhachHang.ReadOnly == false &&
+                !string.IsNullOrWhiteSpace(txtTenKhachHang.Text))
+            {
+                KhachHang khMoi = new KhachHang
                 {
-                    MessageBox.Show(ex.Message,
-                        "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                    MaKH = "KH" + DateTime.Now.ToString("yyMMddHHmmss"),
+                    HoTen = txtTenKhachHang.Text.Trim(),
+                    SDT = sdtLuu,
+                    TongChiTieu = 0,
+                    SoLanMua = 0
+                };
+
+                _khBus.Them(khMoi);
             }
         }
 
@@ -526,6 +753,9 @@ namespace GUI
                 cboHangSX.SelectedIndex = 0;
 
             cboSanPham.DataSource = null;
+
+            ResetPhuongThucThanhToan();
+            ResetMaGiamGia();
         }
     }
 
@@ -636,6 +866,443 @@ namespace GUI
             this.Controls.Add(clbImeis);
             this.Controls.Add(lblTrangThai);
             this.Controls.Add(btnXacNhan);
+        }
+    }
+
+    // ==========================================================
+    // FORM THANH TOÁN CHUYỂN KHOẢN BẰNG VIETQR - FIT NỘI DUNG RỘNG
+    // ==========================================================
+    public class FormThanhToanChuyenKhoan : Form
+    {
+        private readonly string _maHD;
+        private readonly decimal _soTien;
+        private readonly string _chuTaiKhoan;
+        private readonly string _maNganHang;
+        private readonly string _soTaiKhoan;
+
+        private PictureBox picQR;
+        private Label lblTrangThai;
+        private TextBox txtLinkQR;
+
+        public FormThanhToanChuyenKhoan(string maHD, decimal soTien, string chuTaiKhoan, string maNganHang, string soTaiKhoan)
+        {
+            _maHD = maHD;
+            _soTien = soTien;
+            _chuTaiKhoan = chuTaiKhoan;
+            _maNganHang = maNganHang;
+            _soTaiKhoan = soTaiKhoan;
+
+            KhoiTaoGiaoDien();
+            LoadVietQR();
+        }
+
+        private void KhoiTaoGiaoDien()
+        {
+            this.Text = "Thanh toán chuyển khoản VietQR";
+            this.ClientSize = new Size(1080, 690);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.AutoScroll = false;
+            this.BackColor = Color.FromArgb(245, 250, 252);
+
+            // ================= HEADER =================
+            Panel pnlHeader = new Panel
+            {
+                Left = 0,
+                Top = 0,
+                Width = 1080,
+                Height = 86,
+                BackColor = Color.White
+            };
+
+            Label lblLogo = new Label
+            {
+                Text = "LHP",
+                Left = 36,
+                Top = 22,
+                Width = 76,
+                Height = 42,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.FromArgb(15, 75, 92),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 17, FontStyle.Bold)
+            };
+
+            Label lblTitle = new Label
+            {
+                Text = "Thanh toán chuyển khoản VietQR",
+                Left = 135,
+                Top = 18,
+                Width = 650,
+                Height = 38,
+                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                ForeColor = Color.FromArgb(20, 55, 70),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            Label lblSubTitle = new Label
+            {
+                Text = "Quét mã bằng ứng dụng ngân hàng để thanh toán hóa đơn",
+                Left = 138,
+                Top = 55,
+                Width = 650,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.Gray
+            };
+
+            pnlHeader.Controls.Add(lblLogo);
+            pnlHeader.Controls.Add(lblTitle);
+            pnlHeader.Controls.Add(lblSubTitle);
+
+            // ================= MAIN BOX =================
+            Panel pnlMain = new Panel
+            {
+                Left = 32,
+                Top = 108,
+                Width = 1016,
+                Height = 430,
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // ================= LEFT PANEL =================
+            Panel pnlLeft = new Panel
+            {
+                Left = 34,
+                Top = 24,
+                Width = 455,
+                Height = 385,
+                BackColor = Color.White
+            };
+
+            Label lblThongTin = new Label
+            {
+                Text = "Thông tin chuyển khoản",
+                Left = 0,
+                Top = 0,
+                Width = 430,
+                Height = 34,
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                ForeColor = Color.FromArgb(20, 55, 70)
+            };
+
+            Label lblDonViTitle = TaoLabelTitle("Đơn vị bán hàng", 0, 48);
+            Label lblDonVi = TaoLabelValue("LHP Mobile Store", 0, 70);
+
+            Label line1 = TaoLine(0, 104);
+
+            Label lblNganHangTitle = TaoLabelTitle("Mã ngân hàng / BIN", 0, 118);
+            Label lblNganHang = TaoLabelValue(_maNganHang, 0, 140);
+
+            Label line2 = TaoLine(0, 174);
+
+            Label lblSoTaiKhoanTitle = TaoLabelTitle("Số tài khoản", 0, 188);
+            Label lblSoTaiKhoan = TaoLabelValue(_soTaiKhoan, 0, 210);
+
+            Label line3 = TaoLine(0, 244);
+
+            Label lblChuTaiKhoanTitle = TaoLabelTitle("Chủ tài khoản", 0, 258);
+            Label lblChuTaiKhoan = TaoLabelValue(_chuTaiKhoan, 0, 280);
+
+            Label line4 = TaoLine(0, 314);
+
+            Label lblNoiDungTitle = TaoLabelTitle("Nội dung chuyển khoản", 0, 328);
+
+            TextBox txtNoiDung = new TextBox
+            {
+                Text = _maHD,
+                Left = 0,
+                Top = 352,
+                Width = 430,
+                Height = 30,
+                ReadOnly = true,
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.White,
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.FromArgb(0, 90, 170)
+            };
+
+            pnlLeft.Controls.Add(lblThongTin);
+            pnlLeft.Controls.Add(lblDonViTitle);
+            pnlLeft.Controls.Add(lblDonVi);
+            pnlLeft.Controls.Add(line1);
+            pnlLeft.Controls.Add(lblNganHangTitle);
+            pnlLeft.Controls.Add(lblNganHang);
+            pnlLeft.Controls.Add(line2);
+            pnlLeft.Controls.Add(lblSoTaiKhoanTitle);
+            pnlLeft.Controls.Add(lblSoTaiKhoan);
+            pnlLeft.Controls.Add(line3);
+            pnlLeft.Controls.Add(lblChuTaiKhoanTitle);
+            pnlLeft.Controls.Add(lblChuTaiKhoan);
+            pnlLeft.Controls.Add(line4);
+            pnlLeft.Controls.Add(lblNoiDungTitle);
+            pnlLeft.Controls.Add(txtNoiDung);
+
+            // ================= RIGHT QR PANEL =================
+            Panel pnlQR = new Panel
+            {
+                Left = 535,
+                Top = 30,
+                Width = 430,
+                Height = 365,
+                BackColor = Color.FromArgb(232, 242, 244),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            Label lblQRTitle = new Label
+            {
+                Text = "Quét mã QR để chuyển khoản",
+                Left = 0,
+                Top = 18,
+                Width = 430,
+                Height = 34,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 15, FontStyle.Bold),
+                ForeColor = Color.FromArgb(15, 75, 92)
+            };
+
+            picQR = new PictureBox
+            {
+                Left = 110,
+                Top = 60,
+                Width = 210,
+                Height = 210,
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            Label lblSoTienTitle = new Label
+            {
+                Text = "Số tiền cần thanh toán",
+                Left = 0,
+                Top = 278,
+                Width = 430,
+                Height = 20,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.Gray
+            };
+
+            Label lblSoTien = new Label
+            {
+                Text = $"{_soTien:N0} đ",
+                Left = 0,
+                Top = 298,
+                Width = 430,
+                Height = 38,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 20, FontStyle.Bold),
+                ForeColor = Color.FromArgb(15, 75, 92)
+            };
+
+            lblTrangThai = new Label
+            {
+                Text = "Đang tải mã VietQR...",
+                Left = 20,
+                Top = 338,
+                Width = 390,
+                Height = 22,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 8, FontStyle.Bold),
+                ForeColor = Color.DarkOrange
+            };
+
+            pnlQR.Controls.Add(lblQRTitle);
+            pnlQR.Controls.Add(picQR);
+            pnlQR.Controls.Add(lblSoTienTitle);
+            pnlQR.Controls.Add(lblSoTien);
+            pnlQR.Controls.Add(lblTrangThai);
+
+            pnlMain.Controls.Add(pnlLeft);
+            pnlMain.Controls.Add(pnlQR);
+
+            // ================= NOTE =================
+            Panel pnlNote = new Panel
+            {
+                Left = 32,
+                Top = 552,
+                Width = 1016,
+                Height = 50,
+                BackColor = Color.FromArgb(255, 248, 232)
+            };
+
+            Label lblHuongDan = new Label
+            {
+                Text = "Lưu ý: QR đã có sẵn số tiền và nội dung chuyển khoản là mã hóa đơn. Sau khi kiểm tra tiền đã vào tài khoản, nhân viên mới bấm “Tôi đã nhận tiền”.",
+                Left = 18,
+                Top = 7,
+                Width = 970,
+                Height = 34,
+                Font = new Font("Segoe UI", 9, FontStyle.Italic),
+                ForeColor = Color.FromArgb(120, 85, 0),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            pnlNote.Controls.Add(lblHuongDan);
+
+            // ================= BUTTONS =================
+            Button btnDaNhanTien = new Button
+            {
+                Text = "Tôi đã nhận tiền",
+                Left = 665,
+                Top = 620,
+                Width = 190,
+                Height = 42,
+                BackColor = Color.FromArgb(15, 75, 92),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+
+            btnDaNhanTien.FlatAppearance.BorderSize = 0;
+
+            btnDaNhanTien.Click += (s, e) =>
+            {
+                string noiDungXacNhan =
+                    $"Xác nhận đã nhận tiền chuyển khoản?\n\n" +
+                    $"Mã hóa đơn: {_maHD}\n" +
+                    $"Số tiền: {_soTien:N0} đ\n" +
+                    $"Nội dung CK: {_maHD}\n\n" +
+                    $"Sau khi xác nhận, hệ thống sẽ tạo hóa đơn và xuất kho.";
+
+                if (MessageBox.Show(noiDungXacNhan,
+                    "Xác nhận đã nhận tiền", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+            };
+
+            Button btnHuy = new Button
+            {
+                Text = "Hủy",
+                Left = 875,
+                Top = 620,
+                Width = 130,
+                Height = 42,
+                BackColor = Color.White,
+                ForeColor = Color.Red,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+
+            btnHuy.FlatAppearance.BorderColor = Color.Red;
+            btnHuy.FlatAppearance.BorderSize = 1;
+
+            btnHuy.Click += (s, e) =>
+            {
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
+            };
+
+            txtLinkQR = new TextBox
+            {
+                Left = 32,
+                Top = 620,
+                Width = 500,
+                Height = 42,
+                ReadOnly = true,
+                Font = new Font("Segoe UI", 8),
+                Visible = false
+            };
+
+            this.Controls.Add(pnlHeader);
+            this.Controls.Add(pnlMain);
+            this.Controls.Add(pnlNote);
+            this.Controls.Add(txtLinkQR);
+            this.Controls.Add(btnDaNhanTien);
+            this.Controls.Add(btnHuy);
+        }
+
+        private Label TaoLabelTitle(string text, int left, int top)
+        {
+            return new Label
+            {
+                Text = text,
+                Left = left,
+                Top = top,
+                Width = 430,
+                Height = 20,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.Gray
+            };
+        }
+
+        private Label TaoLabelValue(string text, int left, int top)
+        {
+            return new Label
+            {
+                Text = text,
+                Left = left,
+                Top = top,
+                Width = 430,
+                Height = 26,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                ForeColor = Color.Black
+            };
+        }
+
+        private Label TaoLine(int left, int top)
+        {
+            return new Label
+            {
+                Left = left,
+                Top = top,
+                Width = 430,
+                Height = 1,
+                BackColor = Color.FromArgb(235, 235, 235)
+            };
+        }
+
+        private void LoadVietQR()
+        {
+            try
+            {
+                string qrUrl = TaoVietQrUrl();
+
+                txtLinkQR.Text = qrUrl;
+
+                picQR.LoadCompleted += (s, e) =>
+                {
+                    if (e.Error != null)
+                    {
+                        lblTrangThai.Text = "Không tải được QR. Kiểm tra internet hoặc thông tin ngân hàng.";
+                        lblTrangThai.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        lblTrangThai.Text = "QR đã sẵn sàng để quét";
+                        lblTrangThai.ForeColor = Color.Green;
+                    }
+                };
+
+                picQR.LoadAsync(qrUrl);
+            }
+            catch (Exception ex)
+            {
+                lblTrangThai.Text = "Lỗi tạo VietQR";
+                lblTrangThai.ForeColor = Color.Red;
+
+                MessageBox.Show("Lỗi tạo mã VietQR: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string TaoVietQrUrl()
+        {
+            long soTienLamTron = Convert.ToInt64(_soTien);
+
+            string noiDung = Uri.EscapeDataString(_maHD);
+            string tenTaiKhoan = Uri.EscapeDataString(_chuTaiKhoan);
+
+            return $"https://img.vietqr.io/image/{_maNganHang}-{_soTaiKhoan}-compact2.png" +
+                   $"?amount={soTienLamTron}" +
+                   $"&addInfo={noiDung}" +
+                   $"&accountName={tenTaiKhoan}";
         }
     }
 }

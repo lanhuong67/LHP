@@ -1,0 +1,95 @@
+﻿@model WebBanDienThoai.Models.HoaDonWeb
+
+@{
+    ViewData["Title"] = "Thanh toán chuyển khoản";
+    string qrUrl = ViewBag.QrUrl ?? "";
+    string bankId = ViewBag.BankId ?? "";
+    string accountNo = ViewBag.AccountNo ?? "";
+    string accountName = ViewBag.AccountName ?? "";
+}
+
+<div class="phone-page">
+    <h2 class="product-section-title">
+        Thanh toán chuyển khoản <span>✧</span>
+    </h2>
+
+    <div style="display:grid; grid-template-columns: 380px 1fr; gap:28px; align-items:start;">
+        <div style="background:white; border-radius:28px; padding:28px; box-shadow:0 8px 20px rgba(0,0,0,.08);">
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                Thông tin đơn hàng
+            </div>
+
+            <h3 style="font-size:28px; color:#153747; font-weight:900; margin-top:8px;">
+                @Model.MaHD
+            </h3>
+
+            <div style="margin-top:22px; background:#f6f8f9; border-radius:18px; padding:18px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">Ngân hàng / BIN</div>
+                <div style="font-size:18px; color:#153747; font-weight:900;">@bankId</div>
+            </div>
+
+            <div style="margin-top:12px; background:#f6f8f9; border-radius:18px; padding:18px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">Số tài khoản</div>
+                <div style="font-size:18px; color:#153747; font-weight:900;">@accountNo</div>
+            </div>
+
+            <div style="margin-top:12px; background:#f6f8f9; border-radius:18px; padding:18px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">Chủ tài khoản</div>
+                <div style="font-size:18px; color:#153747; font-weight:900;">@accountName</div>
+            </div>
+
+            <div style="margin-top:12px; background:#f6f8f9; border-radius:18px; padding:18px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">Nội dung chuyển khoản</div>
+                <div style="font-size:18px; color:#0f4b5c; font-weight:900;">@Model.MaHD</div>
+            </div>
+        </div>
+
+        <div style="background:white; border-radius:28px; padding:32px; box-shadow:0 8px 20px rgba(0,0,0,.08); text-align:center;">
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                VietQR
+            </div>
+
+            <h3 style="font-size:32px; color:#153747; font-weight:900; margin-top:8px;">
+                Quét mã để thanh toán
+            </h3>
+
+            <div style="margin:24px auto; width:310px; background:#e8f2f4; border-radius:24px; padding:22px;">
+                <img src="@qrUrl"
+                     alt="VietQR"
+                     style="width:260px; height:260px; object-fit:contain; background:white; border-radius:14px;" />
+            </div>
+
+            <div style="font-size:15px; color:#7d8a91; font-weight:800;">
+                Số tiền cần thanh toán
+            </div>
+
+            <div style="font-size:42px; color:#0f4b5c; font-weight:900; margin-top:4px;">
+                @Model.ThanhTienSauGiam.ToString("N0")đ
+            </div>
+
+            <div style="margin:22px auto 0; max-width:620px; background:#fff7e8; border-radius:18px; padding:16px; color:#8a6500; font-weight:700;">
+                Sau khi chuyển khoản, vui lòng bấm “Tôi đã chuyển khoản”.
+                Nhân viên sẽ kiểm tra và xác nhận đơn hàng.
+            </div>
+
+            <form asp-controller="Checkout"
+                  asp-action="ConfirmTransfer"
+                  asp-route-id="@Model.MaHD"
+                  method="post"
+                  style="margin-top:22px;">
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        style="border:none; border-radius:18px; background:#0f4b5c; color:white; font-weight:900; padding:15px 32px;">
+                    Tôi đã chuyển khoản
+                </button>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   style="display:inline-block; margin-left:14px; color:#0f4b5c; font-weight:900;">
+                    Tiếp tục mua hàng
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

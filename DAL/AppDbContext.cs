@@ -19,6 +19,7 @@ namespace DAL
         public DbSet<PhieuBaoHanh> PhieuBaoHanhs { get; set; }
         public DbSet<ChamSocKhachHang> ChamSocKhachHangs { get; set; }
 
+        public DbSet<TaiKhoanKhachHang> TaiKhoanKhachHangs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,32 +29,72 @@ namespace DAL
             }
         }
 
-        // ===============================================
-        // 🔴 BỔ SUNG LUẬT RÀNG BUỘC (FLUENT API) Ở ĐÂY
-        // ===============================================
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Chặn tính năng "Xóa dây chuyền" (Cascade Delete) từ Chi Nhánh sang Nhân Viên
             modelBuilder.Entity<NhanVien>()
                 .HasOne(nv => nv.ChiNhanh)
-                .WithMany() // Một chi nhánh có nhiều nhân viên
+                .WithMany()
                 .HasForeignKey(nv => nv.MaChiNhanh)
-                .OnDelete(DeleteBehavior.NoAction); // Bắt buộc dùng NoAction để tránh lỗi vòng lặp
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // THÊM RÀNG BUỘC CHO SẢN PHẨM ĐỂ KHÔNG BỊ LỖI SQL SERVER
             modelBuilder.Entity<SanPham>()
                 .HasOne(sp => sp.ChiNhanh)
                 .WithMany()
                 .HasForeignKey(sp => sp.MaChiNhanh)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // 🔴 THÊM RÀNG BUỘC MỚI CHO HÓA ĐƠN ĐỂ TRÁNH LỖI MIGRATION
             modelBuilder.Entity<HoaDon>()
                 .HasOne(hd => hd.ChiNhanh)
                 .WithMany()
                 .HasForeignKey(hd => hd.MaChiNhanh)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.HinhThucNhanHang)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.DiaChiGiaoHang)
+                .HasMaxLength(255);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.GhiChuDonHang)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.PhuongThucThanhToan)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.TrangThaiThanhToan)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.TongTienGoc)
+                .HasColumnType("decimal(18,0)");
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.GiamGia)
+                .HasColumnType("decimal(18,0)");
+
+            modelBuilder.Entity<HoaDon>()
+                .Property(hd => hd.ThanhTienSauGiam)
+                .HasColumnType("decimal(18,0)");
+
+            modelBuilder.Entity<TaiKhoanKhachHang>()
+                .HasIndex(tk => tk.SDT)
+                .IsUnique();
+
+            modelBuilder.Entity<TaiKhoanKhachHang>()
+                .HasIndex(tk => tk.MaKH)
+                .IsUnique();
+
+            modelBuilder.Entity<TaiKhoanKhachHang>()
+                .HasOne(tk => tk.KhachHang)
+                .WithMany()
+                .HasForeignKey(tk => tk.MaKH)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

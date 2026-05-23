@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             label1 = new Label();
             label2 = new Label();
             panel1 = new Panel();
@@ -53,10 +53,10 @@
             cboHangSX = new ComboBox();
             numSoLuong = new NumericUpDown();
             panel4 = new Panel();
-            lblTongTien = new Label();
             lblTongSoSP = new Label();
-            label12 = new Label();
             label11 = new Label();
+            lblThanhTienSauGiam = new Label();
+            label12 = new Label();
             dgvGioHang = new DataGridView();
             colSTT = new DataGridViewTextBoxColumn();
             colTenSP = new DataGridViewTextBoxColumn();
@@ -67,12 +67,22 @@
             btnThanhToan = new Button();
             btnHuyDon = new Button();
             txtMaHD = new TextBox();
+            label13 = new Label();
+            cboPhuongThucThanhToan = new ComboBox();
+            panel5 = new Panel();
+            lblTongTienGoc = new Label();
+            lblSoTienGiam = new Label();
+            label15 = new Label();
+            label14 = new Label();
+            cboMaGiamGia = new ComboBox();
+            label16 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numSoLuong).BeginInit();
             panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGioHang).BeginInit();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -338,62 +348,60 @@
             // 
             panel4.BackColor = Color.White;
             panel4.BorderStyle = BorderStyle.FixedSingle;
-            panel4.Controls.Add(lblTongTien);
             panel4.Controls.Add(lblTongSoSP);
-            panel4.Controls.Add(label12);
             panel4.Controls.Add(label11);
-            panel4.Location = new Point(887, 771);
+            panel4.Location = new Point(198, 732);
             panel4.Margin = new Padding(4);
             panel4.Name = "panel4";
-            panel4.Size = new Size(474, 102);
+            panel4.Size = new Size(333, 141);
             panel4.TabIndex = 15;
-            // 
-            // lblTongTien
-            // 
-            lblTongTien.AutoSize = true;
-            lblTongTien.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            lblTongTien.ForeColor = SystemColors.HotTrack;
-            lblTongTien.Location = new Point(258, 57);
-            lblTongTien.Margin = new Padding(4, 0, 4, 0);
-            lblTongTien.Name = "lblTongTien";
-            lblTongTien.Size = new Size(117, 31);
-            lblTongTien.TabIndex = 20;
-            lblTongTien.Text = "Tổng tiền";
-            lblTongTien.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblTongSoSP
             // 
             lblTongSoSP.AutoSize = true;
             lblTongSoSP.Font = new Font("Segoe UI", 13.8F);
-            lblTongSoSP.Location = new Point(296, 13);
+            lblTongSoSP.Location = new Point(224, 54);
             lblTongSoSP.Margin = new Padding(4, 0, 4, 0);
             lblTongSoSP.Name = "lblTongSoSP";
-            lblTongSoSP.Size = new Size(145, 31);
+            lblTongSoSP.Size = new Size(26, 31);
             lblTongSoSP.TabIndex = 19;
-            lblTongSoSP.Text = "Số sản phẩm";
+            lblTongSoSP.Text = "0";
             lblTongSoSP.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            label12.Location = new Point(17, 57);
-            label12.Margin = new Padding(4, 0, 4, 0);
-            label12.Name = "label12";
-            label12.Size = new Size(117, 31);
-            label12.TabIndex = 18;
-            label12.Text = "Tổng tiền";
             // 
             // label11
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 13.8F);
-            label11.Location = new Point(17, 13);
+            label11.Location = new Point(8, 54);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(145, 31);
             label11.TabIndex = 17;
             label11.Text = "Số sản phẩm";
+            // 
+            // lblThanhTienSauGiam
+            // 
+            lblThanhTienSauGiam.AutoSize = true;
+            lblThanhTienSauGiam.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            lblThanhTienSauGiam.ForeColor = SystemColors.HotTrack;
+            lblThanhTienSauGiam.Location = new Point(296, 99);
+            lblThanhTienSauGiam.Margin = new Padding(4, 0, 4, 0);
+            lblThanhTienSauGiam.Name = "lblThanhTienSauGiam";
+            lblThanhTienSauGiam.Size = new Size(27, 31);
+            lblThanhTienSauGiam.TabIndex = 20;
+            lblThanhTienSauGiam.Text = "0";
+            lblThanhTienSauGiam.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            label12.Location = new Point(4, 99);
+            label12.Margin = new Padding(4, 0, 4, 0);
+            label12.Name = "label12";
+            label12.Size = new Size(129, 31);
+            label12.TabIndex = 18;
+            label12.Text = "Thành tiền";
             // 
             // dgvGioHang
             // 
@@ -429,8 +437,8 @@
             // colĐonGia
             // 
             colĐonGia.DataPropertyName = "DonGiaBan";
-            dataGridViewCellStyle1.Format = "N0";
-            colĐonGia.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Format = "N0";
+            colĐonGia.DefaultCellStyle = dataGridViewCellStyle3;
             colĐonGia.HeaderText = "Đơn giá";
             colĐonGia.MinimumWidth = 6;
             colĐonGia.Name = "colĐonGia";
@@ -445,8 +453,8 @@
             // colThanhTien
             // 
             colThanhTien.DataPropertyName = "ThanhTien";
-            dataGridViewCellStyle2.Format = "N0";
-            colThanhTien.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Format = "N0";
+            colThanhTien.DefaultCellStyle = dataGridViewCellStyle4;
             colThanhTien.HeaderText = "Thành tiền";
             colThanhTien.MinimumWidth = 6;
             colThanhTien.Name = "colThanhTien";
@@ -499,11 +507,117 @@
             txtMaHD.Size = new Size(223, 31);
             txtMaHD.TabIndex = 18;
             // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(580, 24);
+            label13.Name = "label13";
+            label13.Size = new Size(206, 25);
+            label13.TabIndex = 19;
+            label13.Text = "Phương thức thanh toán";
+            // 
+            // cboPhuongThucThanhToan
+            // 
+            cboPhuongThucThanhToan.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboPhuongThucThanhToan.FormattingEnabled = true;
+            cboPhuongThucThanhToan.Location = new Point(580, 52);
+            cboPhuongThucThanhToan.Name = "cboPhuongThucThanhToan";
+            cboPhuongThucThanhToan.Size = new Size(206, 33);
+            cboPhuongThucThanhToan.TabIndex = 20;
+            // 
+            // panel5
+            // 
+            panel5.BackColor = Color.White;
+            panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(lblTongTienGoc);
+            panel5.Controls.Add(lblSoTienGiam);
+            panel5.Controls.Add(label15);
+            panel5.Controls.Add(label14);
+            panel5.Controls.Add(label12);
+            panel5.Controls.Add(lblThanhTienSauGiam);
+            panel5.Location = new Point(919, 732);
+            panel5.Margin = new Padding(4);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(442, 141);
+            panel5.TabIndex = 21;
+            // 
+            // lblTongTienGoc
+            // 
+            lblTongTienGoc.AutoSize = true;
+            lblTongTienGoc.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            lblTongTienGoc.ForeColor = SystemColors.HotTrack;
+            lblTongTienGoc.Location = new Point(296, 0);
+            lblTongTienGoc.Margin = new Padding(4, 0, 4, 0);
+            lblTongTienGoc.Name = "lblTongTienGoc";
+            lblTongTienGoc.Size = new Size(27, 31);
+            lblTongTienGoc.TabIndex = 24;
+            lblTongTienGoc.Text = "0";
+            lblTongTienGoc.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblSoTienGiam
+            // 
+            lblSoTienGiam.AutoSize = true;
+            lblSoTienGiam.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            lblSoTienGiam.ForeColor = SystemColors.HotTrack;
+            lblSoTienGiam.Location = new Point(296, 54);
+            lblSoTienGiam.Margin = new Padding(4, 0, 4, 0);
+            lblSoTienGiam.Name = "lblSoTienGiam";
+            lblSoTienGiam.Size = new Size(27, 31);
+            lblSoTienGiam.TabIndex = 23;
+            lblSoTienGiam.Text = "0";
+            lblSoTienGiam.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            label15.Location = new Point(7, 0);
+            label15.Margin = new Padding(4, 0, 4, 0);
+            label15.Name = "label15";
+            label15.Size = new Size(162, 31);
+            label15.TabIndex = 22;
+            label15.Text = "Tổng tiền gốc";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            label14.Location = new Point(7, 54);
+            label14.Margin = new Padding(4, 0, 4, 0);
+            label14.Name = "label14";
+            label14.Size = new Size(109, 31);
+            label14.TabIndex = 21;
+            label14.Text = "Giảm giá";
+            // 
+            // cboMaGiamGia
+            // 
+            cboMaGiamGia.FormattingEnabled = true;
+            cboMaGiamGia.Location = new Point(720, 776);
+            cboMaGiamGia.Name = "cboMaGiamGia";
+            cboMaGiamGia.Size = new Size(151, 33);
+            cboMaGiamGia.TabIndex = 22;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            label16.Location = new Point(720, 733);
+            label16.Margin = new Padding(4, 0, 4, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(147, 31);
+            label16.TabIndex = 24;
+            label16.Text = "Mã giảm giá";
+            // 
             // UC_TaoHoaDon
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.AliceBlue;
+            Controls.Add(label16);
+            Controls.Add(cboMaGiamGia);
+            Controls.Add(panel5);
+            Controls.Add(cboPhuongThucThanhToan);
+            Controls.Add(label13);
             Controls.Add(txtMaHD);
             Controls.Add(btnHuyDon);
             Controls.Add(btnThanhToan);
@@ -529,6 +643,8 @@
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGioHang).EndInit();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -560,7 +676,7 @@
         private DataGridView dgvGioHang;
         private Label label12;
         private Label label11;
-        private Label lblTongTien;
+        private Label lblThanhTienSauGiam;
         private Label lblTongSoSP;
         private Button btnThanhToan;
         private Button btnHuyDon;
@@ -572,5 +688,14 @@
         private DataGridViewTextBoxColumn colSL;
         private DataGridViewTextBoxColumn colThanhTien;
         private DataGridViewButtonColumn colXoa;
+        private Label label13;
+        private ComboBox cboPhuongThucThanhToan;
+        private Panel panel5;
+        private Label lblTongTienGoc;
+        private Label lblSoTienGiam;
+        private Label label15;
+        private Label label14;
+        private ComboBox cboMaGiamGia;
+        private Label label16;
     }
 }

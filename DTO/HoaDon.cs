@@ -36,12 +36,27 @@ namespace DTO
         [Required]
         [StringLength(20)]
         public string MaChiNhanh { get; set; } = string.Empty;
+        public string HinhThucNhanHang { get; set; } = string.Empty;
+
+        public string DiaChiGiaoHang { get; set; } = string.Empty;
+
+        public string GhiChuDonHang { get; set; } = string.Empty;
+        public string PhuongThucThanhToan { get; set; } = "Tiền mặt";
+
+        public string TrangThaiThanhToan { get; set; } = "Đã thanh toán";
+
+        public decimal TongTienGoc { get; set; }
+
+        public decimal GiamGia { get; set; }
+
+        public decimal ThanhTienSauGiam { get; set; }
 
         [ForeignKey("MaChiNhanh")]
         public virtual ChiNhanh? ChiNhanh { get; set; }
         // ===============================================
 
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; } = new List<ChiTietHoaDon>();
+
     }
 
     // 2. Bảng lưu chi tiết các sản phẩm được bán trong Hóa Đơn đó
@@ -94,14 +109,36 @@ namespace DTO
         public decimal TongTien { get; set; }
         public string TrangThai { get; set; }
         public string LyDoHuy { get; set; }
+        public string NguonDon { get; set; } = string.Empty;
+        public string HinhThucNhanHang { get; set; } = string.Empty;
+
+        public string DiaChiGiaoHang { get; set; } = string.Empty;
+
+        public string GhiChuDonHang { get; set; } = string.Empty;
+        public string PhuongThucThanhToan { get; set; } = string.Empty;
+
+        public string TrangThaiThanhToan { get; set; } = string.Empty;
+
+        public decimal TongTienGoc { get; set; }
+
+        public decimal GiamGia { get; set; }
+
+        public decimal ThanhTienSauGiam { get; set; }
     }
 
-    public class ChiTietHoaDonViewModel
-    {
-        public string TenSP { get; set; }
-        public int SoLuong { get; set; }
-        public decimal DonGia { get; set; }
-        public decimal ThanhTien { get; set; }
-        public string GhiChuImei { get; set; }
+ 
+        public class ChiTietHoaDonViewModel
+        {
+            public string MaSP { get; set; } = string.Empty;
+
+            public string TenSP { get; set; } = string.Empty;
+
+            public int SoLuong { get; set; }
+
+            public decimal DonGia { get; set; }
+
+            public decimal ThanhTien { get; set; }
+
+            public string GhiChuImei { get; set; } = string.Empty;
+        }
     }
-}

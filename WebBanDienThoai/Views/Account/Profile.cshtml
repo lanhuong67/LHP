@@ -1,0 +1,210 @@
+﻿@model WebBanDienThoai.Models.AccountProfileViewModel
+
+@{
+    ViewData["Title"] = "Tài khoản";
+
+    var donHang = Model.DonHang ?? new List<WebBanDienThoai.Models.HoaDonWeb>();
+}
+
+<div class="phone-page">
+    <h2 class="product-section-title">
+        Tài khoản của bạn <span>✧</span>
+    </h2>
+
+    <div style="display:grid; grid-template-columns: 360px minmax(0, 1fr); gap:24px; align-items:start;">
+
+        <!-- THÔNG TIN TÀI KHOẢN -->
+        <div style="background:white; border-radius:28px; padding:28px; box-shadow:0 8px 20px rgba(0,0,0,.08);">
+
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                Thông tin khách hàng
+            </div>
+
+            <h3 style="font-size:30px; color:#153747; font-weight:900; margin-top:10px;">
+                @Model.HoTen
+            </h3>
+
+            <div style="margin-top:16px; background:#f6f8f9; border-radius:18px; padding:16px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                    Mã khách hàng
+                </div>
+                <div style="font-weight:900; color:#153747; margin-top:4px;">
+                    @Model.MaKH
+                </div>
+            </div>
+
+            <div style="margin-top:12px; background:#f6f8f9; border-radius:18px; padding:16px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                    Số điện thoại
+                </div>
+                <div style="font-weight:900; color:#153747; margin-top:4px;">
+                    @Model.SDT
+                </div>
+            </div>
+
+            <div style="margin-top:12px; background:#f6f8f9; border-radius:18px; padding:16px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                    Số lần mua
+                </div>
+                <div style="font-weight:900; color:#153747; margin-top:4px;">
+                    @Model.SoLanMua
+                </div>
+            </div>
+
+            <div style="margin-top:12px; background:#f6f8f9; border-radius:18px; padding:16px;">
+                <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                    Tổng chi tiêu
+                </div>
+                <div style="font-weight:900; color:#153747; margin-top:4px;">
+                    @Model.TongChiTieu.ToString("N0")đ
+                </div>
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Logout"
+               style="display:block; margin-top:18px; text-align:center; background:#0f4b5c; color:white; padding:14px; border-radius:18px; font-weight:900; text-decoration:none;">
+                Đăng xuất
+            </a>
+        </div>
+
+        <!-- LỊCH SỬ ĐƠN HÀNG -->
+        <div style="background:white; border-radius:28px; padding:28px; box-shadow:0 8px 20px rgba(0,0,0,.08);">
+
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                Lịch sử mua hàng
+            </div>
+
+            <h3 style="font-size:30px; color:#153747; font-weight:900; margin-top:10px;">
+                Đơn hàng gần đây
+            </h3>
+
+            @if (donHang.Count == 0)
+            {
+                    <div style="margin-top:18px; background:#f6f8f9; border-radius:18px; padding:22px; color:#7d8a91; font-weight:800;">
+                        Bạn chưa có đơn hàng nào.
+                    </div>
+            }
+            else
+            {
+                foreach (var hd in donHang)
+                {
+                    string mauTrangThai = "#0f4b5c";
+                    string nenTrangThai = "#e8f2f4";
+
+                    if (hd.TrangThai == "Đã hủy")
+                    {
+                        mauTrangThai = "#c0392b";
+                        nenTrangThai = "#fdecea";
+                    }
+                    else if (hd.TrangThai == "Hoàn thành")
+                    {
+                        mauTrangThai = "#008000";
+                        nenTrangThai = "#e8f7e8";
+                    }
+                    else if (hd.TrangThai == "Chờ xử lý")
+                    {
+                        mauTrangThai = "#b07800";
+                        nenTrangThai = "#fff7e8";
+                    }
+
+                            <div style="margin-top:16px; border:1px solid #e8e3db; border-radius:22px; padding:20px; background:#fff;">
+
+                                <div style="display:flex; justify-content:space-between; gap:14px; align-items:flex-start;">
+                                    <div>
+                                        <div style="font-size:20px; font-weight:900; color:#153747;">
+                                    @hd.MaHD
+                                        </div>
+
+                                        <div style="font-size:13px; color:#7d8a91; margin-top:5px; font-weight:700;">
+                                            Ngày đặt: @hd.NgayLap.ToString("dd/MM/yyyy HH:mm")
+                                        </div>
+                                    </div>
+
+                                    <div style="background:@nenTrangThai; color:@mauTrangThai; padding:8px 14px; border-radius:999px; font-weight:900; white-space:nowrap;">
+                                @hd.TrangThai
+                                    </div>
+                                </div>
+
+                                <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; margin-top:18px;">
+
+                                    <div style="background:#f6f8f9; border-radius:16px; padding:14px;">
+                                        <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                                            Hình thức nhận hàng
+                                        </div>
+                                        <div style="font-weight:900; color:#153747; margin-top:4px;">
+                                    @(string.IsNullOrWhiteSpace(hd.HinhThucNhanHang) ? "Không có" : hd.HinhThucNhanHang)
+                                        </div>
+                                    </div>
+
+                                    <div style="background:#f6f8f9; border-radius:16px; padding:14px;">
+                                        <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                                            Phương thức thanh toán
+                                        </div>
+                                        <div style="font-weight:900; color:#153747; margin-top:4px;">
+                                    @(string.IsNullOrWhiteSpace(hd.PhuongThucThanhToan) ? "Không có" : hd.PhuongThucThanhToan)
+                                        </div>
+                                    </div>
+
+                                    <div style="background:#f6f8f9; border-radius:16px; padding:14px;">
+                                        <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                                            Trạng thái thanh toán
+                                        </div>
+                                        <div style="font-weight:900; color:#153747; margin-top:4px;">
+                                    @(string.IsNullOrWhiteSpace(hd.TrangThaiThanhToan) ? "Không có" : hd.TrangThaiThanhToan)
+                                        </div>
+                                    </div>
+
+                                    <div style="background:#f6f8f9; border-radius:16px; padding:14px;">
+                                        <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                                            Tổng thanh toán
+                                        </div>
+                                        <div style="font-weight:900; color:#0f4b5c; margin-top:4px;">
+                                    @hd.TongTien.ToString("N0")đ
+                                        </div>
+                                    </div>
+                                </div>
+
+                        @if (!string.IsNullOrWhiteSpace(hd.DiaChiGiaoHang))
+                        {
+                                        <div style="margin-top:12px; background:#fff7e8; border-radius:16px; padding:14px;">
+                                            <div style="font-size:13px; color:#8a6500; font-weight:800;">
+                                                Địa chỉ giao hàng
+                                            </div>
+                                            <div style="font-weight:800; color:#153747; margin-top:4px;">
+                                    @hd.DiaChiGiaoHang
+                                            </div>
+                                        </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(hd.GhiChuDonHang))
+                        {
+                                        <div style="margin-top:12px; background:#f6f8f9; border-radius:16px; padding:14px;">
+                                            <div style="font-size:13px; color:#7d8a91; font-weight:800;">
+                                                Ghi chú
+                                            </div>
+                                            <div style="font-weight:800; color:#153747; margin-top:4px;">
+                                    @hd.GhiChuDonHang
+                                            </div>
+                                        </div>
+                        }
+
+                                <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+                                    <a asp-controller="Order"
+                                       asp-action="Lookup"
+                                       asp-route-keyword="@hd.MaHD"
+                                       style="display:inline-block; background:#0f4b5c; color:white; padding:11px 18px; border-radius:14px; font-weight:900; text-decoration:none;">
+                                        Tra cứu đơn
+                                    </a>
+
+                                    <a asp-controller="Product"
+                                       asp-action="Index"
+                                       style="display:inline-block; background:#e8f2f4; color:#0f4b5c; padding:11px 18px; border-radius:14px; font-weight:900; text-decoration:none;">
+                                        Tiếp tục mua hàng
+                                    </a>
+                                </div>
+                            </div>
+                }
+            }
+        </div>
+    </div>
+</div>

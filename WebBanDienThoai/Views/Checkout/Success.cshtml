@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Đặt hàng thành công";
+
+    string maHD = ViewBag.MaHD != null ? ViewBag.MaHD.ToString() : "";
+}
+
+<div class="phone-page">
+    <div style="max-width:880px; margin:80px auto 120px auto; background:white; border-radius:32px; padding:70px 34px; text-align:center; box-shadow:0 10px 28px rgba(0,0,0,.08);">
+
+        <div style="width:88px; height:88px; margin:0 auto 24px auto; border-radius:18px; background:linear-gradient(135deg,#4dd987,#24b965); display:flex; align-items:center; justify-content:center; color:white; font-size:56px; box-shadow:0 8px 18px rgba(36,185,101,.28);">
+            ✓
+        </div>
+
+        <h1 style="font-size:42px; font-weight:1000; color:#0f4b5c; margin-bottom:12px;">
+            Đặt hàng thành công!
+        </h1>
+
+        <p style="font-size:18px; color:#7c8c95; margin-bottom:28px;">
+            Cảm ơn bạn đã đặt hàng tại LHP Mobile.
+        </p>
+
+        @if (!string.IsNullOrWhiteSpace(maHD))
+        {
+                <div style="display:inline-block; background:#e8f2f4; color:#0f4b5c; padding:16px 30px; border-radius:18px; font-weight:1000; margin-bottom:20px;">
+                    Mã đơn hàng: @maHD
+                </div>
+
+                <p style="color:#8a99a3; font-weight:700; margin-top:6px; margin-bottom:26px;">
+                    Bạn có thể dùng mã đơn hàng này để tra cứu trạng thái đơn bất cứ lúc nào.
+                </p>
+        }
+
+        <div style="max-width:620px; margin:0 auto 34px auto; background:#fff8eb; color:#9a6a2f; padding:18px 24px; border-radius:22px; font-weight:800; line-height:1.6;">
+            Đơn hàng đang ở trạng thái <strong>Chờ xử lý</strong>. Nhân viên cửa hàng sẽ kiểm tra tồn kho, xác nhận IMEI và liên hệ với bạn trong thời gian sớm nhất.
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+            <a asp-controller="Product"
+               asp-action="Index"
+               style="display:inline-block; padding:15px 28px; border-radius:999px; background:#0f4b5c; color:white; font-weight:1000; text-decoration:none;">
+                Tiếp tục mua hàng
+            </a>
+
+            @if (!string.IsNullOrWhiteSpace(maHD))
+            {
+                    <a asp-controller="Order"
+                       asp-action="Lookup"
+                       asp-route-keyword="@maHD"
+                       style="display:inline-block; padding:15px 28px; border-radius:999px; background:#e8f2f4; color:#0f4b5c; font-weight:1000; text-decoration:none;">
+                        Tra cứu đơn hàng
+                    </a>
+            }
+            else
+            {
+                    <a asp-controller="Order"
+                       asp-action="Lookup"
+                       style="display:inline-block; padding:15px 28px; border-radius:999px; background:#e8f2f4; color:#0f4b5c; font-weight:1000; text-decoration:none;">
+                        Tra cứu đơn hàng
+                    </a>
+            }
+        </div>
+    </div>
+</div>

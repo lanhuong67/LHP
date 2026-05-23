@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LHP Mobile</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css?v=1003" />
+</head>
+<body>
+    <header class="mobile-top-header">
+        <div class="mobile-header-inner">
+            <a class="mobile-logo" asp-controller="Product" asp-action="Index">
+                <span class="logo-main">LHP</span>
+                <span class="logo-sub">Mobile Store</span>
+            </a>
+
+            <nav class="desktop-nav">
+                <a asp-controller="Product" asp-action="Index">Trang chủ</a>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-fragment="product-section">
+                    Điện thoại
+                </a>
+
+                <a asp-controller="Order" asp-action="Lookup">Tra cứu đơn</a>
+
+                <a asp-controller="Store" asp-action="Index">Cửa hàng</a>
+
+                <a asp-controller="Account" asp-action="Profile">Tài khoản</a>
+            </nav>
+
+            <div class="header-actions">
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-fragment="search-section"
+                   class="header-icon"
+                   title="Tìm kiếm">
+                    ⌕
+                </a>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-fragment="cart-section"
+                   class="header-icon"
+                   title="Giỏ hàng">
+                    🛒
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main">
+        @RenderBody()
+    </main>
+
+    <nav class="bottom-mobile-nav">
+        <a asp-controller="Product" asp-action="Index">
+            <span>⌂</span>
+            Trang chủ
+        </a>
+
+        <a asp-controller="Product"
+           asp-action="Index"
+           asp-fragment="product-section">
+            <span>📱</span>
+            Sản phẩm
+        </a>
+
+        <a asp-controller="Order" asp-action="Lookup">
+            <span>🔎</span>
+            Tra cứu
+        </a>
+
+        <a asp-controller="Store" asp-action="Index">
+            <span>🏬</span>
+            Cửa hàng
+        </a>
+
+        <a asp-controller="Account" asp-action="Profile">
+            <span>👤</span>
+            Tài khoản
+        </a>
+    </nav>
+
+    <footer class="mobile-footer">
+        <div>© 2026 - LHP Mobile Store</div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const links = document.querySelectorAll('a[href*="#"]');
+
+            links.forEach(link => {
+                link.addEventListener("click", function (e) {
+                    const href = this.getAttribute("href");
+                    if (!href) return;
+
+                    const hashIndex = href.indexOf("#");
+                    if (hashIndex === -1) return;
+
+                    const hash = href.substring(hashIndex);
+                    if (!hash || hash === "#") return;
+
+                    const target = document.querySelector(hash);
+                    if (target) {
+                        const currentPath = window.location.pathname.toLowerCase();
+                        const linkPath = this.pathname ? this.pathname.toLowerCase() : currentPath;
+
+                        if (currentPath === linkPath || linkPath === "") {
+                            e.preventDefault();
+                            target.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start"
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

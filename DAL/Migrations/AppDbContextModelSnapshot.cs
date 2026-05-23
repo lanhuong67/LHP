@@ -290,6 +290,24 @@ namespace DAL.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("DiaChiGiaoHang")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("GhiChuDonHang")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("GiamGia")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<string>("HinhThucNhanHang")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("LyDoHuy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -307,15 +325,31 @@ namespace DAL.Migrations
                     b.Property<DateTime>("NgayLap")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PhuongThucThanhToan")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("SDTKhachHang")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<decimal>("ThanhTienSauGiam")
+                        .HasColumnType("decimal(18,0)");
+
                     b.Property<decimal>("TongTien")
                         .HasColumnType("decimal(18,0)");
 
+                    b.Property<decimal>("TongTienGoc")
+                        .HasColumnType("decimal(18,0)");
+
                     b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TrangThaiThanhToan")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -587,6 +621,50 @@ namespace DAL.Migrations
                     b.ToTable("SanPham");
                 });
 
+            modelBuilder.Entity("DTO.TaiKhoanKhachHang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("LanDangNhapCuoi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MaKH")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MatKhauHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SDT")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaKH")
+                        .IsUnique();
+
+                    b.HasIndex("SDT")
+                        .IsUnique();
+
+                    b.ToTable("TaiKhoanKhachHang");
+                });
+
             modelBuilder.Entity("DTO.ChiTietHoaDon", b =>
                 {
                     b.HasOne("DTO.HoaDon", "HoaDon")
@@ -702,6 +780,17 @@ namespace DAL.Migrations
                     b.Navigation("ChiNhanh");
 
                     b.Navigation("HangSanXuat");
+                });
+
+            modelBuilder.Entity("DTO.TaiKhoanKhachHang", b =>
+                {
+                    b.HasOne("DTO.KhachHang", "KhachHang")
+                        .WithMany()
+                        .HasForeignKey("MaKH")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("KhachHang");
                 });
 
             modelBuilder.Entity("DTO.ChiNhanh", b =>

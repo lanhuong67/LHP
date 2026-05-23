@@ -19,7 +19,6 @@ namespace GUI
         {
             InitializeComponent();
 
-            // Khi UC được hiển thị lại thì tự cập nhật danh sách
             this.VisibleChanged -= UC_DanhSachHoaDon_VisibleChanged;
             this.VisibleChanged += UC_DanhSachHoaDon_VisibleChanged;
 
@@ -40,11 +39,19 @@ namespace GUI
             dgvDanhSachHoaDon.CellContentClick -= dgvDanhSachHoaDon_CellContentClick;
             dgvDanhSachHoaDon.CellFormatting += dgvDanhSachHoaDon_CellFormatting;
             dgvDanhSachHoaDon.CellContentClick += dgvDanhSachHoaDon_CellContentClick;
+
+            DamBaoCotXuLyWeb();
+            DamBaoCotNguonDon();
         }
 
         private void UC_DanhSachHoaDon_Load(object sender, EventArgs e)
         {
             dgvDanhSachHoaDon.AutoGenerateColumns = false;
+            DoiTieuDeCotNhanVien();
+
+            DamBaoCotXuLyWeb();
+            DamBaoCotNguonDon();
+
             if (dgvDanhSachHoaDon.Columns.Contains("colLyDoHuy"))
             {
                 dgvDanhSachHoaDon.Columns["colLyDoHuy"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -59,6 +66,7 @@ namespace GUI
             if (cboTrangThai.Items.Count == 0)
             {
                 cboTrangThai.Items.Add("--Tất cả trạng thái--");
+                cboTrangThai.Items.Add("Chờ xử lý");
                 cboTrangThai.Items.Add("Hoàn thành");
                 cboTrangThai.Items.Add("Đã hủy");
                 cboTrangThai.SelectedIndex = 0;
@@ -79,6 +87,74 @@ namespace GUI
 
             HienThiDanhSach();
         }
+        private void DamBaoCotNguonDon()
+        {
+            if (!dgvDanhSachHoaDon.Columns.Contains("colNguonDon"))
+            {
+                DataGridViewTextBoxColumn colNguonDon = new DataGridViewTextBoxColumn();
+                colNguonDon.Name = "colNguonDon";
+                colNguonDon.HeaderText = "Nguồn đơn";
+                colNguonDon.DataPropertyName = "NguonDon";
+                colNguonDon.Width = 100;
+                colNguonDon.ReadOnly = true;
+
+                // Đặt sau cột Mã hóa đơn nếu có
+                if (dgvDanhSachHoaDon.Columns.Contains("colMaHD"))
+                {
+                    int indexMaHD = dgvDanhSachHoaDon.Columns["colMaHD"].Index;
+                    dgvDanhSachHoaDon.Columns.Insert(indexMaHD + 1, colNguonDon);
+                }
+                else
+                {
+                    dgvDanhSachHoaDon.Columns.Add(colNguonDon);
+                }
+            }
+        }
+        private void DoiTieuDeCotNhanVien()
+        {
+            foreach (DataGridViewColumn col in dgvDanhSachHoaDon.Columns)
+            {
+                if (col.DataPropertyName == "TenNhanVien")
+                {
+                    col.HeaderText = "NV xử lý";
+                    col.Width = 120;
+                    break;
+                }
+            }
+        }
+        private void DamBaoCotXuLyWeb()
+        {
+            if (!dgvDanhSachHoaDon.Columns.Contains("colXuLyWeb"))
+            {
+                DataGridViewButtonColumn colXuLy = new DataGridViewButtonColumn();
+                colXuLy.Name = "colXuLyWeb";
+                colXuLy.HeaderText = "Xử lý";
+                colXuLy.Text = "";
+                colXuLy.UseColumnTextForButtonValue = false;
+                colXuLy.Width = 80;
+
+                if (dgvDanhSachHoaDon.Columns.Contains("colHuyDon"))
+                {
+                    int indexHuy = dgvDanhSachHoaDon.Columns["colHuyDon"].Index;
+                    dgvDanhSachHoaDon.Columns.Insert(indexHuy, colXuLy);
+                }
+                else
+                {
+                    dgvDanhSachHoaDon.Columns.Add(colXuLy);
+                }
+            }
+
+            if (dgvDanhSachHoaDon.Columns.Contains("colHuyDon"))
+            {
+                var colHuy = dgvDanhSachHoaDon.Columns["colHuyDon"] as DataGridViewButtonColumn;
+
+                if (colHuy != null)
+                {
+                    colHuy.Text = "";
+                    colHuy.UseColumnTextForButtonValue = false;
+                }
+            }
+        }
 
         private void UC_DanhSachHoaDon_VisibleChanged(object sender, EventArgs e)
         {
@@ -88,28 +164,20 @@ namespace GUI
             }
         }
 
-        // ============================================================
-        // HÀM BẮT BUỘC CỦA IBranchRefreshable
-        // FormMain sẽ gọi hàm này khi đổi chi nhánh ở ComboBox góc trái
-        // ============================================================
         public void RefreshByBranch()
         {
-            // Reset ô tìm kiếm
             if (txtTimKiemHD != null)
             {
                 txtTimKiemHD.Text = "";
                 SetPlaceholderTimKiem();
             }
 
-            // Reset trạng thái lọc
             if (cboTrangThai.Items.Count > 0)
                 cboTrangThai.SelectedIndex = 0;
 
-            // Reset ngày về 30 ngày gần nhất
             dtpTuNgay.Value = DateTime.Now.AddDays(-30);
             dtpDenNgay.Value = DateTime.Now;
 
-            // Load lại danh sách hóa đơn theo chi nhánh mới
             HienThiDanhSach();
         }
 
@@ -173,7 +241,6 @@ namespace GUI
                 if (string.IsNullOrWhiteSpace(maCN))
                     return;
 
-                // Lấy hóa đơn theo chi nhánh hiện tại
                 var dsFull = _bus.GetDanhSachHoaDon(maCN);
 
                 DateTime tuNgay = dtpTuNgay.Value.Date;
@@ -183,14 +250,12 @@ namespace GUI
                     .Where(x => x.NgayLap.Date >= tuNgay && x.NgayLap.Date <= denNgay)
                     .ToList();
 
-                // Lọc trạng thái
                 if (cboTrangThai.SelectedIndex > 0 && cboTrangThai.Text != "--Tất cả trạng thái--")
                 {
                     string status = cboTrangThai.Text;
                     dsLoc = dsLoc.Where(x => x.TrangThai == status).ToList();
                 }
 
-                // Tìm kiếm theo mã hóa đơn hoặc tên khách hàng
                 if (txtTimKiemHD != null &&
                     txtTimKiemHD.Text != _placeholderTimKiem &&
                     !string.IsNullOrWhiteSpace(txtTimKiemHD.Text))
@@ -237,21 +302,31 @@ namespace GUI
             if (e.RowIndex < 0)
                 return;
 
-            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colSTT")
+            string columnName = dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name;
+
+            if (columnName == "colSTT")
             {
                 e.Value = (e.RowIndex + 1).ToString();
                 e.FormattingApplied = true;
                 return;
             }
 
-            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colTrangThai" && e.Value != null)
+            if (columnName == "colTrangThai" && e.Value != null)
             {
                 string status = e.Value.ToString();
 
                 if (status == "Hoàn thành")
+                {
                     e.CellStyle.ForeColor = Color.Green;
+                }
                 else if (status == "Đã hủy")
+                {
                     e.CellStyle.ForeColor = Color.Red;
+                }
+                else if (status == "Chờ xử lý")
+                {
+                    e.CellStyle.ForeColor = Color.DarkOrange;
+                }
             }
 
             if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].DataPropertyName == "TongTien" && e.Value != null)
@@ -262,13 +337,75 @@ namespace GUI
                     e.FormattingApplied = true;
                 }
             }
-            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colLyDoHuy" && e.Value != null)
+
+            if (columnName == "colLyDoHuy" && e.Value != null)
             {
                 string lyDo = e.Value.ToString();
 
                 if (!string.IsNullOrWhiteSpace(lyDo))
                 {
                     e.CellStyle.ForeColor = Color.DarkRed;
+                }
+            }
+
+            if (columnName == "colXuLyWeb")
+            {
+                var hd = dgvDanhSachHoaDon.Rows[e.RowIndex].DataBoundItem as HoaDonViewModel;
+
+                if (hd != null)
+                {
+                    if (hd.TrangThai == "Chờ xử lý")
+                    {
+                        e.Value = "Xử lý";
+                        e.CellStyle.ForeColor = Color.DarkBlue;
+                        e.CellStyle.BackColor = Color.White;
+                        e.CellStyle.Font = new Font(dgvDanhSachHoaDon.Font, FontStyle.Bold);
+                    }
+                    else
+                    {
+                        e.Value = "";
+                        e.CellStyle.BackColor = Color.WhiteSmoke;
+                    }
+
+                    e.FormattingApplied = true;
+                }
+            }
+
+            if (columnName == "colHuyDon")
+            {
+                var hd = dgvDanhSachHoaDon.Rows[e.RowIndex].DataBoundItem as HoaDonViewModel;
+
+                if (hd != null)
+                {
+                    if (hd.TrangThai == "Đã hủy")
+                    {
+                        e.Value = "";
+                        e.CellStyle.BackColor = Color.WhiteSmoke;
+                    }
+                    else
+                    {
+                        e.Value = "Hủy";
+                        e.CellStyle.ForeColor = Color.DarkRed;
+                        e.CellStyle.BackColor = Color.White;
+                        e.CellStyle.Font = new Font(dgvDanhSachHoaDon.Font, FontStyle.Bold);
+                    }
+
+                    e.FormattingApplied = true;
+                }
+            }
+            if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colNguonDon" && e.Value != null)
+            {
+                string nguon = e.Value.ToString();
+
+                e.CellStyle.Font = new Font(dgvDanhSachHoaDon.Font, FontStyle.Bold);
+
+                if (nguon == "Web")
+                {
+                    e.CellStyle.ForeColor = Color.DarkBlue;
+                }
+                else if (nguon == "Cửa hàng")
+                {
+                    e.CellStyle.ForeColor = Color.DarkGreen;
                 }
             }
         }
@@ -287,21 +424,53 @@ namespace GUI
                 if (hd == null)
                     return;
 
-                if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colChiTiet")
+                string columnName = dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name;
+
+                if (columnName == "colChiTiet")
                 {
                     var dsChiTiet = _bus.GetChiTietHoaDon(hd.MaHD);
 
-                    using (FormChiTietHoaDon frm = new FormChiTietHoaDon(hd.MaHD, dsChiTiet))
+                    using (FormChiTietHoaDon frm = new FormChiTietHoaDon(hd, dsChiTiet))
                     {
                         frm.ShowDialog();
                     }
                 }
-                else if (dgvDanhSachHoaDon.Columns[e.ColumnIndex].Name == "colHuyDon")
+                else if (columnName == "colXuLyWeb")
+                {
+                    if (hd.TrangThai != "Chờ xử lý")
+                    {
+                        return;
+                    }
+
+                    var dsChiTiet = _bus.GetChiTietHoaDon(hd.MaHD);
+
+                    if (dsChiTiet == null || dsChiTiet.Count == 0)
+                    {
+                        MessageBox.Show(
+                            "Hóa đơn này chưa có chi tiết sản phẩm.",
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                        return;
+                    }
+
+                    using (FormXuLyDonWeb frm = new FormXuLyDonWeb(
+                        hd.MaHD,
+                        UserSession.ChiNhanhDuocChon,
+                        dsChiTiet,
+                        _bus))
+                    {
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            HienThiDanhSach();
+                        }
+                    }
+                }
+                else if (columnName == "colHuyDon")
                 {
                     if (hd.TrangThai == "Đã hủy")
                     {
-                        MessageBox.Show("Hóa đơn này đã được hủy trước đó, không thể hủy lại!",
-                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -320,7 +489,7 @@ namespace GUI
 
                         if (_bus.HuyHoaDonThongTu78(hd.MaHD, lyDo, maNhanVien))
                         {
-                            MessageBox.Show("Hủy hóa đơn thành công!\nSố lượng máy đã tự động được hoàn lại vào kho.",
+                            MessageBox.Show("Hủy hóa đơn thành công!",
                                 "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             HienThiDanhSach();
@@ -342,7 +511,6 @@ namespace GUI
             {
                 _isProcessingClick = false;
             }
-
         }
 
         private string PromptLyDoHuy(string maHD)
@@ -415,10 +583,10 @@ namespace GUI
 
     public class FormChiTietHoaDon : Form
     {
-        public FormChiTietHoaDon(string maHD, List<ChiTietHoaDonViewModel> dsChiTiet)
+        public FormChiTietHoaDon(HoaDonViewModel hoaDon, List<ChiTietHoaDonViewModel> dsChiTiet)
         {
-            this.Text = $"Chi tiết Hóa đơn: {maHD}";
-            this.Size = new Size(800, 450);
+            this.Text = $"Chi tiết Hóa đơn: {hoaDon.MaHD}";
+            this.Size = new Size(900, 590);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -426,20 +594,139 @@ namespace GUI
 
             Label lblTieuDe = new Label()
             {
-                Text = $"DANH SÁCH SẢN PHẨM CỦA {maHD}",
+                Text = $"CHI TIẾT HÓA ĐƠN: {hoaDon.MaHD}",
                 Left = 20,
                 Top = 15,
-                AutoSize = true,
+                Width = 840,
+                Height = 30,
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                ForeColor = Color.Navy
+            };
+
+            Panel pnlThongTinDon = new Panel()
+            {
+                Left = 20,
+                Top = 50,
+                Width = 840,
+                Height = 150,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.FromArgb(245, 250, 255)
+            };
+
+            Label lblNguon = new Label()
+            {
+                Text = $"Nguồn đơn: {GiaTriHoacMacDinh(hoaDon.NguonDon)}",
+                Left = 12,
+                Top = 10,
+                Width = 260,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = hoaDon.NguonDon == "Web" ? Color.DarkBlue : Color.DarkGreen
+            };
+
+            Label lblTrangThai = new Label()
+            {
+                Text = $"Trạng thái: {GiaTriHoacMacDinh(hoaDon.TrangThai)}",
+                Left = 290,
+                Top = 10,
+                Width = 260,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = LayMauTrangThai(hoaDon.TrangThai)
+            };
+
+            Label lblNhanVien = new Label()
+            {
+                Text = $"NV xử lý: {GiaTriHoacMacDinh(hoaDon.TenNhanVien)}",
+                Left = 560,
+                Top = 10,
+                Width = 260,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = Color.Black
+            };
+
+            Label lblKhach = new Label()
+            {
+                Text = $"Khách hàng: {GiaTriHoacMacDinh(hoaDon.TenKhachHang)}",
+                Left = 12,
+                Top = 40,
+                Width = 390,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.Black
+            };
+
+            Label lblTongTien = new Label()
+            {
+                Text = $"Tổng tiền: {hoaDon.TongTien:N0} đ",
+                Left = 420,
+                Top = 40,
+                Width = 390,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = Color.DarkGreen
+            };
+
+            Label lblHinhThuc = new Label()
+            {
+                Text = $"Hình thức nhận: {GiaTriHoacMacDinh(hoaDon.HinhThucNhanHang)}",
+                Left = 12,
+                Top = 70,
+                Width = 390,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.Black
+            };
+
+            Label lblDiaChi = new Label()
+            {
+                Text = $"Địa chỉ giao hàng: {GiaTriHoacMacDinh(hoaDon.DiaChiGiaoHang)}",
+                Left = 420,
+                Top = 70,
+                Width = 390,
+                Height = 24,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.Black
+            };
+
+            Label lblGhiChu = new Label()
+            {
+                Text = $"Ghi chú khách: {GiaTriHoacMacDinh(hoaDon.GhiChuDonHang)}",
+                Left = 12,
+                Top = 100,
+                Width = 800,
+                Height = 42,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = string.IsNullOrWhiteSpace(hoaDon.GhiChuDonHang) ? Color.Gray : Color.DarkRed
+            };
+
+            pnlThongTinDon.Controls.Add(lblNguon);
+            pnlThongTinDon.Controls.Add(lblTrangThai);
+            pnlThongTinDon.Controls.Add(lblNhanVien);
+            pnlThongTinDon.Controls.Add(lblKhach);
+            pnlThongTinDon.Controls.Add(lblTongTien);
+            pnlThongTinDon.Controls.Add(lblHinhThuc);
+            pnlThongTinDon.Controls.Add(lblDiaChi);
+            pnlThongTinDon.Controls.Add(lblGhiChu);
+
+            Label lblDanhSachSP = new Label()
+            {
+                Text = "DANH SÁCH SẢN PHẨM",
+                Left = 20,
+                Top = 215,
+                Width = 840,
+                Height = 25,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 ForeColor = Color.Navy
             };
 
             DataGridView dgvChiTiet = new DataGridView()
             {
                 Left = 20,
-                Top = 50,
-                Width = 740,
-                Height = 300,
+                Top = 245,
+                Width = 840,
+                Height = 250,
                 AllowUserToAddRows = false,
                 ReadOnly = true,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
@@ -451,9 +738,16 @@ namespace GUI
 
             dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
             {
+                HeaderText = "Mã SP",
+                DataPropertyName = "MaSP",
+                Width = 80
+            });
+
+            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 HeaderText = "Sản phẩm",
                 DataPropertyName = "TenSP",
-                Width = 150
+                Width = 160
             });
 
             dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
@@ -479,20 +773,20 @@ namespace GUI
                 Width = 100
             });
 
-            var colImei = new DataGridViewTextBoxColumn
+            dgvChiTiet.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Danh sách IMEI đã bán",
                 DataPropertyName = "GhiChuImei",
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     WrapMode = DataGridViewTriState.True
-                }
-            };
-
-            dgvChiTiet.Columns.Add(colImei);
+                },
+                Width = 230
+            });
 
             var formattedList = dsChiTiet.Select(x => new ChiTietHoaDonViewModel
             {
+                MaSP = x.MaSP,
                 TenSP = x.TenSP,
                 SoLuong = x.SoLuong,
                 DonGia = x.DonGia,
@@ -507,8 +801,8 @@ namespace GUI
             Button btnDong = new Button()
             {
                 Text = "Đóng",
-                Left = 660,
-                Top = 360,
+                Left = 760,
+                Top = 510,
                 Width = 100,
                 Height = 35,
                 BackColor = Color.LightGray,
@@ -518,8 +812,340 @@ namespace GUI
             btnDong.Click += (s, e) => this.Close();
 
             this.Controls.Add(lblTieuDe);
+            this.Controls.Add(pnlThongTinDon);
+            this.Controls.Add(lblDanhSachSP);
             this.Controls.Add(dgvChiTiet);
             this.Controls.Add(btnDong);
+        }
+
+        private static string GiaTriHoacMacDinh(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? "Không có" : value;
+        }
+
+        private static Color LayMauTrangThai(string trangThai)
+        {
+            if (trangThai == "Chờ xử lý")
+                return Color.DarkOrange;
+
+            if (trangThai == "Hoàn thành")
+                return Color.Green;
+
+            if (trangThai == "Đã hủy")
+                return Color.Red;
+
+            return Color.Black;
+        }
+    }
+
+    public class FormXuLyDonWeb : Form
+    {
+        private readonly string _maHD;
+        private readonly string _maCN;
+        private readonly List<ChiTietHoaDonViewModel> _dsChiTiet;
+        private readonly HoaDonBUS _bus;
+
+        private FlowLayoutPanel flowPanel;
+        private Dictionary<string, CheckedListBox> _mapCheckedListBox = new Dictionary<string, CheckedListBox>();
+
+        public FormXuLyDonWeb(string maHD, string maCN, List<ChiTietHoaDonViewModel> dsChiTiet, HoaDonBUS bus)
+        {
+            _maHD = maHD;
+            _maCN = maCN;
+            _dsChiTiet = dsChiTiet;
+            _bus = bus;
+
+            KhoiTaoGiaoDien();
+            LoadDanhSachSanPhamCanXuLy();
+        }
+
+        private void KhoiTaoGiaoDien()
+        {
+            this.Text = $"Xử lý đơn web: {_maHD}";
+            this.Size = new Size(780, 640);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+
+            Label lblTitle = new Label()
+            {
+                Text = $"XÁC NHẬN ĐƠN WEB: {_maHD}",
+                Left = 20,
+                Top = 15,
+                Width = 720,
+                Height = 30,
+                Font = new Font("Segoe UI", 13, FontStyle.Bold),
+                ForeColor = Color.Navy
+            };
+
+            Label lblGuide = new Label()
+            {
+                Text = "Chọn đúng số lượng IMEI cho từng sản phẩm. Hệ thống tự tick IMEI nhập kho lâu nhất theo FIFO.",
+                Left = 20,
+                Top = 48,
+                Width = 720,
+                Height = 25,
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.DarkGreen
+            };
+
+            flowPanel = new FlowLayoutPanel()
+            {
+                Left = 20,
+                Top = 85,
+                Width = 720,
+                Height = 420,
+                AutoScroll = true,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.White
+            };
+
+            Button btnXacNhan = new Button()
+            {
+                Text = "Xác nhận hoàn thành đơn",
+                Left = 390,
+                Top = 525,
+                Width = 230,
+                Height = 40,
+                BackColor = Color.Green,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            btnXacNhan.Click += BtnXacNhan_Click;
+
+            Button btnDong = new Button()
+            {
+                Text = "Đóng",
+                Left = 640,
+                Top = 525,
+                Width = 100,
+                Height = 40,
+                BackColor = Color.LightGray,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+            };
+            btnDong.Click += (s, e) => this.Close();
+
+            this.Controls.Add(lblTitle);
+            this.Controls.Add(lblGuide);
+            this.Controls.Add(flowPanel);
+            this.Controls.Add(btnXacNhan);
+            this.Controls.Add(btnDong);
+        }
+
+        private void LoadDanhSachSanPhamCanXuLy()
+        {
+            flowPanel.Controls.Clear();
+            _mapCheckedListBox.Clear();
+
+            foreach (var ct in _dsChiTiet)
+            {
+                Panel panel = new Panel()
+                {
+                    Width = 680,
+                    Height = 190,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Margin = new Padding(10),
+                    BackColor = Color.FromArgb(248, 250, 252)
+                };
+
+                Label lblSP = new Label()
+                {
+                    Text = $"{ct.TenSP} - SL cần chọn: {ct.SoLuong}",
+                    Left = 12,
+                    Top = 10,
+                    Width = 640,
+                    Height = 25,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    ForeColor = Color.DarkBlue
+                };
+
+                Label lblMaSP = new Label()
+                {
+                    Text = $"Mã SP: {ct.MaSP} | Đơn giá: {ct.DonGia:N0} đ | Thành tiền: {ct.ThanhTien:N0} đ",
+                    Left = 12,
+                    Top = 35,
+                    Width = 640,
+                    Height = 22,
+                    Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                    ForeColor = Color.DimGray
+                };
+
+                CheckedListBox clbImei = new CheckedListBox()
+                {
+                    Left = 12,
+                    Top = 62,
+                    Width = 640,
+                    Height = 108,
+                    CheckOnClick = true
+                };
+
+                var dsImei = _bus.GetImeiTonKho(ct.MaSP, _maCN);
+
+                if (dsImei == null || dsImei.Count < ct.SoLuong)
+                {
+                    int soLuongCon = dsImei == null ? 0 : dsImei.Count;
+
+                    clbImei.Items.Add($"Không đủ IMEI trong kho. Còn {soLuongCon}, cần {ct.SoLuong}.");
+                    clbImei.Enabled = false;
+                    panel.BackColor = Color.MistyRose;
+                }
+                else
+                {
+                    foreach (var imei in dsImei)
+                    {
+                        clbImei.Items.Add(imei);
+                    }
+
+                    for (int i = 0; i < ct.SoLuong && i < clbImei.Items.Count; i++)
+                    {
+                        clbImei.SetItemChecked(i, true);
+                    }
+                }
+
+                clbImei.ItemCheck += (s, e) =>
+                {
+                    int checkedCount = clbImei.CheckedItems.Count;
+
+                    if (e.NewValue == CheckState.Checked)
+                        checkedCount++;
+                    else if (e.NewValue == CheckState.Unchecked)
+                        checkedCount--;
+
+                    if (checkedCount > ct.SoLuong)
+                    {
+                        e.NewValue = CheckState.Unchecked;
+
+                        MessageBox.Show(
+                            $"Sản phẩm {ct.TenSP} chỉ được chọn đúng {ct.SoLuong} IMEI.",
+                            "Cảnh báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                    }
+                };
+
+                panel.Controls.Add(lblSP);
+                panel.Controls.Add(lblMaSP);
+                panel.Controls.Add(clbImei);
+
+                flowPanel.Controls.Add(panel);
+
+                _mapCheckedListBox[ct.MaSP] = clbImei;
+            }
+        }
+
+        private void BtnXacNhan_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<string, List<string>> imeiTheoSanPham = new Dictionary<string, List<string>>();
+
+                foreach (var ct in _dsChiTiet)
+                {
+                    if (!_mapCheckedListBox.ContainsKey(ct.MaSP))
+                    {
+                        MessageBox.Show(
+                            $"Chưa có danh sách IMEI cho sản phẩm {ct.TenSP}.",
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                        return;
+                    }
+
+                    CheckedListBox clb = _mapCheckedListBox[ct.MaSP];
+
+                    if (!clb.Enabled)
+                    {
+                        MessageBox.Show(
+                            $"Sản phẩm {ct.TenSP} không đủ IMEI trong kho để xử lý đơn.",
+                            "Thiếu IMEI",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        return;
+                    }
+
+                    List<string> imeiDaChon = new List<string>();
+
+                    foreach (var item in clb.CheckedItems)
+                    {
+                        if (item != null)
+                            imeiDaChon.Add(item.ToString());
+                    }
+
+                    imeiDaChon = imeiDaChon
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .Select(x => x.Trim())
+                        .Distinct()
+                        .ToList();
+
+                    if (imeiDaChon.Count != ct.SoLuong)
+                    {
+                        MessageBox.Show(
+                            $"Sản phẩm {ct.TenSP} cần chọn đúng {ct.SoLuong} IMEI, hiện đang chọn {imeiDaChon.Count}.",
+                            "Thiếu IMEI",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        return;
+                    }
+
+                    imeiTheoSanPham[ct.MaSP] = imeiDaChon;
+                }
+
+                DialogResult confirm = MessageBox.Show(
+                    "Xác nhận hoàn thành đơn web?\n\nSau khi xác nhận, hệ thống sẽ trừ tồn kho, cập nhật IMEI đã bán và chuyển hóa đơn sang Hoàn thành.",
+                    "Xác nhận xử lý đơn",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (confirm != DialogResult.Yes)
+                    return;
+
+                string maNV = string.IsNullOrWhiteSpace(UserSession.MaNV)
+                    ? "NV01"
+                    : UserSession.MaNV;
+
+                bool thanhCong = _bus.XacNhanDonWeb(_maHD, imeiTheoSanPham, maNV);
+
+                if (thanhCong)
+                {
+                    MessageBox.Show(
+                        "Xử lý đơn web thành công!\nHóa đơn đã chuyển sang Hoàn thành.",
+                        "Thành công",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể xử lý đơn web. Vui lòng kiểm tra lại dữ liệu.",
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Lỗi xử lý đơn web",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
     }
 }

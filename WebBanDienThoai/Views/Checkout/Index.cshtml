@@ -1,0 +1,432 @@
+﻿@model WebBanDienThoai.Models.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Thanh toán";
+
+    var cart = ViewBag.Cart as List<WebBanDienThoai.Models.CartItemViewModel>
+               ?? new List<WebBanDienThoai.Models.CartItemViewModel>();
+
+    int cartCount = ViewBag.CartCount ?? 0;
+    decimal cartTotal = ViewBag.CartTotal ?? 0;
+
+    string tenChiNhanh = Model?.TenChiNhanh ?? "";
+
+    if (string.IsNullOrWhiteSpace(tenChiNhanh) && ViewBag.TenChiNhanh != null)
+    {
+        tenChiNhanh = ViewBag.TenChiNhanh.ToString();
+    }
+
+    if (string.IsNullOrWhiteSpace(tenChiNhanh) && cart.Count > 0)
+    {
+        tenChiNhanh = cart.First().TenChiNhanh;
+    }
+}
+
+<div class="phone-page">
+
+    <h2 class="product-section-title">
+        Thanh toán đơn hàng <span>✧</span>
+    </h2>
+
+    <div style="display:grid; grid-template-columns: minmax(0, 1fr) 380px; gap:24px; align-items:start;">
+
+        <form asp-controller="Checkout"
+              asp-action="PlaceOrder"
+              method="post"
+              style="background:white; border-radius:28px; padding:28px; box-shadow:0 8px 20px rgba(0,0,0,.08);">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 style="color:#d9534f; font-weight:800; margin-bottom:12px;">
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Họ tên khách hàng</label>
+                <input asp-for="HoTen"
+                       class="form-control"
+                       placeholder="Nhập họ tên khách hàng"
+                       style="height:52px; border-radius:16px; margin-top:8px;" />
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Số điện thoại</label>
+                <input asp-for="SDT"
+                       class="form-control"
+                       placeholder="Nhập số điện thoại"
+                       style="height:52px; border-radius:16px; margin-top:8px;" />
+                <span asp-validation-for="SDT" class="text-danger"></span>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Chi nhánh xử lý đơn</label>
+
+                <input type="hidden" asp-for="MaChiNhanh" />
+                <input type="hidden" asp-for="TenChiNhanh" />
+
+                <div style="height:52px; border-radius:16px; margin-top:8px; background:#e8f2f4; color:#0f4b5c; display:flex; align-items:center; padding:0 18px; font-weight:900;">
+                    @tenChiNhanh
+                </div>
+
+                <div style="font-size:13px; color:#8a99a3; margin-top:6px;">
+                    Chi nhánh này được tự động lấy theo sản phẩm trong giỏ hàng. Bạn không thể đổi sang chi nhánh khác.
+                </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Hình thức nhận hàng</label>
+
+                <div style="display:flex; gap:14px; margin-top:10px; flex-wrap:wrap;">
+                    <label id="lblNhanTaiCuaHang"
+                           style="background:#e8f2f4; padding:14px 18px; border-radius:18px; font-weight:900; color:#0f4b5c; cursor:pointer;">
+                        <input type="radio"
+                               asp-for="HinhThucNhanHang"
+                               value="Nhận tại cửa hàng" />
+                        Nhận tại cửa hàng
+                    </label>
+
+                    <label id="lblGiaoHang"
+                           style="background:#e8f2f4; padding:14px 18px; border-radius:18px; font-weight:900; color:#0f4b5c; cursor:pointer;">
+                        <input type="radio"
+                               asp-for="HinhThucNhanHang"
+                               value="Giao hàng" />
+                        Giao hàng
+                    </label>
+                </div>
+
+                <span asp-validation-for="HinhThucNhanHang" class="text-danger"></span>
+
+                <div id="pickup-note"
+                     style="font-size:13px; color:#8a99a3; margin-top:8px;">
+                    Khách đến nhận tại chi nhánh xử lý đơn: <strong>@tenChiNhanh</strong>.
+                </div>
+
+                <div id="delivery-note"
+                     style="display:none; font-size:13px; color:#8a6500; margin-top:8px; background:#fff7e8; padding:10px 14px; border-radius:14px; font-weight:700;">
+                    Bạn đã chọn giao hàng. Vui lòng nhập đầy đủ địa chỉ bên dưới để cửa hàng giao đúng nơi.
+                </div>
+            </div>
+
+            <div id="diaChiBox" style="margin-bottom:18px;">
+                <label id="lblDiaChiGiaoHang" style="font-weight:900; color:#153747;">
+                    Địa chỉ giao hàng
+                </label>
+
+                <textarea asp-for="DiaChiGiaoHang"
+                          class="form-control"
+                          rows="3"
+                          style="border-radius:16px; margin-top:8px;"></textarea>
+
+                <span asp-validation-for="DiaChiGiaoHang" class="text-danger"></span>
+
+                <div id="diachi-help"
+                     style="font-size:13px; color:#8a99a3; margin-top:6px;">
+                    Nếu nhận tại cửa hàng thì có thể bỏ trống địa chỉ.
+                </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Mã giảm giá</label>
+
+                <select asp-for="MaGiamGia"
+                        id="MaGiamGia"
+                        class="form-control"
+                        style="height:52px; border-radius:16px; margin-top:8px;">
+                    <option value="">--Không áp dụng--</option>
+                    <option value="LHP50K">LHP50K - Giảm 50,000đ từ đơn 500,000đ</option>
+                    <option value="LHP10">LHP10 - Giảm 10%, tối đa 500,000đ từ đơn 1,000,000đ</option>
+                    <option value="VIP100K">VIP100K - Giảm 100,000đ từ đơn 2,000,000đ</option>
+                </select>
+
+                <div id="discount-note"
+                     style="font-size:13px; color:#8a6500; margin-top:8px; background:#fff7e8; padding:10px 14px; border-radius:14px; font-weight:700; display:none;">
+                </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Phương thức thanh toán</label>
+
+                <div style="display:flex; gap:14px; margin-top:10px; flex-wrap:wrap;">
+                    <label id="lblThanhToanKhiNhanHang"
+                           style="background:#e8f2f4; padding:14px 18px; border-radius:18px; font-weight:900; color:#0f4b5c; cursor:pointer;">
+                        <input type="radio"
+                               asp-for="PhuongThucThanhToan"
+                               value="Thanh toán khi nhận hàng" />
+                        Thanh toán khi nhận hàng
+                    </label>
+
+                    <label id="lblChuyenKhoan"
+                           style="background:#e8f2f4; padding:14px 18px; border-radius:18px; font-weight:900; color:#0f4b5c; cursor:pointer;">
+                        <input type="radio"
+                               asp-for="PhuongThucThanhToan"
+                               value="Chuyển khoản" />
+                        Chuyển khoản VietQR
+                    </label>
+                </div>
+
+                <span asp-validation-for="PhuongThucThanhToan" class="text-danger"></span>
+
+                <div id="cod-note"
+                     style="font-size:13px; color:#8a99a3; margin-top:8px;">
+                    Đơn website sẽ ở trạng thái <strong>Chưa thanh toán</strong> cho đến khi nhân viên xử lý đơn.
+                </div>
+
+                <div id="vietqr-note"
+                     style="display:none; font-size:13px; color:#8a6500; margin-top:8px; background:#fff7e8; padding:10px 14px; border-radius:14px; font-weight:700;">
+                    Sau khi bấm xác nhận đặt hàng, hệ thống sẽ chuyển sang trang VietQR để khách quét mã chuyển khoản.
+                    Nhân viên sẽ kiểm tra và xác nhận thanh toán khi xử lý đơn.
+                </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="font-weight:900; color:#153747;">Ghi chú</label>
+                <textarea asp-for="GhiChu"
+                          class="form-control"
+                          rows="3"
+                          style="border-radius:16px; margin-top:8px;"></textarea>
+            </div>
+
+            <button type="submit"
+                    class="checkout-btn"
+                    style="width:100%;">
+                Xác nhận đặt hàng
+            </button>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               style="display:block; text-align:center; margin-top:14px; font-weight:900; color:#0f4b5c;">
+                Quay lại chọn sản phẩm
+            </a>
+        </form>
+
+        <aside class="cart-panel" style="display:block; position:sticky; top:20px;">
+            <div class="cart-title-small">Đơn hàng</div>
+            <div class="cart-title">Sản phẩm đã chọn</div>
+
+            @if (cart.Count > 0)
+            {
+                    <div style="background:#e8f2f4; color:#0f4b5c; padding:10px 14px; border-radius:14px; font-weight:900; margin-bottom:12px;">
+                        Chi nhánh xử lý: @tenChiNhanh
+                    </div>
+            }
+
+            @foreach (var item in cart)
+            {
+                    <div style="background:white; border:1px solid #e8e3db; border-radius:18px; padding:14px; margin-bottom:12px;">
+                        <div style="font-weight:900; color:#153747;">
+                        @item.TenSP
+                        </div>
+
+                        <div style="font-size:13px; color:#8a99a3; margin-top:4px;">
+                        @item.TenHang - @item.TenChiNhanh
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                            <span>@item.SoLuong x @item.DonGia.ToString("N0")đ</span>
+                            <strong>@item.ThanhTien.ToString("N0")đ</strong>
+                        </div>
+                    </div>
+            }
+
+            <div class="cart-line">
+                <span>Số lượng</span>
+                <strong>@cartCount</strong>
+            </div>
+
+            <div class="cart-line">
+                <span>Tổng tiền gốc</span>
+                <strong id="cartTotalGoc">@cartTotal.ToString("N0")đ</strong>
+            </div>
+
+            <div class="cart-line">
+                <span>Giảm giá</span>
+                <strong id="cartDiscount">0đ</strong>
+            </div>
+
+            <div class="cart-line">
+                <span>Thanh toán</span>
+                <strong id="cartFinalTotal">@cartTotal.ToString("N0")đ</strong>
+            </div>
+
+            <div style="margin-top:14px; font-size:13px; color:#8a99a3; line-height:1.5;">
+                Đơn hàng sẽ được nhân viên chi nhánh <strong>@tenChiNhanh</strong> kiểm tra và xử lý.
+            </div>
+        </aside>
+    </div>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+
+        <script>
+            function updateCheckoutOptions() {
+                const selectedNhanHang = document.querySelector('input[name="HinhThucNhanHang"]:checked')?.value;
+                const selectedThanhToan = document.querySelector('input[name="PhuongThucThanhToan"]:checked')?.value;
+
+                const diaChiBox = document.getElementById('diaChiBox');
+                const lblDiaChiGiaoHang = document.getElementById('lblDiaChiGiaoHang');
+                const pickupNote = document.getElementById('pickup-note');
+                const deliveryNote = document.getElementById('delivery-note');
+                const diachiHelp = document.getElementById('diachi-help');
+
+                const codNote = document.getElementById('cod-note');
+                const vietqrNote = document.getElementById('vietqr-note');
+
+                const lblNhanTaiCuaHang = document.getElementById('lblNhanTaiCuaHang');
+                const lblGiaoHang = document.getElementById('lblGiaoHang');
+                const lblThanhToanKhiNhanHang = document.getElementById('lblThanhToanKhiNhanHang');
+                const lblChuyenKhoan = document.getElementById('lblChuyenKhoan');
+
+                if (selectedNhanHang === 'Giao hàng') {
+                    diaChiBox.style.display = 'block';
+                    lblDiaChiGiaoHang.innerText = 'Địa chỉ giao hàng *';
+                    pickupNote.style.display = 'none';
+                    deliveryNote.style.display = 'block';
+                    diachiHelp.innerText = 'Bắt buộc nhập địa chỉ khi chọn giao hàng.';
+
+                    lblGiaoHang.style.background = '#0f4b5c';
+                    lblGiaoHang.style.color = 'white';
+                    lblNhanTaiCuaHang.style.background = '#e8f2f4';
+                    lblNhanTaiCuaHang.style.color = '#0f4b5c';
+                } else {
+                    diaChiBox.style.display = 'block';
+                    lblDiaChiGiaoHang.innerText = 'Địa chỉ giao hàng';
+                    pickupNote.style.display = 'block';
+                    deliveryNote.style.display = 'none';
+                    diachiHelp.innerText = 'Nếu nhận tại cửa hàng thì có thể bỏ trống địa chỉ.';
+
+                    lblNhanTaiCuaHang.style.background = '#0f4b5c';
+                    lblNhanTaiCuaHang.style.color = 'white';
+                    lblGiaoHang.style.background = '#e8f2f4';
+                    lblGiaoHang.style.color = '#0f4b5c';
+                }
+
+                if (selectedThanhToan === 'Chuyển khoản') {
+                    codNote.style.display = 'none';
+                    vietqrNote.style.display = 'block';
+
+                    lblChuyenKhoan.style.background = '#0f4b5c';
+                    lblChuyenKhoan.style.color = 'white';
+                    lblThanhToanKhiNhanHang.style.background = '#e8f2f4';
+                    lblThanhToanKhiNhanHang.style.color = '#0f4b5c';
+                } else {
+                    codNote.style.display = 'block';
+                    vietqrNote.style.display = 'none';
+
+                    lblThanhToanKhiNhanHang.style.background = '#0f4b5c';
+                    lblThanhToanKhiNhanHang.style.color = 'white';
+                    lblChuyenKhoan.style.background = '#e8f2f4';
+                    lblChuyenKhoan.style.color = '#0f4b5c';
+                }
+            }
+
+            const cartTotalValue = @cartTotal;
+
+            function formatVnd(value) {
+                return new Intl.NumberFormat('vi-VN').format(value) + 'đ';
+            }
+
+            function tinhGiamGiaWeb(ma, tongTienGoc) {
+                ma = (ma || '').trim().toUpperCase();
+
+                if (ma === 'LHP50K') {
+                    if (tongTienGoc >= 500000) {
+                        return {
+                            giamGia: 50000,
+                            message: 'Áp dụng LHP50K: giảm 50,000đ.'
+                        };
+                    }
+
+                    return {
+                        giamGia: 0,
+                        message: 'Mã LHP50K chỉ áp dụng cho đơn từ 500,000đ.'
+                    };
+                }
+
+                if (ma === 'LHP10') {
+                    if (tongTienGoc >= 1000000) {
+                        let giam = tongTienGoc * 0.10;
+
+                        if (giam > 500000) {
+                            giam = 500000;
+                        }
+
+                        return {
+                            giamGia: giam,
+                            message: 'Áp dụng LHP10: giảm 10%, tối đa 500,000đ.'
+                        };
+                    }
+
+                    return {
+                        giamGia: 0,
+                        message: 'Mã LHP10 chỉ áp dụng cho đơn từ 1,000,000đ.'
+                    };
+                }
+
+                if (ma === 'VIP100K') {
+                    if (tongTienGoc >= 2000000) {
+                        return {
+                            giamGia: 100000,
+                            message: 'Áp dụng VIP100K: giảm 100,000đ.'
+                        };
+                    }
+
+                    return {
+                        giamGia: 0,
+                        message: 'Mã VIP100K chỉ áp dụng cho đơn từ 2,000,000đ.'
+                    };
+                }
+
+                return {
+                    giamGia: 0,
+                    message: ''
+                };
+            }
+
+            function updateDiscountPreview() {
+                const select = document.getElementById('MaGiamGia');
+                const note = document.getElementById('discount-note');
+                const discountEl = document.getElementById('cartDiscount');
+                const finalTotalEl = document.getElementById('cartFinalTotal');
+
+                if (!select || !discountEl || !finalTotalEl) {
+                    return;
+                }
+
+                const ma = select.value;
+                const result = tinhGiamGiaWeb(ma, cartTotalValue);
+
+                let thanhTien = cartTotalValue - result.giamGia;
+
+                if (thanhTien < 0) {
+                    thanhTien = 0;
+                }
+
+                discountEl.innerText = formatVnd(result.giamGia);
+                finalTotalEl.innerText = formatVnd(thanhTien);
+
+                if (result.message) {
+                    note.style.display = 'block';
+                    note.innerText = result.message;
+                } else {
+                    note.style.display = 'none';
+                    note.innerText = '';
+                }
+            }
+
+            document.querySelectorAll('input[name="HinhThucNhanHang"], input[name="PhuongThucThanhToan"]')
+                .forEach(function (radio) {
+                    radio.addEventListener('change', updateCheckoutOptions);
+                });
+
+            const maGiamGiaSelect = document.getElementById('MaGiamGia');
+
+            if (maGiamGiaSelect) {
+                maGiamGiaSelect.addEventListener('change', updateDiscountPreview);
+            }
+
+            updateCheckoutOptions();
+            updateDiscountPreview();
+        </script>
+}

@@ -1,0 +1,428 @@
+﻿@model List<WebBanDienThoai.Models.SanPhamWeb>
+
+@{
+    ViewData["Title"] = "Sản phẩm";
+
+    var dsHang = ViewBag.HangSanXuat as List<WebBanDienThoai.Models.HangSanXuatWeb>;
+    var dsChiNhanh = ViewBag.ChiNhanh as List<WebBanDienThoai.Models.ChiNhanhWeb>;
+
+    var cart = ViewBag.Cart as List<WebBanDienThoai.Models.CartItemViewModel>
+               ?? new List<WebBanDienThoai.Models.CartItemViewModel>();
+
+    int cartCount = ViewBag.CartCount ?? 0;
+    decimal cartTotal = ViewBag.CartTotal ?? 0;
+
+    string keyword = ViewBag.Keyword as string ?? "";
+    string maHangDangChon = ViewBag.MaHangDangChon as string ?? "";
+    string maChiNhanhDangChon = ViewBag.MaChiNhanhDangChon as string ?? "";
+}
+
+<div class="phone-page" id="top-section">
+
+    @if (TempData["CartMessage"] != null)
+    {
+            <div class="cart-notify-wrapper">
+                <div class="cart-notify-box">
+                @TempData["CartMessage"]
+                </div>
+            </div>
+    }
+
+    <!-- PHẦN CHÀO KHÁCH -->
+    <section class="greeting-card">
+        <div class="avatar-circle">
+            LHP
+        </div>
+
+        <div>
+            <div class="greeting-label">Chào mừng đến LHP Mobile!</div>
+            <div class="greeting-name">Cửa hàng điện thoại di động</div>
+        </div>
+
+        <div class="greeting-icons">
+            <a asp-controller="UuDai"
+               asp-action="Index"
+               style="text-decoration:none;">
+                🏷️
+            </a>
+
+            <span>🔔</span>
+        </div>
+    </section>
+
+    <!-- BANNER CHÍNH -->
+    <section class="promo-banner">
+        <div class="promo-left">
+            <div class="promo-kicker">Ưu đãi công nghệ</div>
+
+            <div class="promo-title">
+                Smartphone mới<br />
+                sẵn sàng lên đời
+            </div>
+
+            <p class="promo-desc">
+                Khám phá các mẫu điện thoại đang bán tại hệ thống LHP Mobile.
+                Lọc theo hãng, chọn chi nhánh và đặt hàng nhanh chóng.
+            </p>
+
+            <a href="#product-section" class="promo-btn">
+                Khám phá ngay
+            </a>
+        </div>
+
+        <div class="phone-visual">
+            <div class="phone-mockup"></div>
+        </div>
+    </section>
+
+    <!-- HAI THẺ DỊCH VỤ -->
+    <section class="order-type-grid">
+        <div class="order-type-card">
+            <div class="order-type-icon">🚚</div>
+            <div class="order-type-title">Giao hàng</div>
+        </div>
+
+        <div class="order-type-card">
+            <div class="order-type-icon">🏬</div>
+            <div class="order-type-title">Lấy tại cửa hàng</div>
+        </div>
+    </section>
+
+    <div class="order-note">
+        Đặt hàng online - nhận máy tại cửa hàng hoặc giao tận nơi
+    </div>
+
+    <!-- TIÊU ĐỀ KHU SẢN PHẨM -->
+    <h2 class="product-section-title" id="product-section">
+        Sản phẩm nổi bật <span>✧</span>
+    </h2>
+
+    <!-- KHU SHOP CHÍNH -->
+    <section class="phone-shop-area">
+
+        <!-- SIDEBAR DANH MỤC DỌC -->
+        <aside class="vertical-category">
+            <div class="vertical-category-title">Danh mục</div>
+
+            <a class="category-item @(string.IsNullOrEmpty(maHangDangChon) ? "active" : "")"
+               href="@Url.Action("Index", "Product", new { keyword = keyword, maChiNhanh = maChiNhanhDangChon })">
+                <span class="category-icon">📱</span>
+                <span>Tất cả</span>
+            </a>
+
+            @if (dsHang != null)
+            {
+                foreach (var hang in dsHang)
+                {
+                    string icon = "📱";
+                    string tenHangLower = hang.TenHang.ToLower();
+
+                    if (tenHangLower.Contains("apple"))
+                    {
+                        icon = "🍎";
+                    }
+                    else if (tenHangLower.Contains("samsung"))
+                    {
+                        icon = "🤖";
+                    }
+                    else if (tenHangLower.Contains("oppo"))
+                    {
+                        icon = "✨";
+                    }
+                    else if (tenHangLower.Contains("vivo"))
+                    {
+                        icon = "💠";
+                    }
+                    else if (tenHangLower.Contains("xiaomi"))
+                    {
+                        icon = "⚡";
+                    }
+
+                            <a class="category-item @(maHangDangChon == hang.MaHang ? "active" : "")"
+                               href="@Url.Action("Index", "Product", new { keyword = keyword, maHang = hang.MaHang, maChiNhanh = maChiNhanhDangChon })">
+                                <span class="category-icon">@icon</span>
+                                <span>@hang.TenHang</span>
+                            </a>
+                }
+            }
+        </aside>
+
+        <!-- NỘI DUNG SẢN PHẨM -->
+        <main class="product-content">
+
+            <!-- BOX GỢI Ý -->
+            <div class="group-card">
+                <div>
+                    <div class="group-title">Mua điện thoại dễ dàng hơn</div>
+                    <div class="group-desc">
+                        Chọn sản phẩm yêu thích, thêm vào giỏ và đặt hàng nhanh.
+                    </div>
+                </div>
+
+                <a asp-controller="UuDai"
+                   asp-action="Index"
+                   class="group-btn"
+                   style="text-decoration:none;">
+                    Xem ưu đãi
+                </a>
+            </div>
+
+            <!-- SEARCH + CHI NHÁNH -->
+            <form method="get"
+                  asp-controller="Product"
+                  asp-action="Index"
+                  class="search-tabs"
+                  id="search-section">
+
+                <input type="hidden" name="maHang" value="@maHangDangChon" />
+
+                <div class="search-pill">
+                    <span style="font-size: 30px;">⌕</span>
+                    <input type="text"
+                           name="keyword"
+                           value="@keyword"
+                           placeholder="Bạn muốn tìm điện thoại gì?" />
+                </div>
+
+                <select name="maChiNhanh"
+                        class="branch-select"
+                        onchange="this.form.submit()">
+                    <option value="">Tất cả chi nhánh</option>
+
+                    @if (dsChiNhanh != null)
+                    {
+                        foreach (var cn in dsChiNhanh)
+                        {
+                            if (maChiNhanhDangChon == cn.MaChiNhanh)
+                            {
+                                            <option value="@cn.MaChiNhanh" selected>@cn.TenChiNhanh</option>
+                            }
+                            else
+                            {
+                                            <option value="@cn.MaChiNhanh">@cn.TenChiNhanh</option>
+                            }
+                        }
+                    }
+                </select>
+            </form>
+
+            <!-- TABS LỌC NHANH -->
+            <div class="filter-tabs">
+                <a class="filter-tab @(string.IsNullOrEmpty(keyword) ? "active" : "")"
+                   href="@Url.Action("Index", "Product", new { maChiNhanh = maChiNhanhDangChon })">
+                    Tất cả
+                </a>
+
+                <a class="filter-tab @(keyword.ToLower() == "iphone" ? "active" : "")"
+                   href="@Url.Action("Index", "Product", new { keyword = "iphone", maChiNhanh = maChiNhanhDangChon })">
+                    iPhone
+                </a>
+
+                <a class="filter-tab @(keyword.ToLower() == "samsung" ? "active" : "")"
+                   href="@Url.Action("Index", "Product", new { keyword = "samsung", maChiNhanh = maChiNhanhDangChon })">
+                    Samsung
+                </a>
+
+                <a class="filter-tab @(keyword.ToLower() == "oppo" ? "active" : "")"
+                   href="@Url.Action("Index", "Product", new { keyword = "oppo", maChiNhanh = maChiNhanhDangChon })">
+                    Oppo
+                </a>
+            </div>
+
+            <!-- DANH SÁCH SẢN PHẨM -->
+            @if (Model == null || Model.Count == 0)
+            {
+                    <div class="cart-empty-box">
+                        Không tìm thấy sản phẩm phù hợp.
+                    </div>
+            }
+            else
+            {
+                    <div class="product-grid-mobile">
+                    @foreach (var sp in Model)
+                    {
+                                <div class="phone-card">
+
+                            @if (sp.TonKho > 0)
+                            {
+                                            <div class="discount-badge">
+                                                New
+                                            </div>
+                            }
+                            else
+                            {
+                                            <div class="discount-badge">
+                                                Hết
+                                            </div>
+                            }
+
+                                    <div class="phone-img-box">
+                                @sp.TenSP.Substring(0, Math.Min(2, sp.TenSP.Length)).ToUpper()
+                                    </div>
+
+                                    <div class="phone-card-body">
+                                        <div class="phone-name">
+                                    @sp.TenSP
+                                        </div>
+
+                                        <div class="phone-meta">
+                                            Mã SP: <strong>@sp.MaSP</strong><br />
+                                            Hãng: <strong>@sp.HangSanXuat?.TenHang</strong><br />
+                                            Chi nhánh: <strong>@sp.ChiNhanh?.TenChiNhanh</strong><br />
+
+                                            Tồn kho:
+                                    @if (sp.TonKho > 0)
+                                    {
+                                                    <strong>@sp.TonKho</strong>
+                                    }
+                                    else
+                                    {
+                                                    <strong class="text-danger">Tạm hết hàng</strong>
+                                    }
+
+                                            <br />
+                                    @sp.CauHinh
+                                        </div>
+
+                                        <div class="phone-price">
+                                    @sp.GiaBan.ToString("N0")đ
+                                        </div>
+
+                                        <div class="old-price">
+                                    @{
+                                        var giaCu = sp.GiaBan + 1200000;
+                                    }
+                                    @giaCu.ToString("N0")đ
+                                        </div>
+
+                                @if (sp.TonKho > 0)
+                                {
+                                                <a href="@Url.Action("Add", "Cart", new { id = sp.MaSP })" class="add-round">
+                                                    +
+                                                </a>
+                                }
+                                else
+                                {
+                                                <button class="add-round" disabled style="opacity: .45; cursor: not-allowed;">
+                                                    ×
+                                                </button>
+                                }
+                                    </div>
+                                </div>
+                    }
+                    </div>
+            }
+        </main>
+
+        <!-- CART PANEL PHẢI -->
+        <aside class="cart-panel" id="cart-section">
+            <div class="cart-title-small">Giỏ hàng</div>
+            <div class="cart-title">Sản phẩm đã chọn</div>
+
+            @if (cart.Count > 0)
+            {
+                    <div style="background:#e8f2f4; color:#0f4b5c; padding:10px 14px; border-radius:14px; font-weight:900; margin-bottom:12px;">
+                        Chi nhánh xử lý: @cart.First().TenChiNhanh
+                    </div>
+            }
+
+            @if (cart.Count == 0)
+            {
+                    <div class="cart-empty-box">
+                        Chưa có sản phẩm nào.
+                    </div>
+            }
+            else
+            {
+                    <div class="cart-list">
+                    @foreach (var item in cart)
+                    {
+                                <div style="background:white; border:1px solid #e8e3db; border-radius:18px; padding:14px; margin-bottom:12px;">
+                                    <div style="font-weight:900; color:#153747;">
+                                @item.TenSP
+                                    </div>
+
+                                    <div style="font-size:13px; color:#8a99a3; margin-top:4px;">
+                                @item.TenHang - @item.TenChiNhanh
+                                    </div>
+
+                                    <div style="font-weight:900; color:#0f4b5c; margin-top:6px;">
+                                @item.DonGia.ToString("N0")đ
+                                    </div>
+
+                                    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+                                        <div>
+                                            <a href="@Url.Action("Decrease", "Cart", new { id = item.MaSP })"
+                                               style="display:inline-flex; width:28px; height:28px; border-radius:50%; background:#e8f2f4; color:#0f4b5c; align-items:center; justify-content:center; font-weight:900; text-decoration:none;">
+                                                -
+                                            </a>
+
+                                            <span style="display:inline-block; min-width:30px; text-align:center; font-weight:900;">
+                                        @item.SoLuong
+                                            </span>
+
+                                            <a href="@Url.Action("Increase", "Cart", new { id = item.MaSP })"
+                                               style="display:inline-flex; width:28px; height:28px; border-radius:50%; background:#0f4b5c; color:white; align-items:center; justify-content:center; font-weight:900; text-decoration:none;">
+                                                +
+                                            </a>
+                                        </div>
+
+                                        <a href="@Url.Action("Remove", "Cart", new { id = item.MaSP })"
+                                           style="color:#d9534f; font-weight:900;">
+                                            Xóa
+                                        </a>
+                                    </div>
+                                </div>
+                    }
+                    </div>
+            }
+
+            <div class="cart-line">
+                <span>Số lượng</span>
+                <strong>@cartCount</strong>
+            </div>
+
+            <div class="cart-line">
+                <span>Tổng tiền</span>
+                <strong>@cartTotal.ToString("N0")đ</strong>
+            </div>
+
+            @if (cart.Count > 0)
+            {
+                    <a href="@Url.Action("Clear", "Cart")"
+                       style="display:block; text-align:center; margin-top:12px; color:#d9534f; font-weight:900;">
+                        Xóa giỏ hàng
+                    </a>
+            }
+
+            @if (cart.Count > 0)
+            {
+                    <a href="@Url.Action("Index", "Checkout")"
+                       class="checkout-btn"
+                       style="display:block; text-align:center;">
+                        Đặt hàng với giỏ hàng
+                    </a>
+            }
+            else
+            {
+                    <button class="checkout-btn" type="button" disabled style="opacity:.5; cursor:not-allowed;">
+                        Đặt hàng với giỏ hàng
+                    </button>
+            }
+        </aside>
+
+    </section>
+
+    <!-- GIỎ HÀNG NỔI KHI MÀN HÌNH NHỎ -->
+    <a href="#product-section" class="floating-cart">
+        🛍️
+
+        @if (cartCount > 0)
+        {
+                <span style="position:absolute; top:-4px; right:-4px; background:#d9534f; color:white; width:24px; height:24px; border-radius:50%; font-size:13px; display:flex; align-items:center; justify-content:center; font-weight:900;">
+                @cartCount
+                </span>
+        }
+    </a>
+
+</div>

@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Ưu đãi";
+}
+
+<div class="phone-page">
+    <h2 class="product-section-title">
+        Ưu đãi hiện có <span>✧</span>
+    </h2>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:22px; margin-top:24px;">
+
+        <div style="background:white; border-radius:28px; padding:26px; box-shadow:0 8px 20px rgba(0,0,0,.08); border:1px solid #efe8df;">
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                Mã giảm giá
+            </div>
+
+            <h3 style="font-size:34px; color:#153747; font-weight:900; margin-top:10px;">
+                LHP50K
+            </h3>
+
+            <p style="color:#7d8a91; font-weight:700; margin-top:8px;">
+                Giảm ngay 50,000đ cho đơn hàng từ 500,000đ.
+            </p>
+
+            <div style="margin-top:18px; background:#e8f2f4; color:#0f4b5c; padding:12px 16px; border-radius:16px; font-weight:900;">
+                Áp dụng tại trang thanh toán
+            </div>
+        </div>
+
+        <div style="background:white; border-radius:28px; padding:26px; box-shadow:0 8px 20px rgba(0,0,0,.08); border:1px solid #efe8df;">
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                Mã giảm giá
+            </div>
+
+            <h3 style="font-size:34px; color:#153747; font-weight:900; margin-top:10px;">
+                LHP10
+            </h3>
+
+            <p style="color:#7d8a91; font-weight:700; margin-top:8px;">
+                Giảm 10%, tối đa 500,000đ cho đơn hàng từ 1,000,000đ.
+            </p>
+
+            <div style="margin-top:18px; background:#e8f2f4; color:#0f4b5c; padding:12px 16px; border-radius:16px; font-weight:900;">
+                Phù hợp khi mua điện thoại
+            </div>
+        </div>
+
+        <div style="background:white; border-radius:28px; padding:26px; box-shadow:0 8px 20px rgba(0,0,0,.08); border:1px solid #efe8df;">
+            <div style="color:#b08a5a; text-transform:uppercase; font-weight:900; letter-spacing:1px;">
+                Khách hàng thân thiết
+            </div>
+
+            <h3 style="font-size:34px; color:#153747; font-weight:900; margin-top:10px;">
+                VIP100K
+            </h3>
+
+            <p style="color:#7d8a91; font-weight:700; margin-top:8px;">
+                Giảm 100,000đ cho đơn hàng từ 2,000,000đ.
+            </p>
+
+            <div style="margin-top:18px; background:#fff7e8; color:#8a6500; padding:12px 16px; border-radius:16px; font-weight:900;">
+                Gợi ý dùng cho khách hàng thành viên
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top:30px; background:white; border-radius:28px; padding:28px; box-shadow:0 8px 20px rgba(0,0,0,.08);">
+        <h3 style="color:#153747; font-weight:900;">
+            Cách sử dụng mã ưu đãi
+        </h3>
+
+        <div style="margin-top:14px; color:#6f7c83; font-weight:700; line-height:1.8;">
+            1. Chọn sản phẩm và thêm vào giỏ hàng.<br />
+            2. Vào trang thanh toán.<br />
+            3. Chọn mã giảm giá phù hợp.<br />
+            4. Hệ thống tự tính số tiền giảm và thành tiền sau giảm.<br />
+            5. Nếu chọn chuyển khoản VietQR, mã QR sẽ dùng số tiền sau giảm.
+        </div>
+
+        <a asp-controller="Product"
+           asp-action="Index"
+           style="display:inline-block; margin-top:22px; background:#0f4b5c; color:white; padding:14px 28px; border-radius:18px; font-weight:900; text-decoration:none;">
+            Mua hàng ngay
+        </a>
+    </div>
+</div>

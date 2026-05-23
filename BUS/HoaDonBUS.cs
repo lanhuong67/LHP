@@ -39,5 +39,9 @@ namespace BUS
         {
             return _dal.HuyHoaDonThongTu78(maHD, lyDo, maNhanVienHuy);
         }
+        public bool XacNhanDonWeb(string maHD, Dictionary<string, List<string>> imeiTheoSanPham, string maNhanVien)
+        {
+            return _dal.XacNhanDonWeb(maHD, imeiTheoSanPham, maNhanVien);
+        }
     }
 }

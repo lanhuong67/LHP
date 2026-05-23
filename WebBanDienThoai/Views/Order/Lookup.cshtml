@@ -1,0 +1,235 @@
+﻿@model WebBanDienThoai.Models.OrderLookupViewModel
+
+@{
+    ViewData["Title"] = "Tra cứu đơn hàng";
+}
+
+<div class="phone-page">
+
+    <h2 class="product-section-title">
+        Tra cứu đơn hàng <span>✧</span>
+    </h2>
+
+    <div style="display:grid; grid-template-columns: 420px 1fr; gap:24px; align-items:start;">
+
+        <form asp-controller="Order"
+              asp-action="Lookup"
+              method="post"
+              style="background:white; border-radius:28px; padding:28px; box-shadow:0 8px 20px rgba(0,0,0,.08); position:sticky; top:20px;">
+
+            @Html.AntiForgeryToken()
+
+            <div style="font-weight:900; color:#b78b5d; margin-bottom:6px; text-transform:uppercase;">
+                Kiểm tra trạng thái
+            </div>
+
+            <div style="font-size:34px; font-weight:1000; color:#153747; line-height:1.1; margin-bottom:16px;">
+                Đơn hàng của bạn
+            </div>
+
+            <div asp-validation-summary="ModelOnly"
+                 style="color:#d9534f; font-weight:800; margin-bottom:12px;">
+            </div>
+
+            <label style="font-weight:900; color:#153747;">Mã đơn hàng hoặc SĐT</label>
+
+            <input asp-for="TuKhoa"
+                   class="form-control"
+                   placeholder="VD: HDWEB2026... hoặc 090..."
+                   style="height:54px; border-radius:18px; margin-top:8px; margin-bottom:8px;" />
+
+            <span asp-validation-for="TuKhoa" class="text-danger"></span>
+
+            <button type="submit"
+                    class="checkout-btn"
+                    style="width:100%; margin-top:18px;">
+                Tra cứu ngay
+            </button>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               style="display:block; text-align:center; margin-top:14px; font-weight:900; color:#0f4b5c;">
+                Quay lại mua hàng
+            </a>
+        </form>
+
+        <div>
+            @if (Model.KetQua != null && Model.KetQua.Count > 0)
+            {
+                foreach (var don in Model.KetQua)
+                {
+                    string statusBg = "#e8f2f4";
+                    string statusColor = "#0f4b5c";
+
+                    if (don.TrangThai == "Chờ xử lý")
+                    {
+                        statusBg = "#fff4dc";
+                        statusColor = "#c77700";
+                    }
+                    else if (don.TrangThai == "Hoàn thành")
+                    {
+                        statusBg = "#e6f7ea";
+                        statusColor = "#178a3d";
+                    }
+                    else if (don.TrangThai == "Đã hủy")
+                    {
+                        statusBg = "#fde8e8";
+                        statusColor = "#c92a2a";
+                    }
+
+                            <div style="background:white; border-radius:28px; padding:24px; box-shadow:0 8px 20px rgba(0,0,0,.08); margin-bottom:22px;">
+
+                                <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap; margin-bottom:18px;">
+                                    <div>
+                                        <div style="font-size:13px; color:#8a99a3; font-weight:900; text-transform:uppercase;">
+                                            Mã đơn hàng
+                                        </div>
+
+                                        <div style="font-size:26px; font-weight:1000; color:#153747;">
+                                    @don.MaHD
+                                        </div>
+
+                                        <div style="font-size:14px; color:#8a99a3; margin-top:4px;">
+                                            Ngày đặt: @don.NgayLap.ToString("dd/MM/yyyy HH:mm")
+                                        </div>
+                                    </div>
+
+                                    <div style="background:@statusBg; color:@statusColor; padding:12px 18px; border-radius:999px; font-weight:1000;">
+                                @don.TrangThai
+                                    </div>
+                                </div>
+
+                                <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:14px; margin-bottom:18px;">
+
+                                    <div style="background:#f8fafb; padding:14px; border-radius:18px;">
+                                        <div style="font-size:12px; color:#8a99a3; font-weight:900;">Khách hàng</div>
+                                        <div style="font-weight:900; color:#153747;">@don.TenKhachHang</div>
+                                    </div>
+
+                                    <div style="background:#f8fafb; padding:14px; border-radius:18px;">
+                                        <div style="font-size:12px; color:#8a99a3; font-weight:900;">Số điện thoại</div>
+                                        <div style="font-weight:900; color:#153747;">@don.SDTKhachHang</div>
+                                    </div>
+
+                                    <div style="background:#f8fafb; padding:14px; border-radius:18px;">
+                                        <div style="font-size:12px; color:#8a99a3; font-weight:900;">Chi nhánh xử lý</div>
+                                        <div style="font-weight:900; color:#153747;">@don.TenChiNhanh</div>
+                                    </div>
+
+                                    <div style="background:#f8fafb; padding:14px; border-radius:18px;">
+                                        <div style="font-size:12px; color:#8a99a3; font-weight:900;">Tổng tiền</div>
+                                        <div style="font-weight:1000; color:#0f4b5c;">@don.TongTien.ToString("N0")đ</div>
+                                    </div>
+
+                                    <div style="background:#f8fafb; padding:14px; border-radius:18px;">
+                                        <div style="font-size:12px; color:#8a99a3; font-weight:900;">Hình thức nhận</div>
+                                        <div style="font-weight:900; color:#153747;">
+                                    @(string.IsNullOrWhiteSpace(don.HinhThucNhanHang) ? "Không có" : don.HinhThucNhanHang)
+                                        </div>
+                                    </div>
+
+                                    <div style="background:#f8fafb; padding:14px; border-radius:18px;">
+                                        <div style="font-size:12px; color:#8a99a3; font-weight:900;">Nguồn đơn</div>
+                                        <div style="font-weight:900; color:#153747;">@don.NguonDon</div>
+                                    </div>
+                                </div>
+
+                        @if (!string.IsNullOrWhiteSpace(don.DiaChiGiaoHang))
+                        {
+                                        <div style="background:#e8f2f4; color:#0f4b5c; padding:14px; border-radius:18px; font-weight:800; margin-bottom:14px;">
+                                            Địa chỉ giao hàng: @don.DiaChiGiaoHang
+                                        </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(don.GhiChuDonHang))
+                        {
+                                        <div style="background:#fff4dc; color:#9a6a2f; padding:14px; border-radius:18px; font-weight:800; margin-bottom:14px;">
+                                            Ghi chú khách hàng: @don.GhiChuDonHang
+                                        </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(don.LyDoHuy))
+                        {
+                                        <div style="background:#fde8e8; color:#c92a2a; padding:14px; border-radius:18px; font-weight:800; margin-bottom:18px;">
+                                            Lý do hủy: @don.LyDoHuy
+                                        </div>
+                        }
+
+                                <div style="font-size:18px; font-weight:1000; color:#153747; margin-bottom:10px;">
+                                    Sản phẩm trong đơn
+                                </div>
+
+                        @foreach (var ct in don.ChiTiet)
+                        {
+                                        <div style="border:1px solid #e8e3db; border-radius:18px; padding:14px; margin-bottom:12px;">
+                                            <div style="display:flex; justify-content:space-between; gap:12px;">
+                                                <div>
+                                                    <div style="font-weight:1000; color:#153747;">
+                                            @ct.TenSP
+                                                    </div>
+
+                                                    <div style="font-size:13px; color:#8a99a3;">
+                                                        Mã SP: @ct.MaSP
+                                                    </div>
+                                                </div>
+
+                                                <div style="text-align:right;">
+                                                    <div style="font-weight:900;">
+                                            @ct.SoLuong x @ct.DonGia.ToString("N0")đ
+                                                    </div>
+
+                                                    <div style="font-weight:1000; color:#0f4b5c;">
+                                            @ct.ThanhTien.ToString("N0")đ
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                @if (!string.IsNullOrWhiteSpace(ct.GhiChuImei))
+                                {
+                                                    <div style="margin-top:10px; background:#e8f2f4; color:#0f4b5c; padding:10px 12px; border-radius:14px; font-size:13px; font-weight:800;">
+                                                        IMEI: @ct.GhiChuImei
+                                                    </div>
+                                }
+                                        </div>
+                        }
+
+                        @if (don.TrangThai == "Chờ xử lý")
+                        {
+                                        <div style="margin-top:14px; color:#8a99a3; font-size:14px;">
+                                            Đơn hàng đang chờ nhân viên xác nhận. Cửa hàng sẽ liên hệ bạn trong thời gian sớm nhất.
+                                        </div>
+                        }
+                        else if (don.TrangThai == "Hoàn thành")
+                        {
+                                        <div style="margin-top:14px; color:#178a3d; font-size:14px; font-weight:800;">
+                                            Đơn hàng đã được xác nhận và hoàn thành.
+                                        </div>
+                        }
+                        else if (don.TrangThai == "Đã hủy")
+                        {
+                                        <div style="margin-top:14px; color:#c92a2a; font-size:14px; font-weight:800;">
+                                            Đơn hàng đã bị hủy.
+                                        </div>
+                        }
+                            </div>
+                }
+            }
+            else
+            {
+                    <div style="background:white; border-radius:28px; padding:38px; text-align:center; box-shadow:0 8px 20px rgba(0,0,0,.08);">
+                        <div style="font-size:52px;">🔎</div>
+                        <div style="font-size:26px; font-weight:1000; color:#153747; margin-top:10px;">
+                            Nhập thông tin để tra cứu
+                        </div>
+                        <div style="color:#8a99a3; margin-top:8px;">
+                            Bạn có thể nhập mã đơn hàng hoặc số điện thoại đã dùng khi đặt hàng.
+                        </div>
+                    </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}
