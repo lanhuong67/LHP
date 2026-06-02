@@ -14,7 +14,6 @@ namespace BUS
         public bool Xoa(string maKH) => _dal.Xoa(maKH);
 
         // ========================================================
-        // HÀM MỚI: TÌM KHÁCH HÀNG THEO SỐ ĐIỆN THOẠI
         // Cầu nối giúp giao diện UC_TaoHoaDon gọi được hàm dưới DAL
         // ========================================================
         public KhachHang TimKhachHangTheoSDT(string sdt)

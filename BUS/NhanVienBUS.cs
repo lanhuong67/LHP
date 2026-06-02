@@ -8,7 +8,6 @@ namespace BUS
     {
         private NhanVienDAL _nhanVienDAL = new NhanVienDAL();
 
-        // Đổi tên hàm thành Login
         public NhanVien? Login(string user, string pass)
         {
             return _nhanVienDAL.Login(user, pass);
@@ -23,16 +22,21 @@ namespace BUS
         {
             return _nhanVienDAL.ThemNhanVien(nv);
         }
-        public bool XoaNhanVien(string maNV)
-        {
-            // Gọi xuống tầng DAL để thực thi lệnh xóa
-            return _nhanVienDAL.XoaNhanVien(maNV);
-        }
+
         public bool SuaNhanVien(NhanVien nv)
         {
-            // (Tùy chọn) Bạn có thể thêm các logic kiểm tra ở đây, ví dụ:
-            // if(nv.HoTen.Length < 3) return false;
             return _nhanVienDAL.SuaNhanVien(nv);
+        }
+
+        public bool XoaNhanVien(string maNV)
+        {
+            string thongBao;
+            return _nhanVienDAL.XoaNhanVien(maNV, out thongBao);
+        }
+
+        public bool XoaNhanVien(string maNV, out string thongBao)
+        {
+            return _nhanVienDAL.XoaNhanVien(maNV, out thongBao);
         }
     }
 }

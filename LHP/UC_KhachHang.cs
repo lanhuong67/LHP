@@ -282,7 +282,7 @@ namespace GUI
         {
             if (string.IsNullOrWhiteSpace(txtMaKH.Text))
             {
-                MessageBox.Show("Vui lòng chọn một khách hàng từ danh sách để xóa!",
+                MessageBox.Show("Vui lòng chọn khách hàng cần xóa khỏi danh mục!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -291,16 +291,19 @@ namespace GUI
             string hoTen = txtHoTen.Text.Trim();
 
             DialogResult result = MessageBox.Show(
-                $"Bạn có thực sự muốn xóa khách hàng [{hoTen}] không?\nDữ liệu đã xóa sẽ không thể khôi phục!",
-                "Cảnh báo xóa",
+                $"Bạn có chắc chắn muốn xóa khách hàng [{hoTen}] khỏi danh mục không?",
+                "Xác nhận",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
+                MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes)
+                return;
+
+            try
             {
                 if (_bus.Xoa(maKH))
                 {
-                    MessageBox.Show("Đã xóa khách hàng thành công!",
+                    MessageBox.Show("Đã xóa khách hàng khỏi danh mục.",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     LoadData();
@@ -308,9 +311,21 @@ namespace GUI
                 }
                 else
                 {
-                    MessageBox.Show("Xóa thất bại! Khách hàng này có thể đã phát sinh giao dịch trong hệ thống.",
-                        "Lỗi ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Khách hàng này đã có dữ liệu mua hàng, bảo hành hoặc chăm sóc khách hàng liên quan nên không thể xóa khỏi danh mục.\n" +
+                        "Hệ thống cần giữ lại thông tin khách hàng để tra cứu lịch sử nghiệp vụ.",
+                        "Không thể xóa khách hàng",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể xử lý khách hàng này. Chi tiết lỗi: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 

@@ -48,7 +48,6 @@
             btnLamTrong = new Button();
             btnLuu = new Button();
             label11 = new Label();
-            txtVaiTro = new TextBox();
             label10 = new Label();
             txtEmail = new TextBox();
             label8 = new Label();
@@ -63,6 +62,7 @@
             btnLamMoi = new Button();
             txtTimKiem = new TextBox();
             label2 = new Label();
+            cboVaiTro = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvNhanVien).BeginInit();
             panelThongTin.SuspendLayout();
             panel1.SuspendLayout();
@@ -171,6 +171,7 @@
             // 
             panelThongTin.BackColor = Color.White;
             panelThongTin.BorderStyle = BorderStyle.FixedSingle;
+            panelThongTin.Controls.Add(cboVaiTro);
             panelThongTin.Controls.Add(label5);
             panelThongTin.Controls.Add(cboChiNhanh);
             panelThongTin.Controls.Add(txtMaNV);
@@ -180,7 +181,6 @@
             panelThongTin.Controls.Add(btnLamTrong);
             panelThongTin.Controls.Add(btnLuu);
             panelThongTin.Controls.Add(label11);
-            panelThongTin.Controls.Add(txtVaiTro);
             panelThongTin.Controls.Add(label10);
             panelThongTin.Controls.Add(txtEmail);
             panelThongTin.Controls.Add(label8);
@@ -292,15 +292,6 @@
             label11.Size = new Size(86, 25);
             label11.TabIndex = 20;
             label11.Text = "Tài khoản";
-            // 
-            // txtVaiTro
-            // 
-            txtVaiTro.Font = new Font("Segoe UI", 10.8F);
-            txtVaiTro.Location = new Point(29, 432);
-            txtVaiTro.Margin = new Padding(4);
-            txtVaiTro.Name = "txtVaiTro";
-            txtVaiTro.Size = new Size(426, 31);
-            txtVaiTro.TabIndex = 11;
             // 
             // label10
             // 
@@ -463,6 +454,15 @@
             label2.TabIndex = 0;
             label2.Text = "Tìm kiếm";
             // 
+            // cboVaiTro
+            // 
+            cboVaiTro.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboVaiTro.FormattingEnabled = true;
+            cboVaiTro.Location = new Point(28, 437);
+            cboVaiTro.Name = "cboVaiTro";
+            cboVaiTro.Size = new Size(427, 33);
+            cboVaiTro.TabIndex = 26;
+            // 
             // UC_NhanVien
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -499,7 +499,6 @@
         private Button btnLamTrong;
         private Button btnLuu;
         private Label label11;
-        private TextBox txtVaiTro;
         private Label label10;
         private TextBox txtEmail;
         private Label label8;
@@ -526,5 +525,6 @@
         private DataGridViewTextBoxColumn colEmail;
         private DataGridViewTextBoxColumn colVaiTro;
         private DataGridViewTextBoxColumn MaChiNhanh;
+        private ComboBox cboVaiTro;
     }
 }

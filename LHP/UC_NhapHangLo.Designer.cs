@@ -746,7 +746,7 @@
             lblTongChi.AutoSize = true;
             lblTongChi.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblTongChi.ForeColor = Color.DarkBlue;
-            lblTongChi.Location = new Point(262, 54);
+            lblTongChi.Location = new Point(244, 54);
             lblTongChi.Name = "lblTongChi";
             lblTongChi.Size = new Size(23, 25);
             lblTongChi.TabIndex = 26;
@@ -778,7 +778,7 @@
             lblTongSPDaNhap.AutoSize = true;
             lblTongSPDaNhap.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold);
             lblTongSPDaNhap.ForeColor = Color.Black;
-            lblTongSPDaNhap.Location = new Point(323, 37);
+            lblTongSPDaNhap.Location = new Point(311, 38);
             lblTongSPDaNhap.Name = "lblTongSPDaNhap";
             lblTongSPDaNhap.Size = new Size(48, 25);
             lblTongSPDaNhap.TabIndex = 25;

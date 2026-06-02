@@ -59,10 +59,7 @@ namespace DTO
         public decimal TongTien { get; set; }
         public string TrangThai { get; set; }
 
-        // ====================================================
-        // VŨ KHÍ BÍ MẬT: Báo cho WinForms biết cấm vẽ cột này ra giao diện
-        // Nhưng dữ liệu bên dưới RAM thì vẫn giữ nguyên để dùng cho nút [Chi tiết]
-        // ====================================================
+
         [Browsable(false)]
         public string GhiChu { get; set; }
     }

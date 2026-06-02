@@ -437,10 +437,11 @@ namespace GUI
                 }
                 else if (columnName == "colXuLyWeb")
                 {
-                    if (hd.TrangThai != "Chờ xử lý")
-                    {
+                    if (!KiemTraChiNhanhDangHoatDong())
                         return;
-                    }
+
+                    if (hd.TrangThai != "Chờ xử lý")
+                        return;
 
                     var dsChiTiet = _bus.GetChiTietHoaDon(hd.MaHD);
 
@@ -448,10 +449,9 @@ namespace GUI
                     {
                         MessageBox.Show(
                             "Hóa đơn này chưa có chi tiết sản phẩm.",
-                            "Lỗi",
+                            "Không thể xử lý",
                             MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+                            MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -469,43 +469,79 @@ namespace GUI
                 }
                 else if (columnName == "colHuyDon")
                 {
+                    if (!KiemTraChiNhanhDangHoatDong())
+                        return;
+
                     if (hd.TrangThai == "Đã hủy")
                     {
+                        MessageBox.Show(
+                            "Hóa đơn này đã được hủy trước đó.",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
                         return;
                     }
 
                     string lyDo = PromptLyDoHuy(hd.MaHD);
 
-                    if (lyDo != null)
+                    if (lyDo == null)
+                        return;
+
+                    if (string.IsNullOrWhiteSpace(lyDo))
                     {
-                        if (string.IsNullOrWhiteSpace(lyDo))
+                        MessageBox.Show(
+                            "Vui lòng nhập lý do hủy hóa đơn.\nLý do hủy là bắt buộc để hệ thống lưu lại lịch sử xử lý.",
+                            "Thiếu lý do hủy",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    string maNhanVien = UserSession.MaNV ?? "Admin";
+                    string trangThaiTruocKhiHuy = hd.TrangThai;
+
+                    bool ketQua = _bus.HuyHoaDonThongTu78(hd.MaHD, lyDo, maNhanVien);
+
+                    if (ketQua)
+                    {
+                        if (trangThaiTruocKhiHuy == "Chờ xử lý")
                         {
-                            MessageBox.Show("Theo quy định, bắt buộc phải ghi rõ lý do hủy hóa đơn!",
-                                "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                            return;
-                        }
-
-                        string maNhanVien = UserSession.MaNV ?? "Admin";
-
-                        if (_bus.HuyHoaDonThongTu78(hd.MaHD, lyDo, maNhanVien))
-                        {
-                            MessageBox.Show("Hủy hóa đơn thành công!",
-                                "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            HienThiDanhSach();
+                            MessageBox.Show(
+                                "Đã hủy hóa đơn thành công.\n\n" +
+                                "Đơn hàng này đang ở trạng thái chờ xử lý nên hệ thống chỉ cập nhật trạng thái hóa đơn, không cần hoàn kho.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                         }
                         else
                         {
-                            MessageBox.Show("Xử lý thất bại. Vui lòng kiểm tra lại Database.",
-                                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(
+                                "Đã hủy hóa đơn thành công.\n\n" +
+                                "Hệ thống đã cập nhật lại tồn kho, trạng thái IMEI và thông tin mua hàng của khách nếu có liên quan.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                         }
+
+                        HienThiDanhSach();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "Không thể hủy hóa đơn này. Vui lòng kiểm tra lại trạng thái hóa đơn hoặc dữ liệu liên quan.",
+                            "Không thể hủy hóa đơn",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message,
-                    "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Không thể xử lý hóa đơn này. Chi tiết lỗi: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             finally
             {
@@ -517,10 +553,10 @@ namespace GUI
         {
             Form prompt = new Form()
             {
-                Width = 470,
+                Width = 490,
                 Height = 280,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = "Thông báo hủy hóa đơn",
+                Text = "Xác nhận hủy hóa đơn",
                 StartPosition = FormStartPosition.CenterScreen,
                 MaximizeBox = false,
                 MinimizeBox = false
@@ -530,28 +566,38 @@ namespace GUI
             {
                 Left = 20,
                 Top = 15,
-                Width = 400,
+                Width = 430,
                 AutoSize = true,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Text = $"XÁC NHẬN HỦY HÓA ĐƠN: {maHD}\n\nVui lòng nhập lý do hủy/hoàn trả (Bắt buộc):"
+                Text = $"Xác nhận hủy hóa đơn: {maHD}"
+            };
+
+            Label noteLabel = new Label()
+            {
+                Left = 20,
+                Top = 50,
+                Width = 430,
+                Height = 40,
+                Text = "Vui lòng nhập lý do hủy hóa đơn. Lý do hủy là bắt buộc để hệ thống lưu lại lịch sử xử lý.",
+                ForeColor = Color.DarkRed
             };
 
             TextBox textBox = new TextBox()
             {
                 Left = 20,
-                Top = 80,
-                Width = 410,
+                Top = 95,
+                Width = 430,
                 Multiline = true,
-                Height = 60
+                Height = 70
             };
 
             Button cancel = new Button()
             {
                 Text = "Quay lại",
-                Left = 130,
+                Left = 190,
                 Width = 120,
                 Height = 35,
-                Top = 170,
+                Top = 185,
                 DialogResult = DialogResult.Cancel,
                 FlatStyle = FlatStyle.Flat
             };
@@ -559,10 +605,10 @@ namespace GUI
             Button confirmation = new Button()
             {
                 Text = "Xác nhận hủy",
-                Left = 260,
-                Width = 150,
+                Left = 320,
+                Width = 130,
                 Height = 35,
-                Top = 170,
+                Top = 185,
                 DialogResult = DialogResult.OK,
                 BackColor = Color.Red,
                 ForeColor = Color.White,
@@ -570,6 +616,7 @@ namespace GUI
             };
 
             prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(noteLabel);
             prompt.Controls.Add(textBox);
             prompt.Controls.Add(confirmation);
             prompt.Controls.Add(cancel);
@@ -578,6 +625,38 @@ namespace GUI
             prompt.CancelButton = cancel;
 
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text.Trim() : null;
+        }
+
+
+        private bool KiemTraChiNhanhDangHoatDong()
+        {
+            if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chưa xác định được chi nhánh đang làm việc.\nVui lòng chọn chi nhánh đang hoạt động ở góc trái trên cùng.",
+                    "Thiếu chi nhánh",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            ChiNhanhBUS cnBus = new ChiNhanhBUS();
+
+            if (!cnBus.ChiNhanhDangHoatDong(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chi nhánh đang chọn đã ngưng hoạt động.\n" +
+                    "Bạn không thể tạo, sửa hoặc xử lý nghiệp vụ mới tại chi nhánh này.\n\n" +
+                    "Dữ liệu cũ vẫn được giữ lại để tra cứu và báo cáo.",
+                    "Chi nhánh ngưng hoạt động",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            return true;
         }
     }
 

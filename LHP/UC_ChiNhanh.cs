@@ -14,6 +14,7 @@ namespace GUI
         private bool _isAddNew = false;
 
         private readonly string _placeholderTimKiem = "Tìm tên hoặc mã chi nhánh...";
+        private string _trangThaiCuDangChon = "";
 
         public UC_ChiNhanh()
         {
@@ -53,7 +54,7 @@ namespace GUI
             dgvChiNhanh.ReadOnly = true;
             dgvChiNhanh.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            KhoiTaoDuanLieuDanhMuc();
+            KhoiTaoDuLieuDanhMuc();
             LoadDanhSachChiNhanh();
             TrangThaiKhaiBaoForm(false);
 
@@ -84,16 +85,20 @@ namespace GUI
             }
         }
 
-        private void KhoiTaoDuanLieuDanhMuc()
+        private void KhoiTaoDuLieuDanhMuc()
         {
             cboThanhPho.Items.Clear();
             cboThanhPho.Items.Add("TP. Hồ Chí Minh");
 
             cboTrangThai.Items.Clear();
-            cboTrangThai.Items.AddRange(new string[] { "Đang hoạt động", "Ngưng hoạt động" });
+            cboTrangThai.Items.AddRange(new string[]
+            {
+                "Đang hoạt động",
+                "Ngưng hoạt động"
+            });
 
-            // 🔴 CHỈ LẤY ADMIN ĐỔ VÀO COMBOBOX QUẢN LÝ
             cboQuanLy.Items.Clear();
+
             try
             {
                 NhanVienBUS nvBus = new NhanVienBUS();
@@ -101,10 +106,12 @@ namespace GUI
 
                 if (dsNhanVien != null && dsNhanVien.Count > 0)
                 {
-                    // Lọc những ai có VaiTro là "Admin" (không phân biệt hoa thường)
                     var listAdmin = dsNhanVien
-                        .Where(x => !string.IsNullOrEmpty(x.VaiTro) && x.VaiTro.Trim().Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                        .Where(x => !string.IsNullOrWhiteSpace(x.VaiTro)
+                            && x.VaiTro.Trim().Equals("Admin", StringComparison.OrdinalIgnoreCase))
                         .Select(x => x.HoTen)
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .Distinct()
                         .ToArray();
 
                     if (listAdmin.Length > 0)
@@ -123,7 +130,7 @@ namespace GUI
             }
             catch
             {
-                cboQuanLy.Items.Add("Lỗi Tải NV");
+                cboQuanLy.Items.Add("Lỗi tải nhân viên");
             }
         }
 
@@ -144,6 +151,7 @@ namespace GUI
                     "TP. Thủ Đức", "Huyện Bình Chánh", "Huyện Cần Giờ", "Huyện Củ Chi",
                     "Huyện Hóc Môn", "Huyện Nhà Bè"
                 };
+
                 cboQuanHuyen.Items.AddRange(dsQuanHuyenHCM);
             }
         }
@@ -153,21 +161,25 @@ namespace GUI
             try
             {
                 var dsChiNhanh = _cnBus.GetAll();
+                dgvChiNhanh.DataSource = null;
                 dgvChiNhanh.DataSource = dsChiNhanh;
+
                 CapNhatThongKeTheCard(dsChiNhanh);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hệ thống không thể tải danh sách chi nhánh: " + ex.Message, "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Hệ thống không thể tải danh sách chi nhánh: " + ex.Message,
+                    "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void CapNhatThongKeTheCard(List<ChiNhanh> ds)
         {
             if (ds == null) return;
+
             lblTongCN.Text = ds.Count.ToString();
-            lblDangHoatDong.Text = ds.Count(x => x.TrangThai == "Đang hoạt động").ToString();
-            lblNgungHoatDong.Text = ds.Count(x => x.TrangThai == "Ngưng hoạt động").ToString();
+            lblDangHoatDong.Text = ds.Count(x => LaTrangThaiDangHoatDong(x.TrangThai)).ToString();
+            lblNgungHoatDong.Text = ds.Count(x => LaTrangThaiNgungHoatDong(x.TrangThai)).ToString();
 
             try
             {
@@ -182,6 +194,7 @@ namespace GUI
 
         private void TrangThaiKhaiBaoForm(bool isEditMode)
         {
+            txtMaCN.Enabled = false;
             txtTenCN.Enabled = isEditMode;
             cboThanhPho.Enabled = isEditMode;
             txtDiaChi.Enabled = isEditMode;
@@ -193,7 +206,10 @@ namespace GUI
             btnLamTrong.Enabled = isEditMode;
 
             ComboBox cboQuanHuyen = this.Controls.Find("cboQuanHuyen", true).FirstOrDefault() as ComboBox;
-            if (cboQuanHuyen != null) cboQuanHuyen.Enabled = isEditMode;
+            if (cboQuanHuyen != null)
+            {
+                cboQuanHuyen.Enabled = isEditMode;
+            }
         }
 
         private void BtnLamTrong_Click(object sender, EventArgs e)
@@ -205,7 +221,11 @@ namespace GUI
             cboQuanLy.SelectedIndex = -1;
             txtSDT.Clear();
             txtEmail.Clear();
-            cboTrangThai.SelectedIndex = 0;
+
+            if (cboTrangThai.Items.Count > 0)
+            {
+                cboTrangThai.Text = "Đang hoạt động";
+            }
 
             ComboBox cboQuanHuyen = this.Controls.Find("cboQuanHuyen", true).FirstOrDefault() as ComboBox;
             if (cboQuanHuyen != null)
@@ -213,11 +233,14 @@ namespace GUI
                 cboQuanHuyen.SelectedIndex = -1;
                 cboQuanHuyen.Text = "";
             }
+
+            _trangThaiCuDangChon = "";
         }
 
         private void BtnThemCN_Click(object sender, EventArgs e)
         {
             _isAddNew = true;
+
             TrangThaiKhaiBaoForm(true);
             BtnLamTrong_Click(null, null);
 
@@ -232,9 +255,11 @@ namespace GUI
         {
             if (string.IsNullOrWhiteSpace(txtMaCN.Text))
             {
-                MessageBox.Show("Vui lòng click chọn một chi nhánh từ bảng danh sách trước khi sửa!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng click chọn một chi nhánh từ bảng danh sách trước khi sửa!",
+                    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             _isAddNew = false;
             TrangThaiKhaiBaoForm(true);
             txtTenCN.Focus();
@@ -242,26 +267,29 @@ namespace GUI
 
         private void dgvChiNhanh_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0) return;
+
+            TrangThaiKhaiBaoForm(false);
+
+            var cn = dgvChiNhanh.Rows[e.RowIndex].DataBoundItem as ChiNhanh;
+
+            if (cn == null) return;
+
+            txtMaCN.Text = cn.MaChiNhanh;
+            txtTenCN.Text = cn.TenChiNhanh;
+            cboThanhPho.Text = cn.ThanhPho;
+            txtDiaChi.Text = cn.DiaChi;
+            cboQuanLy.Text = cn.QuanLy;
+            txtSDT.Text = cn.SDT;
+            txtEmail.Text = cn.Email;
+            cboTrangThai.Text = cn.TrangThai;
+
+            _trangThaiCuDangChon = cn.TrangThai ?? "";
+
+            ComboBox cboQuanHuyen = this.Controls.Find("cboQuanHuyen", true).FirstOrDefault() as ComboBox;
+            if (cboQuanHuyen != null)
             {
-                TrangThaiKhaiBaoForm(false);
-
-                var cn = dgvChiNhanh.Rows[e.RowIndex].DataBoundItem as ChiNhanh;
-
-                if (cn != null)
-                {
-                    txtMaCN.Text = cn.MaChiNhanh;
-                    txtTenCN.Text = cn.TenChiNhanh;
-                    cboThanhPho.Text = cn.ThanhPho;
-                    txtDiaChi.Text = cn.DiaChi;
-                    cboQuanLy.Text = cn.QuanLy;
-                    txtSDT.Text = cn.SDT;
-                    txtEmail.Text = cn.Email;
-                    cboTrangThai.Text = cn.TrangThai;
-
-                    ComboBox cboQuanHuyen = this.Controls.Find("cboQuanHuyen", true).FirstOrDefault() as ComboBox;
-                    if (cboQuanHuyen != null) cboQuanHuyen.Text = cn.QuanHuyen;
-                }
+                cboQuanHuyen.Text = cn.QuanHuyen;
             }
         }
 
@@ -270,75 +298,314 @@ namespace GUI
             ComboBox cboQuanHuyen = this.Controls.Find("cboQuanHuyen", true).FirstOrDefault() as ComboBox;
             string tenQuanHuyen = cboQuanHuyen != null ? cboQuanHuyen.Text.Trim() : "";
 
-            if (string.IsNullOrWhiteSpace(txtTenCN.Text) || string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            if (!KiemTraDuLieuHopLe(tenQuanHuyen))
             {
-                MessageBox.Show("Tên chi nhánh và thông tin Địa chỉ không được phép bỏ trống!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             ChiNhanh cn = new ChiNhanh
             {
-                MaChiNhanh = txtMaCN.Text,
+                MaChiNhanh = txtMaCN.Text.Trim(),
                 TenChiNhanh = txtTenCN.Text.Trim(),
-                ThanhPho = cboThanhPho.Text,
+                ThanhPho = cboThanhPho.Text.Trim(),
                 QuanHuyen = tenQuanHuyen,
                 DiaChi = txtDiaChi.Text.Trim(),
-                QuanLy = cboQuanLy.Text,
+                QuanLy = cboQuanLy.Text.Trim(),
                 SDT = txtSDT.Text.Trim(),
                 Email = txtEmail.Text.Trim(),
-                TrangThai = cboTrangThai.Text
+                TrangThai = cboTrangThai.Text.Trim()
             };
+
+            bool dangChuyenSangNgungHoatDong =
+                !_isAddNew &&
+                LaTrangThaiDangHoatDong(_trangThaiCuDangChon) &&
+                LaTrangThaiNgungHoatDong(cn.TrangThai);
+
+            if (dangChuyenSangNgungHoatDong)
+            {
+                DialogResult confirm = MessageBox.Show(
+                    "Bạn đang chuyển chi nhánh này sang trạng thái Ngưng hoạt động.\n\n" +
+                    "Sau khi ngưng hoạt động:\n" +
+                    "- Chi nhánh sẽ không còn xuất hiện trong combobox thao tác toàn cục.\n" +
+                    "- Các UC khác sẽ không được tạo hóa đơn, nhập hàng, bán hàng hoặc xử lý nghiệp vụ mới tại chi nhánh này.\n" +
+                    "- Website cũng không hiển thị chi nhánh này cho khách đặt hàng.\n" +
+                    "- Dữ liệu cũ vẫn được giữ lại để tra cứu và báo cáo.\n\n" +
+                    "Bạn có chắc chắn muốn tiếp tục không?",
+                    "Xác nhận ngưng hoạt động chi nhánh",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.No)
+                {
+                    return;
+                }
+            }
 
             try
             {
-                bool success = false;
+                bool success;
+
                 if (_isAddNew)
                 {
                     success = _cnBus.Them(cn);
-                    if (success) MessageBox.Show("Đã thêm thông tin chi nhánh mới lên hệ thống thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (success)
+                    {
+                        MessageBox.Show("Đã thêm thông tin chi nhánh mới lên hệ thống thành công!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 else
                 {
                     success = _cnBus.Sua(cn);
-                    if (success) MessageBox.Show("Cập nhật thông tin chi nhánh thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (success)
+                    {
+                        MessageBox.Show("Cập nhật thông tin chi nhánh thành công!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
 
                 if (success)
                 {
+                    XuLySauKhiLuuChiNhanh(cn, dangChuyenSangNgungHoatDong);
+
                     LoadDanhSachChiNhanh();
                     TrangThaiKhaiBaoForm(false);
+
+                    _isAddNew = false;
+                    _trangThaiCuDangChon = cn.TrangThai;
                 }
                 else
                 {
-                    MessageBox.Show("Quá trình lưu dữ liệu gặp sự cố. Vui lòng kiểm tra lại cấu trúc kết nối!", "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Quá trình lưu dữ liệu gặp sự cố. Vui lòng kiểm tra lại cấu trúc kết nối!",
+                        "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Exception ex) { MessageBox.Show("Lỗi kết nối tệp tin dữ liệu: " + ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kết nối tệp tin dữ liệu: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool KiemTraDuLieuHopLe(string tenQuanHuyen)
+        {
+            if (string.IsNullOrWhiteSpace(txtMaCN.Text))
+            {
+                MessageBox.Show("Mã chi nhánh không được để trống!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtTenCN.Text))
+            {
+                MessageBox.Show("Tên chi nhánh không được phép bỏ trống!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenCN.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(cboThanhPho.Text))
+            {
+                MessageBox.Show("Vui lòng chọn thành phố!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboThanhPho.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(tenQuanHuyen))
+            {
+                MessageBox.Show("Vui lòng chọn quận/huyện!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            {
+                MessageBox.Show("Địa chỉ chi nhánh không được phép bỏ trống!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiaChi.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(cboTrangThai.Text))
+            {
+                MessageBox.Show("Vui lòng chọn trạng thái chi nhánh!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboTrangThai.Focus();
+                return false;
+            }
+
+            if (!LaTrangThaiDangHoatDong(cboTrangThai.Text) && !LaTrangThaiNgungHoatDong(cboTrangThai.Text))
+            {
+                MessageBox.Show("Trạng thái chi nhánh không hợp lệ. Chỉ được chọn Đang hoạt động hoặc Ngưng hoạt động!",
+                    "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboTrangThai.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        private void XuLySauKhiLuuChiNhanh(ChiNhanh cn, bool vuaChuyenSangNgungHoatDong)
+        {
+            LamMoiComboChiNhanhToanCuc();
+
+            if (!vuaChuyenSangNgungHoatDong)
+            {
+                return;
+            }
+
+            if (UserSession.ChiNhanhDuocChon == cn.MaChiNhanh)
+            {
+                ChuyenSessionSangChiNhanhHoatDongKhac(cn.MaChiNhanh);
+                LamMoiComboChiNhanhToanCuc();
+
+                if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
+                {
+                    MessageBox.Show(
+                        "Chi nhánh đang thao tác đã được chuyển sang Ngưng hoạt động.\n" +
+                        "Hiện không còn chi nhánh nào đang hoạt động để tiếp tục thao tác nghiệp vụ.",
+                        "Không còn chi nhánh hoạt động",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Chi nhánh đang thao tác đã được chuyển sang Ngưng hoạt động.\n" +
+                        "Hệ thống đã tự chuyển sang chi nhánh đang hoạt động khác để tiếp tục thao tác.",
+                        "Đã đổi chi nhánh thao tác",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private void ChuyenSessionSangChiNhanhHoatDongKhac(string maChiNhanhVuaNgung)
+        {
+            var dsConHoatDong = _cnBus.GetAll()
+                .Where(x =>
+                    x.MaChiNhanh != maChiNhanhVuaNgung &&
+                    LaTrangThaiDangHoatDong(x.TrangThai))
+                .OrderBy(x => x.TenChiNhanh)
+                .ToList();
+
+            if (dsConHoatDong.Count == 0)
+            {
+                UserSession.ChiNhanhDuocChon = "";
+                return;
+            }
+
+            UserSession.ChiNhanhDuocChon = dsConHoatDong[0].MaChiNhanh;
+        }
+
+        private void LamMoiComboChiNhanhToanCuc()
+        {
+            try
+            {
+                Form formMain = this.FindForm();
+                if (formMain == null) return;
+
+                ComboBox cboGlobal = formMain.Controls.Find("cboGlobalChiNhanh", true).FirstOrDefault() as ComboBox;
+                if (cboGlobal == null) return;
+
+                var dsChiNhanhHoatDong = _cnBus.GetAll()
+                    .Where(x => LaTrangThaiDangHoatDong(x.TrangThai))
+                    .OrderBy(x => x.TenChiNhanh)
+                    .ToList();
+
+                cboGlobal.DisplayMember = "TenChiNhanh";
+                cboGlobal.ValueMember = "MaChiNhanh";
+                cboGlobal.DataSource = null;
+                cboGlobal.DataSource = dsChiNhanhHoatDong;
+
+                if (dsChiNhanhHoatDong.Count == 0)
+                {
+                    cboGlobal.SelectedIndex = -1;
+                    cboGlobal.Enabled = false;
+                    UserSession.ChiNhanhDuocChon = "";
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon) &&
+                    dsChiNhanhHoatDong.Any(x => x.MaChiNhanh == UserSession.ChiNhanhDuocChon))
+                {
+                    cboGlobal.SelectedValue = UserSession.ChiNhanhDuocChon;
+                }
+                else
+                {
+                    cboGlobal.SelectedIndex = 0;
+                    UserSession.ChiNhanhDuocChon = cboGlobal.SelectedValue?.ToString() ?? "";
+                }
+
+                cboGlobal.Enabled = UserSession.VaiTro == "Admin";
+            }
+            catch
+            {
+                // Không chặn lưu chi nhánh nếu chỉ lỗi refresh combobox toàn cục.
+            }
         }
 
         private void BtnXoaCN_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtMaCN.Text))
             {
-                MessageBox.Show("Vui lòng tích chọn chi nhánh cần loại bỏ khỏi danh sách!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng tích chọn chi nhánh cần loại bỏ khỏi danh sách!",
+                    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (MessageBox.Show($"Bạn có chắc chắn muốn xóa chi nhánh [{txtTenCN.Text}] không?\nDữ liệu liên quan sẽ bị ảnh hưởng!", "Xác nhận loại bỏ", MessageBoxButtons.YesNo, MessageBoxIcon.Stop) == DialogResult.Yes)
+            DialogResult result = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa chi nhánh [{txtTenCN.Text}] không?\n\n" +
+                "Chỉ nên xóa cứng khi chi nhánh chưa phát sinh dữ liệu.\n" +
+                "Nếu chi nhánh đã có nhân viên, sản phẩm, hóa đơn hoặc phiếu nhập thì nên chuyển trạng thái sang Ngưng hoạt động.",
+                "Xác nhận loại bỏ",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result != DialogResult.Yes)
             {
-                try
+                return;
+            }
+
+            try
+            {
+                string maCNCanXoa = txtMaCN.Text.Trim();
+
+                if (_cnBus.Xoa(maCNCanXoa))
                 {
-                    if (_cnBus.Xoa(txtMaCN.Text))
+                    MessageBox.Show("Đã xóa chi nhánh ra khỏi hệ thống cơ sở dữ liệu!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (UserSession.ChiNhanhDuocChon == maCNCanXoa)
                     {
-                        MessageBox.Show("Đã xóa chi nhánh ra khỏi hệ thống cơ sở dữ liệu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        BtnLamTrong_Click(null, null);
-                        LoadDanhSachChiNhanh();
+                        ChuyenSessionSangChiNhanhHoatDongKhac(maCNCanXoa);
                     }
+
+                    BtnLamTrong_Click(null, null);
+                    LoadDanhSachChiNhanh();
+                    LamMoiComboChiNhanhToanCuc();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Không thể xóa chi nhánh này do có ràng buộc khóa ngoại.\nHãy chuyển trạng thái sang 'Ngưng hoạt động' để xử lý ẩn danh mục.", "Lỗi Ràng Buộc", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        "Không thể xóa chi nhánh này.\n" +
+                        "Nếu chi nhánh đã phát sinh dữ liệu, hãy chuyển trạng thái sang Ngưng hoạt động.",
+                        "Không thể xóa",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Không thể xóa chi nhánh này do có ràng buộc khóa ngoại.\n" +
+                    "Hãy chuyển trạng thái sang Ngưng hoạt động để ngừng phát sinh nghiệp vụ mới nhưng vẫn giữ dữ liệu cũ.",
+                    "Lỗi ràng buộc",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -355,19 +622,59 @@ namespace GUI
             }
 
             var dsAll = _cnBus.GetAll();
+
             var dsLoc = dsAll.Where(x =>
                 (!string.IsNullOrEmpty(x.TenChiNhanh) && x.TenChiNhanh.ToLower().Contains(tuKhoa)) ||
-                (!string.IsNullOrEmpty(x.MaChiNhanh) && x.MaChiNhanh.ToLower().Contains(tuKhoa))
+                (!string.IsNullOrEmpty(x.MaChiNhanh) && x.MaChiNhanh.ToLower().Contains(tuKhoa)) ||
+                (!string.IsNullOrEmpty(x.TrangThai) && x.TrangThai.ToLower().Contains(tuKhoa))
             ).ToList();
 
             dgvChiNhanh.DataSource = null;
             dgvChiNhanh.DataSource = dsLoc;
+
+            CapNhatThongKeTheCard(dsLoc);
         }
 
         private void BtnLamMoiTimKiem_Click(object sender, EventArgs e)
         {
             ThietLapChuMoTimKiem();
             LoadDanhSachChiNhanh();
+        }
+
+        private bool LaTrangThaiDangHoatDong(string trangThai)
+        {
+            if (string.IsNullOrWhiteSpace(trangThai))
+                return false;
+
+            string value = trangThai.Trim().ToLower();
+
+            return value == "đang hoạt động"
+                || value == "dang hoat dong"
+                || value == "hoạt động"
+                || value == "hoat dong"
+                || value == "đang kinh doanh"
+                || value == "dang kinh doanh"
+                || value == "active"
+                || value == "true"
+                || value == "1";
+        }
+
+        private bool LaTrangThaiNgungHoatDong(string trangThai)
+        {
+            if (string.IsNullOrWhiteSpace(trangThai))
+                return false;
+
+            string value = trangThai.Trim().ToLower();
+
+            return value == "ngưng hoạt động"
+                || value == "ngung hoat dong"
+                || value == "ngừng hoạt động"
+                || value == "ngung hoạt động"
+                || value == "tạm ngưng"
+                || value == "tam ngung"
+                || value == "inactive"
+                || value == "false"
+                || value == "0";
         }
     }
 }

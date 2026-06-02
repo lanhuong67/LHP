@@ -24,6 +24,8 @@ namespace GUI
         {
             dgvSanPham.AutoGenerateColumns = false;
             dgvSanPham.CellFormatting += dgvSanPham_CellFormatting;
+            btnNhapKho.Click -= btnNhapKho_Click;
+            btnNhapKho.Click += btnNhapKho_Click;
 
             if (cboTrangThai.Items.Count == 0)
             {
@@ -121,6 +123,9 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             isAdding = true;
             btnLamTrong_Click(sender, e);
             txtMaSP.ReadOnly = false;
@@ -144,6 +149,9 @@ namespace GUI
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             if (!isAdding && txtMaSP.ReadOnly == false && !string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
                 isAdding = true;
@@ -213,6 +221,9 @@ namespace GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             if (string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
                 MessageBox.Show("Vui lòng chọn Sản phẩm cần sửa!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -257,21 +268,61 @@ namespace GUI
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaSP.Text)) return;
-
-            string maXoa = txtMaSP.Text.Trim();
-            if (MessageBox.Show("Bạn có chắc chắn muốn xóa Sản phẩm này?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
-                try
+                MessageBox.Show(
+                    "Vui lòng chọn sản phẩm cần xóa khỏi danh mục.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            string maSP = txtMaSP.Text.Trim();
+            string tenSP = txtTenSP.Text.Trim();
+
+            DialogResult result = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa sản phẩm [{tenSP}] khỏi danh mục không?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string thongBao;
+
+                bool ketQua = _bus.Xoa(maSP, out thongBao);
+
+                if (ketQua)
                 {
-                    if (_bus.Xoa(maXoa))
-                    {
-                        MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadData();
-                        btnLamTrong_Click(sender, e);
-                    }
+                    MessageBox.Show(
+                        thongBao,
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    LoadData();
+                    btnLamTrong_Click(sender, e);
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                else
+                {
+                    MessageBox.Show(
+                        thongBao,
+                        "Không thể xóa sản phẩm",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể xử lý sản phẩm này. Chi tiết lỗi: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -288,10 +339,39 @@ namespace GUI
         {
             if (string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
-                MessageBox.Show("Vui lòng chọn một Sản phẩm để nhập hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Vui lòng chọn sản phẩm cần nhập kho.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
-            MessageBox.Show($"Chức năng sẽ điều hướng sang Form Nhập hàng lô cho mã: {txtMaSP.Text}", "Đang phát triển", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            string maSP = txtMaSP.Text.Trim();
+            string tenSP = txtTenSP.Text.Trim();
+
+            DialogResult result = MessageBox.Show(
+                $"Bạn có muốn chuyển sang màn hình Nhập hàng / lô để nhập kho cho sản phẩm [{tenSP}] không?",
+                "Xác nhận nhập kho",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+                return;
+
+            FormMain formMain = this.FindForm() as FormMain;
+
+            if (formMain == null)
+            {
+                MessageBox.Show(
+                    "Không tìm thấy màn hình chính để chuyển sang chức năng nhập kho.",
+                    "Lỗi điều hướng",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            formMain.MoNhapHangTheoSanPham(maSP);
         }
 
         // ==========================================
@@ -388,5 +468,38 @@ namespace GUI
             // Load lại dữ liệu theo chi nhánh mới
             LoadData();
         }
+
+
+        private bool KiemTraChiNhanhDangHoatDong()
+        {
+            if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chưa xác định được chi nhánh đang làm việc.\nVui lòng chọn chi nhánh đang hoạt động ở góc trái trên cùng.",
+                    "Thiếu chi nhánh",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            ChiNhanhBUS cnBus = new ChiNhanhBUS();
+
+            if (!cnBus.ChiNhanhDangHoatDong(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chi nhánh đang chọn đã ngưng hoạt động.\n" +
+                    "Bạn không thể tạo, sửa hoặc xử lý nghiệp vụ mới tại chi nhánh này.\n\n" +
+                    "Dữ liệu cũ vẫn được giữ lại để tra cứu và báo cáo.",
+                    "Chi nhánh ngưng hoạt động",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

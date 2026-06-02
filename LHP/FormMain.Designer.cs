@@ -143,7 +143,7 @@ namespace GUI
             lblTenNV.AutoSize = true;
             lblTenNV.Font = new Font("Segoe UI", 13.8F);
             lblTenNV.ForeColor = Color.White;
-            lblTenNV.Location = new Point(1142, 22);
+            lblTenNV.Location = new Point(919, 18);
             lblTenNV.Name = "lblTenNV";
             lblTenNV.Size = new Size(166, 31);
             lblTenNV.TabIndex = 9;

@@ -12,7 +12,6 @@ namespace DAL
 
         public List<SanPham> GetAll()
         {
-            // Lấy toàn bộ sản phẩm kèm thông tin hãng
             return _db.SanPhams
                 .Include(s => s.HangSanXuat)
                 .ToList();
@@ -20,7 +19,6 @@ namespace DAL
 
         public List<SanPham> GetByBranch(string maCN)
         {
-            // Lấy sản phẩm theo chi nhánh kèm thông tin hãng
             return _db.SanPhams
                 .Include(s => s.HangSanXuat)
                 .Where(s => s.MaChiNhanh == maCN)
@@ -76,22 +74,78 @@ namespace DAL
 
         public bool Xoa(string maSP)
         {
+            string thongBao;
+            return Xoa(maSP, out thongBao);
+        }
+
+        public bool Xoa(string maSP, out string thongBao)
+        {
+            thongBao = "";
+
             try
             {
+                if (string.IsNullOrWhiteSpace(maSP))
+                {
+                    thongBao = "Vui lòng chọn sản phẩm cần xóa khỏi danh mục.";
+                    return false;
+                }
+
                 var sp = _db.SanPhams.FirstOrDefault(s => s.MaSP == maSP);
 
-                if (sp != null)
+                if (sp == null)
                 {
-                    _db.SanPhams.Remove(sp);
+                    thongBao = "Không tìm thấy sản phẩm trong hệ thống.";
+                    return false;
+                }
+
+                // 1. Sản phẩm còn tồn kho thì KHÔNG cho xóa
+                if (sp.TonKho > 0)
+                {
+                    thongBao =
+                        $"Sản phẩm [{sp.TenSP}] hiện còn {sp.TonKho} sản phẩm trong kho nên không thể xóa khỏi danh mục.\n\n" +
+                        "Vui lòng bán hết, chuyển kho hoặc xử lý tồn kho trước. " +
+                        "Nếu sản phẩm không còn kinh doanh, bạn có thể chuyển trạng thái sang Ngừng kinh doanh.";
+
+                    return false;
+                }
+
+                // 2. Kiểm tra sản phẩm đã từng phát sinh nghiệp vụ chưa
+                bool daPhatSinhNhapHang = _db.ChiTietPhieuNhaps.Any(x => x.MaSP == maSP);
+                bool daPhatSinhBanHang = _db.ChiTietHoaDons.Any(x => x.MaSP == maSP);
+                bool daCoImei = _db.ChiTietIMEIs.Any(x => x.MaSP == maSP);
+                bool daPhatSinhBaoHanh = _db.PhieuBaoHanhs.Any(x => x.MaSP == maSP);
+
+                bool daPhatSinhDuLieu =
+                    daPhatSinhNhapHang ||
+                    daPhatSinhBanHang ||
+                    daCoImei ||
+                    daPhatSinhBaoHanh;
+
+                // 3. Nếu đã có lịch sử nhưng không còn tồn kho
+                // thì không xóa khỏi database, chỉ chuyển sang Ngừng kinh doanh
+                if (daPhatSinhDuLieu)
+                {
+                    sp.TrangThai = "Ngừng kinh doanh";
                     _db.SaveChanges();
+
+                    thongBao =
+                        $"Sản phẩm [{sp.TenSP}] đã có dữ liệu nhập hàng, bán hàng, IMEI hoặc bảo hành liên quan.\n\n" +
+                        "Hệ thống đã chuyển sản phẩm sang trạng thái Ngừng kinh doanh để giữ lại lịch sử nghiệp vụ.";
+
                     return true;
                 }
 
-                return false;
+                // 4. Chỉ xóa khỏi danh mục nếu sản phẩm chưa có tồn kho và chưa phát sinh nghiệp vụ
+                _db.SanPhams.Remove(sp);
+                _db.SaveChanges();
+
+                thongBao = $"Đã xóa sản phẩm [{sp.TenSP}] khỏi danh mục.";
+                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.InnerException?.Message ?? ex.Message);
+                thongBao = "Không thể xử lý sản phẩm này. Chi tiết lỗi: " + (ex.InnerException?.Message ?? ex.Message);
+                return false;
             }
         }
     }

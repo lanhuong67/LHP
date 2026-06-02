@@ -15,7 +15,7 @@ namespace DAL
         }
 
         // ========================================================
-        // HÀM MỚI: TÌM KHÁCH HÀNG THEO SỐ ĐIỆN THOẠI
+        // HÀM: TÌM KHÁCH HÀNG THEO SỐ ĐIỆN THOẠI
         // Phục vụ cho tính năng gợi ý tên tự động bên Hóa Đơn
         // ========================================================
         public KhachHang TimKhachHangTheoSDT(string sdt)
@@ -55,7 +55,6 @@ namespace DAL
                     kh.HoTen = khUpdate.HoTen;
                     kh.SDT = khUpdate.SDT;
                     kh.DiaChi = khUpdate.DiaChi;
-                    // Không sửa SoLanMua và TongChiTieu ở đây, việc đó để Trigger lo!
 
                     _db.SaveChanges();
                     return true;

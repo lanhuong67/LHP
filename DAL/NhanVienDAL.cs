@@ -1,4 +1,6 @@
 ﻿using DTO;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,10 +10,11 @@ namespace DAL
     {
         private AppDbContext _db = new AppDbContext();
 
-        // Đổi tên hàm thành Login cho khớp với FormDangNhap
         public NhanVien? Login(string user, string pass)
         {
-            return _db.NhanViens.FirstOrDefault(nv => nv.TenDangNhap == user && nv.MatKhau == pass);
+            return _db.NhanViens.FirstOrDefault(nv =>
+                nv.TenDangNhap == user &&
+                nv.MatKhau == pass);
         }
 
         public List<NhanVien> GetAllNhanVien()
@@ -32,56 +35,100 @@ namespace DAL
                 return false;
             }
         }
-        public bool XoaNhanVien(string maNV)
-        {
-            try
-            {
-                // 1. Tìm nhân viên có mã tương ứng trong Database
-                var nv = _db.NhanViens.FirstOrDefault(n => n.MaNV == maNV);
 
-                // 2. Nếu tìm thấy thì tiến hành xóa
-                if (nv != null)
-                {
-                    _db.NhanViens.Remove(nv);
-                    _db.SaveChanges(); // Chốt lưu xuống SQL Server
-                    return true;
-                }
-                return false; // Không tìm thấy nhân viên
-            }
-            catch
-            {
-                // Nếu chạy vào đây (báo lỗi Exception) thường là do dính Khóa Ngoại.
-                // Tức là nhân viên này đã từng lập Phiếu nhập hoặc Hóa đơn, SQL Server sẽ chặn không cho xóa để bảo toàn lịch sử giao dịch.
-                return false;
-            }
-        }
-        // 4. Nghiệp vụ Cập nhật nhân viên
         public bool SuaNhanVien(NhanVien nvUpdate)
         {
             try
             {
-                // Tìm nhân viên cũ trong Database dựa trên MaNV
                 var nvCu = _db.NhanViens.FirstOrDefault(n => n.MaNV == nvUpdate.MaNV);
 
                 if (nvCu != null)
                 {
-                    // Cập nhật các thông tin mới (Không cập nhật MaNV vì nó là khóa chính)
                     nvCu.HoTen = nvUpdate.HoTen;
                     nvCu.SDT = nvUpdate.SDT;
                     nvCu.Email = nvUpdate.Email;
                     nvCu.VaiTro = nvUpdate.VaiTro;
                     nvCu.TenDangNhap = nvUpdate.TenDangNhap;
                     nvCu.MatKhau = nvUpdate.MatKhau;
+                    nvCu.MaChiNhanh = nvUpdate.MaChiNhanh;
 
-                    // Lưu thay đổi xuống SQL Server
                     _db.SaveChanges();
                     return true;
                 }
-                return false; // Trả về false nếu không tìm thấy nhân viên
+
+                return false;
             }
             catch
             {
-                return false; // Bắt lỗi nếu có trục trặc (ví dụ: đứt mạng)
+                return false;
+            }
+        }
+
+        public bool XoaNhanVien(string maNV)
+        {
+            string thongBao;
+            return XoaNhanVien(maNV, out thongBao);
+        }
+
+        public bool XoaNhanVien(string maNV, out string thongBao)
+        {
+            thongBao = "";
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(maNV))
+                {
+                    thongBao = "Vui lòng chọn nhân viên cần xóa khỏi danh mục.";
+                    return false;
+                }
+
+                var nv = _db.NhanViens.FirstOrDefault(n => n.MaNV == maNV);
+
+                if (nv == null)
+                {
+                    thongBao = "Không tìm thấy nhân viên trong hệ thống.";
+                    return false;
+                }
+
+                if (!string.IsNullOrWhiteSpace(nv.VaiTro) &&
+                    nv.VaiTro.Trim().ToLower() == "admin")
+                {
+                    int soAdmin = _db.NhanViens
+                        .AsEnumerable()
+                        .Count(x =>
+                            !string.IsNullOrWhiteSpace(x.VaiTro) &&
+                            x.VaiTro.Trim().ToLower() == "admin");
+
+                    if (soAdmin <= 1)
+                    {
+                        thongBao = "Không thể xóa tài khoản Admin cuối cùng của hệ thống.";
+                        return false;
+                    }
+                }
+
+                try
+                {
+                    _db.NhanViens.Remove(nv);
+                    _db.SaveChanges();
+
+                    thongBao = "Đã xóa nhân viên khỏi danh mục.";
+                    return true;
+                }
+                catch (DbUpdateException)
+                {
+                    _db.Entry(nv).State = EntityState.Unchanged;
+
+                    thongBao =
+                        "Nhân viên này đã có dữ liệu nghiệp vụ liên quan nên không thể xóa khỏi danh mục. " +
+                        "Cần giữ lại thông tin nhân viên để tra cứu lịch sử hóa đơn, nhập hàng hoặc các nghiệp vụ đã xử lý.";
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                thongBao = "Không thể xử lý nhân viên này. Chi tiết lỗi: " + ex.Message;
+                return false;
             }
         }
     }

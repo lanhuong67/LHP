@@ -438,6 +438,9 @@ namespace GUI
         // ============================================================
         private void btnThemSanPham_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
             {
                 MessageBox.Show("Chưa xác định được chi nhánh đang làm việc.",
@@ -582,6 +585,9 @@ namespace GUI
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             if (!KiemTraDuLieuTruocThanhToan())
                 return;
 
@@ -756,6 +762,38 @@ namespace GUI
 
             ResetPhuongThucThanhToan();
             ResetMaGiamGia();
+        }
+
+
+        private bool KiemTraChiNhanhDangHoatDong()
+        {
+            if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chưa xác định được chi nhánh đang làm việc.\nVui lòng chọn chi nhánh đang hoạt động ở góc trái trên cùng.",
+                    "Thiếu chi nhánh",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            ChiNhanhBUS cnBus = new ChiNhanhBUS();
+
+            if (!cnBus.ChiNhanhDangHoatDong(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chi nhánh đang chọn đã ngưng hoạt động.\n" +
+                    "Bạn không thể tạo, sửa hoặc xử lý nghiệp vụ mới tại chi nhánh này.\n\n" +
+                    "Dữ liệu cũ vẫn được giữ lại để tra cứu và báo cáo.",
+                    "Chi nhánh ngưng hoạt động",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            return true;
         }
     }
 

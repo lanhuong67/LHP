@@ -8,9 +8,30 @@ namespace BUS
     {
         private HangSanXuatDAL _dal = new HangSanXuatDAL();
 
-        public List<HangSanXuat> GetAll() => _dal.GetAll();
-        public bool Them(HangSanXuat hsx) => _dal.Them(hsx);
-        public bool Sua(HangSanXuat hsx) => _dal.Sua(hsx);
-        public bool Xoa(string maHang) => _dal.Xoa(maHang);
+        public List<HangSanXuat> GetAll()
+        {
+            return _dal.GetAll();
+        }
+
+        public bool Them(HangSanXuat h)
+        {
+            return _dal.Them(h);
+        }
+
+        public bool Sua(HangSanXuat h)
+        {
+            return _dal.Sua(h);
+        }
+
+        public bool Xoa(string maHang)
+        {
+            string thongBao;
+            return _dal.Xoa(maHang, out thongBao);
+        }
+
+        public bool Xoa(string maHang, out string thongBao)
+        {
+            return _dal.Xoa(maHang, out thongBao);
+        }
     }
 }

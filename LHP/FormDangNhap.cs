@@ -12,18 +12,13 @@ namespace GUI
         {
             InitializeComponent();
 
-            // Khởi tạo trạng thái ban đầu
             lblError.Visible = false;
             SetPlaceholder();
 
-            // Kích hoạt tính năng hiện đại: Bấm Enter để đăng nhập
             txtTenDangNhap.KeyDown += Txt_KeyDown;
             txtMatKhau.KeyDown += Txt_KeyDown;
         }
 
-        // ==========================================
-        // 1. HIỆU ỨNG CHỮ MỜ (PLACEHOLDER)
-        // ==========================================
         private void SetPlaceholder()
         {
             if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
@@ -36,12 +31,10 @@ namespace GUI
             {
                 txtMatKhau.Text = "Nhập mật khẩu...";
                 txtMatKhau.ForeColor = Color.Gray;
-                // Khi đang hiện chữ mờ thì TẮT dấu chấm tròn để đọc được chữ
                 txtMatKhau.UseSystemPasswordChar = false;
             }
         }
 
-        // Khi trỏ chuột VÀO ô Tài khoản
         private void txtTenDangNhap_Enter(object sender, EventArgs e)
         {
             if (txtTenDangNhap.Text == "Nhập tên đăng nhập...")
@@ -51,7 +44,6 @@ namespace GUI
             }
         }
 
-        // Khi trỏ chuột RA KHỎI ô Tài khoản
         private void txtTenDangNhap_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
@@ -61,39 +53,31 @@ namespace GUI
             }
         }
 
-        // Khi trỏ chuột VÀO ô Mật khẩu
         private void txtMatKhau_Enter(object sender, EventArgs e)
         {
             if (txtMatKhau.Text == "Nhập mật khẩu...")
             {
                 txtMatKhau.Text = "";
                 txtMatKhau.ForeColor = Color.Black;
-                // Bắt đầu gõ thì BẬT dấu chấm tròn bảo mật lên
                 txtMatKhau.UseSystemPasswordChar = true;
             }
         }
 
-        // Khi trỏ chuột RA KHỎI ô Mật khẩu
         private void txtMatKhau_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
             {
                 txtMatKhau.Text = "Nhập mật khẩu...";
                 txtMatKhau.ForeColor = Color.Gray;
-                // Không có text thì tắt dấu chấm để hiện chữ mờ
                 txtMatKhau.UseSystemPasswordChar = false;
             }
         }
 
-        // ==========================================
-        // 2. XỬ LÝ ĐĂNG NHẬP VÀ GÁN SESSION
-        // ==========================================
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
             string user = txtTenDangNhap.Text.Trim();
             string pass = txtMatKhau.Text.Trim();
 
-            // Kiểm tra xem người dùng có lười chưa gõ gì mà để nguyên chữ mờ rồi bấm Đăng nhập không
             if (string.IsNullOrEmpty(user) || user == "Nhập tên đăng nhập..." ||
                 string.IsNullOrEmpty(pass) || pass == "Nhập mật khẩu...")
             {
@@ -103,39 +87,64 @@ namespace GUI
             }
 
             NhanVienBUS bus = new NhanVienBUS();
-            NhanVien tk = bus.Login(user, pass);
+            NhanVien? tk = bus.Login(user, pass);
 
-            if (tk != null)
-            {
-                // 🟢 ĐIỂM SÁNG LÀ TẠI ĐÂY: Lưu thông tin người dùng vào Session
-                // Từ giờ trở đi, bất cứ form nào cần biết "Ai đang dùng máy" chỉ cần gọi UserSession ra hỏi
-                UserSession.MaNV = tk.MaNV;
-                UserSession.HoTen = tk.HoTen;
-                UserSession.VaiTro = tk.VaiTro;
-
-                lblError.Visible = false;
-                FormMain frm = new FormMain();
-                this.Hide();
-                frm.ShowDialog();
-                this.Close();
-            }
-            else
+            if (tk == null)
             {
                 lblError.Text = "Tài khoản hoặc mật khẩu không đúng!";
                 lblError.Visible = true;
+                return;
             }
+
+            string vaiTro = tk.VaiTro?.Trim() ?? "";
+            string maChiNhanhNhanVien = tk.MaChiNhanh?.Trim() ?? "";
+
+            if (vaiTro != "Admin")
+            {
+                if (string.IsNullOrWhiteSpace(maChiNhanhNhanVien))
+                {
+                    lblError.Text = "Tài khoản nhân viên chưa được phân công chi nhánh!";
+                    lblError.Visible = true;
+                    return;
+                }
+
+                ChiNhanhBUS chiNhanhBUS = new ChiNhanhBUS();
+
+                if (!chiNhanhBUS.ChiNhanhDangHoatDong(maChiNhanhNhanVien))
+                {
+                    lblError.Text = "Chi nhánh làm việc của tài khoản này đã ngừng hoạt động!";
+                    lblError.Visible = true;
+                    return;
+                }
+            }
+
+            UserSession.MaNV = tk.MaNV;
+            UserSession.HoTen = tk.HoTen;
+            UserSession.VaiTro = tk.VaiTro;
+            UserSession.MaChiNhanh = maChiNhanhNhanVien;
+
+            if (vaiTro == "Admin")
+            {
+                UserSession.ChiNhanhDuocChon = maChiNhanhNhanVien;
+            }
+            else
+            {
+                UserSession.ChiNhanhDuocChon = maChiNhanhNhanVien;
+            }
+
+            lblError.Visible = false;
+
+            FormMain frm = new FormMain();
+            this.Hide();
+            frm.ShowDialog();
+            this.Close();
         }
 
-        // ==========================================
-        // 3. TÍNH NĂNG BẤM ENTER TỰ ĐĂNG NHẬP
-        // ==========================================
         private void Txt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // Ngăn chặn tiếng bíp (ding) mặc định của Windows
                 e.SuppressKeyPress = true;
-                // Gọi thẳng hàm click nút đăng nhập
                 btnDangNhap_Click(sender, e);
             }
         }

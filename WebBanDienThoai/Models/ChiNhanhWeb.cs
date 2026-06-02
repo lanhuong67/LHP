@@ -19,6 +19,9 @@ namespace WebBanDienThoai.Models
         [StringLength(15)]
         public string SDT { get; set; } = string.Empty;
 
+        [StringLength(50)]
+        public string TrangThai { get; set; } = "Đang hoạt động";
+
         public virtual ICollection<SanPhamWeb> SanPhams { get; set; } = new List<SanPhamWeb>();
     }
 }

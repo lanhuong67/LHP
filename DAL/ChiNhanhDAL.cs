@@ -7,7 +7,6 @@ namespace DAL
 {
     public class ChiNhanhDAL
     {
-        // 🔴 ĐỔI "LHPContext" THÀNH TÊN DBCONTEXT CỦA BẠN (Ví dụ: QLCuaHangContext, Model1, v.v.)
         private AppDbContext _db = new AppDbContext();
 
         // 1. READ: Lấy toàn bộ danh sách chi nhánh

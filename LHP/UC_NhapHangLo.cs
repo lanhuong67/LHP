@@ -202,7 +202,7 @@ namespace GUI
                 // Chi nhánh
                 cboChiNhanh.DisplayMember = "TenChiNhanh";
                 cboChiNhanh.ValueMember = "MaChiNhanh";
-                cboChiNhanh.DataSource = _pnBus.GetAllChiNhanh();
+                cboChiNhanh.DataSource = new ChiNhanhBUS().GetChiNhanhDangHoatDong();
 
                 cboChiNhanh.SelectedValue = UserSession.ChiNhanhDuocChon;
                 cboChiNhanh.Enabled = false;
@@ -256,13 +256,23 @@ namespace GUI
                 dgvLichSuNhap.AutoGenerateColumns = false;
                 dgvLichSuNhap.DataSource = dsLichSu;
 
-                lblTongPhieuNhap.Text = dsLichSu.Count.ToString();
-                lblTongSPDaNhap.Text = dsLichSu.Sum(x => x.SoSanPham).ToString();
-                lblTongChi.Text = dsLichSu.Sum(x => x.TongTien).ToString("N0") + " đ";
+                // Thống kê chỉ tính các phiếu nhập đã hoàn thành.
+                // Phiếu đã hủy vẫn hiển thị trong lịch sử nhưng không cộng vào tổng nhập kho.
+                var dsThongKe = dsLichSu
+                    .Where(x => x.TrangThai == "Hoàn thành")
+                    .ToList();
+
+                lblTongPhieuNhap.Text = dsThongKe.Count.ToString();
+                lblTongSPDaNhap.Text = dsThongKe.Sum(x => x.SoSanPham).ToString();
+                lblTongChi.Text = dsThongKe.Sum(x => x.TongTien).ToString("N0") + " đ";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải lịch sử nhập: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Lỗi tải lịch sử nhập: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -318,7 +328,8 @@ namespace GUI
 
         private void ThucHienLocDuLieu()
         {
-            if (_pnBus == null || cboLocNCC.Items.Count == 0) return;
+            if (_pnBus == null || cboLocNCC.Items.Count == 0)
+                return;
 
             var dsLoc = _pnBus.GetLichSuNhap(UserSession.ChiNhanhDuocChon);
 
@@ -326,31 +337,60 @@ namespace GUI
             DateTime denNgay = dtpDenNgay.Value.Date;
 
             if (dtpTuNgay.Checked && dtpDenNgay.Checked)
-                dsLoc = dsLoc.Where(x => x.NgayNhap.Date >= tuNgay && x.NgayNhap.Date <= denNgay).ToList();
+            {
+                dsLoc = dsLoc
+                    .Where(x => x.NgayNhap.Date >= tuNgay && x.NgayNhap.Date <= denNgay)
+                    .ToList();
+            }
             else if (dtpTuNgay.Checked)
-                dsLoc = dsLoc.Where(x => x.NgayNhap.Date >= tuNgay).ToList();
+            {
+                dsLoc = dsLoc
+                    .Where(x => x.NgayNhap.Date >= tuNgay)
+                    .ToList();
+            }
             else if (dtpDenNgay.Checked)
-                dsLoc = dsLoc.Where(x => x.NgayNhap.Date <= denNgay).ToList();
+            {
+                dsLoc = dsLoc
+                    .Where(x => x.NgayNhap.Date <= denNgay)
+                    .ToList();
+            }
 
             string nccDaChon = cboLocNCC.Text.Trim();
 
             if (!string.IsNullOrEmpty(nccDaChon) && nccDaChon != "--Tất cả Nhà cung cấp--")
-                dsLoc = dsLoc.Where(x => x.TenNCC != null && x.TenNCC.Contains(nccDaChon)).ToList();
+            {
+                dsLoc = dsLoc
+                    .Where(x => x.TenNCC != null && x.TenNCC.Contains(nccDaChon))
+                    .ToList();
+            }
 
             string trangThai = cboLocTrangThai.Text.Trim();
 
             if (!string.IsNullOrEmpty(trangThai) && trangThai != "--Tất cả trạng thái--")
-                dsLoc = dsLoc.Where(x => x.TrangThai == trangThai).ToList();
+            {
+                dsLoc = dsLoc
+                    .Where(x => x.TrangThai == trangThai)
+                    .ToList();
+            }
 
             dgvLichSuNhap.DataSource = dsLoc;
 
-            lblTongPhieuNhap.Text = dsLoc.Count.ToString();
-            lblTongSPDaNhap.Text = dsLoc.Sum(x => x.SoSanPham).ToString();
-            lblTongChi.Text = dsLoc.Sum(x => x.TongTien).ToString("N0") + " đ";
+            // Thống kê chỉ tính các phiếu nhập đã hoàn thành trong danh sách sau khi lọc.
+            // Nếu đang lọc trạng thái "Đã hủy" thì thống kê sẽ về 0 là đúng.
+            var dsThongKe = dsLoc
+                .Where(x => x.TrangThai == "Hoàn thành")
+                .ToList();
+
+            lblTongPhieuNhap.Text = dsThongKe.Count.ToString();
+            lblTongSPDaNhap.Text = dsThongKe.Sum(x => x.SoSanPham).ToString();
+            lblTongChi.Text = dsThongKe.Sum(x => x.TongTien).ToString("N0") + " đ";
         }
 
         private void btnXacNhan_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             if (_isProcessingClick) return;
             _isProcessingClick = true;
 
@@ -534,6 +574,9 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            if (!KiemTraChiNhanhDangHoatDong())
+                return;
+
             if (cboSanPham.SelectedItem is not SanPham sp) return;
 
             int soLuong = (int)numSoLuong.Value;
@@ -626,8 +669,14 @@ namespace GUI
 
         private void btnHuyPhieu_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Xóa trắng toàn bộ thông tin đang lập dở?", "Cảnh báo",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            DialogResult result = MessageBox.Show(
+                "Bạn có chắc chắn muốn làm trống toàn bộ thông tin phiếu nhập đang lập không?\n\n" +
+                "Thao tác này chỉ xóa dữ liệu đang nhập trên màn hình, không ảnh hưởng đến các phiếu nhập đã lưu trong hệ thống.",
+                "Xác nhận làm trống phiếu nhập",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
             {
                 ResetFormTaoPhieu();
             }
@@ -649,8 +698,8 @@ namespace GUI
         {
             Form prompt = new Form()
             {
-                Width = 460,
-                Height = 240,
+                Width = 480,
+                Height = 250,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 Text = "Xác nhận hủy phiếu nhập",
                 StartPosition = FormStartPosition.CenterScreen,
@@ -662,17 +711,27 @@ namespace GUI
             {
                 Left = 20,
                 Top = 20,
-                Width = 400,
+                Width = 420,
                 AutoSize = true,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Text = "Vui lòng nhập lý do hủy phiếu (Bắt buộc):"
+                Text = "Vui lòng nhập lý do hủy phiếu nhập:"
+            };
+
+            Label noteLabel = new Label()
+            {
+                Left = 20,
+                Top = 45,
+                Width = 420,
+                Height = 30,
+                Text = "Lý do hủy là bắt buộc để hệ thống lưu lại lịch sử xử lý.",
+                ForeColor = Color.DarkRed
             };
 
             TextBox textBox = new TextBox()
             {
                 Left = 20,
-                Top = 60,
-                Width = 400,
+                Top = 80,
+                Width = 420,
                 Multiline = true,
                 Height = 60
             };
@@ -680,10 +739,10 @@ namespace GUI
             Button cancel = new Button()
             {
                 Text = "Quay lại",
-                Left = 130,
+                Left = 170,
                 Width = 120,
                 Height = 35,
-                Top = 140,
+                Top = 155,
                 DialogResult = DialogResult.Cancel,
                 FlatStyle = FlatStyle.Flat
             };
@@ -691,10 +750,10 @@ namespace GUI
             Button confirmation = new Button()
             {
                 Text = "Xác nhận hủy",
-                Left = 260,
-                Width = 150,
+                Left = 300,
+                Width = 140,
                 Height = 35,
-                Top = 140,
+                Top = 155,
                 DialogResult = DialogResult.OK,
                 BackColor = Color.Red,
                 ForeColor = Color.White,
@@ -702,6 +761,7 @@ namespace GUI
             };
 
             prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(noteLabel);
             prompt.Controls.Add(textBox);
             prompt.Controls.Add(confirmation);
             prompt.Controls.Add(cancel);
@@ -714,59 +774,92 @@ namespace GUI
 
         private void dgvLichSuNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || _isProcessingClick) return;
+            if (e.RowIndex < 0 || _isProcessingClick)
+                return;
 
             _isProcessingClick = true;
 
             try
             {
                 var phieuDuocChon = dgvLichSuNhap.Rows[e.RowIndex].DataBoundItem as LichSuNhapViewModel;
-                if (phieuDuocChon == null) return;
 
-                if (dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colChiTiet")
+                if (phieuDuocChon == null)
+                    return;
+
+                string colName = dgvLichSuNhap.Columns[e.ColumnIndex].Name;
+
+                if (colName == "colChiTiet")
                 {
                     string thongBao =
-                        $"Mã Phiếu: {phieuDuocChon.MaPN}\n" +
+                        $"Mã phiếu: {phieuDuocChon.MaPN}\n" +
                         $"Nhà cung cấp: {phieuDuocChon.TenNCC}\n" +
                         $"Tổng tiền: {phieuDuocChon.TongTien:N0} đ\n" +
-                        $"Ghi chú: {(string.IsNullOrEmpty(phieuDuocChon.GhiChu) ? "Không có" : phieuDuocChon.GhiChu)}\n\n" +
-                        $"Form xem chi tiết sẽ được phát triển ở giai đoạn sau.";
+                        $"Ghi chú: {(string.IsNullOrEmpty(phieuDuocChon.GhiChu) ? "Không có" : phieuDuocChon.GhiChu)}";
 
-                    MessageBox.Show(thongBao, "Thông tin phiếu nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        thongBao,
+                        "Thông tin phiếu nhập",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
-                else if (dgvLichSuNhap.Columns[e.ColumnIndex].Name == "colHuyPhieu")
+                else if (colName == "colHuyPhieu")
                 {
                     if (phieuDuocChon.TrangThai == "Đã hủy")
                     {
-                        MessageBox.Show("Phiếu này đã được hủy trước đó rồi!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(
+                            "Phiếu nhập này đã được hủy trước đó.",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
                         return;
                     }
 
                     string lyDo = PromptLyDoHuy();
 
-                    if (lyDo != null)
+                    if (lyDo == null)
+                        return;
+
+                    if (string.IsNullOrWhiteSpace(lyDo))
                     {
-                        if (string.IsNullOrWhiteSpace(lyDo))
-                        {
-                            MessageBox.Show("Bạn phải ghi rõ lý do để hệ thống lưu vết thu hồi kho!", "Cảnh báo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
+                        MessageBox.Show(
+                            "Vui lòng nhập lý do hủy phiếu nhập.\nLý do hủy là bắt buộc để hệ thống lưu lại lịch sử xử lý.",
+                            "Thiếu lý do hủy",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        return;
+                    }
 
-                        if (_pnBus.HuyPhieuNhap(phieuDuocChon.MaPN, lyDo))
-                        {
-                            MessageBox.Show("Hủy phiếu và trừ tồn kho thành công!", "Thông báo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    bool ketQua = _pnBus.HuyPhieuNhap(phieuDuocChon.MaPN, lyDo);
 
-                            LoadLichSuNhap();
-                            HienThiLoHang();
-                        }
+                    if (ketQua)
+                    {
+                        MessageBox.Show(
+                            "Đã hủy phiếu nhập thành công.\nHệ thống đã cập nhật lại tồn kho và trạng thái IMEI liên quan.",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        LoadLichSuNhap();
+                        LoadComboBox_LoHang();
+                        HienThiLoHang();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "Không thể hủy phiếu nhập này. Vui lòng kiểm tra lại trạng thái phiếu hoặc dữ liệu liên quan.",
+                            "Không thể hủy phiếu nhập",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Lỗi xử lý", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Không thể xử lý phiếu nhập này. Chi tiết lỗi: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             finally
             {
@@ -862,6 +955,38 @@ namespace GUI
         private void txtNhanVien_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+
+        private bool KiemTraChiNhanhDangHoatDong()
+        {
+            if (string.IsNullOrWhiteSpace(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chưa xác định được chi nhánh đang làm việc.\nVui lòng chọn chi nhánh đang hoạt động ở góc trái trên cùng.",
+                    "Thiếu chi nhánh",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            ChiNhanhBUS cnBus = new ChiNhanhBUS();
+
+            if (!cnBus.ChiNhanhDangHoatDong(UserSession.ChiNhanhDuocChon))
+            {
+                MessageBox.Show(
+                    "Chi nhánh đang chọn đã ngưng hoạt động.\n" +
+                    "Bạn không thể tạo, sửa hoặc xử lý nghiệp vụ mới tại chi nhánh này.\n\n" +
+                    "Dữ liệu cũ vẫn được giữ lại để tra cứu và báo cáo.",
+                    "Chi nhánh ngưng hoạt động",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            return true;
         }
     }
 

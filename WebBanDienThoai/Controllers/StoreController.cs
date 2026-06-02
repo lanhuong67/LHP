@@ -15,11 +15,30 @@ namespace WebBanDienThoai.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var trangThaiHoatDong = LayDanhSachTrangThaiHoatDong();
+
             var dsChiNhanh = await _db.ChiNhanhs
+                .Where(x => trangThaiHoatDong.Contains(x.TrangThai))
                 .OrderBy(x => x.TenChiNhanh)
                 .ToListAsync();
 
             return View(dsChiNhanh);
+        }
+
+        private string[] LayDanhSachTrangThaiHoatDong()
+        {
+            return new[]
+            {
+                "Đang hoạt động",
+                "Hoạt động",
+                "Đang kinh doanh",
+                "Kích hoạt",
+                "Active",
+                "active",
+                "True",
+                "true",
+                "1"
+            };
         }
     }
 }

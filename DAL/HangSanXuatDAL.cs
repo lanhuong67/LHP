@@ -11,70 +11,97 @@ namespace DAL
 
         public List<HangSanXuat> GetAll()
         {
-            try
-            {
-                return _db.HangSanXuats.ToList();
-            }
-            catch (Exception ex)
-            {
-                // Ném lỗi về tầng trên xử lý hiển thị
-                throw new Exception("Lỗi lấy dữ liệu từ Database: " + (ex.InnerException?.Message ?? ex.Message));
-            }
+            return _db.HangSanXuats.ToList();
         }
 
-        public bool Them(HangSanXuat hsx)
+        public bool Them(HangSanXuat h)
         {
             try
             {
-                _db.HangSanXuats.Add(hsx);
+                _db.HangSanXuats.Add(h);
                 _db.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception("Lỗi Database khi Thêm: " + (ex.InnerException?.Message ?? ex.Message));
+                return false;
             }
         }
 
-        public bool Sua(HangSanXuat hsxUpdate)
+        public bool Sua(HangSanXuat hUpdate)
         {
             try
             {
-                var hsx = _db.HangSanXuats.FirstOrDefault(h => h.MaHang == hsxUpdate.MaHang);
-                if (hsx != null)
-                {
-                    hsx.TenHang = hsxUpdate.TenHang;
-                    hsx.QuocGia = hsxUpdate.QuocGia;
-                    hsx.MoTa = hsxUpdate.MoTa;
-                    hsx.TrangThai = hsxUpdate.TrangThai;
+                var hCu = _db.HangSanXuats.FirstOrDefault(x => x.MaHang == hUpdate.MaHang);
 
-                    _db.SaveChanges();
-                    return true;
-                }
-                return false;
+                if (hCu == null)
+                    return false;
+
+                hCu.TenHang = hUpdate.TenHang;
+                hCu.QuocGia = hUpdate.QuocGia;
+                hCu.MoTa = hUpdate.MoTa;
+                hCu.TrangThai = hUpdate.TrangThai;
+
+                _db.SaveChanges();
+                return true;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception("Lỗi Database khi Sửa: " + ex.Message);
+                return false;
             }
         }
 
         public bool Xoa(string maHang)
         {
+            string thongBao;
+            return Xoa(maHang, out thongBao);
+        }
+
+        public bool Xoa(string maHang, out string thongBao)
+        {
+            thongBao = "";
+
             try
             {
-                var hsx = _db.HangSanXuats.FirstOrDefault(h => h.MaHang == maHang);
-                if (hsx != null)
+                if (string.IsNullOrWhiteSpace(maHang))
                 {
-                    _db.HangSanXuats.Remove(hsx);
+                    thongBao = "Vui lòng chọn hãng sản xuất cần xóa khỏi danh mục.";
+                    return false;
+                }
+
+                var hang = _db.HangSanXuats.FirstOrDefault(x => x.MaHang == maHang);
+
+                if (hang == null)
+                {
+                    thongBao = "Không tìm thấy hãng sản xuất trong hệ thống.";
+                    return false;
+                }
+
+                bool daCoSanPham = _db.SanPhams.Any(sp => sp.MaHang == maHang);
+
+                if (daCoSanPham)
+                {
+                    hang.TrangThai = "Ngừng hợp tác";
                     _db.SaveChanges();
+
+                    thongBao =
+                        $"Hãng sản xuất [{hang.TenHang}] đang có sản phẩm liên quan nên không thể xóa khỏi danh mục.\n\n" +
+                        "Hệ thống đã chuyển hãng sang trạng thái Ngừng hợp tác để giữ lại lịch sử dữ liệu.";
+
                     return true;
                 }
-                return false;
+
+                _db.HangSanXuats.Remove(hang);
+                _db.SaveChanges();
+
+                thongBao = $"Đã xóa hãng sản xuất [{hang.TenHang}] khỏi danh mục.";
+                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception("Lỗi Database khi Xóa: " + ex.Message);
+                thongBao = "Không thể xử lý hãng sản xuất này. Chi tiết lỗi: " +
+                           (ex.InnerException?.Message ?? ex.Message);
+                return false;
             }
         }
     }

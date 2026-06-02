@@ -175,28 +175,61 @@ namespace GUI
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaHang.Text)) return;
-
-            string maXoa = txtMaHang.Text.Trim();
-            if (MessageBox.Show("Bạn có chắc chắn muốn xóa Hãng sản xuất này không?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (string.IsNullOrWhiteSpace(txtMaHang.Text))
             {
-                try
+                MessageBox.Show(
+                    "Vui lòng chọn hãng sản xuất cần xóa khỏi danh mục.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            string maHang = txtMaHang.Text.Trim();
+            string tenHang = txtTenHang.Text.Trim();
+
+            DialogResult result = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa hãng sản xuất [{tenHang}] khỏi danh mục không?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string thongBao;
+
+                bool ketQua = _bus.Xoa(maHang, out thongBao);
+
+                if (ketQua)
                 {
-                    if (_bus.Xoa(maXoa))
-                    {
-                        MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadData();
-                        btnLamTrong_Click(sender, e);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không thể xóa! Có thể hãng này đang có sản phẩm trong hệ thống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show(
+                        thongBao,
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    LoadData();
+                    btnLamTrong_Click(sender, e);
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message, "Lỗi Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        thongBao,
+                        "Không thể xóa hãng sản xuất",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể xử lý hãng sản xuất này. Chi tiết lỗi: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
