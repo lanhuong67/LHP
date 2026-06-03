@@ -163,18 +163,16 @@ namespace GUI
                 return;
             }
 
-            // 🔴 BƯỚC CHẶN QUAN TRỌNG: Đảm bảo đã có chi nhánh
             if (string.IsNullOrEmpty(UserSession.ChiNhanhDuocChon))
             {
                 MessageBox.Show("Lỗi hệ thống: Chưa xác định được Chi nhánh đang làm việc. Vui lòng chọn lại Chi nhánh ở góc trái trên cùng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            decimal giaNhap = 0, giaBan = 0;
-            if (!decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out giaNhap) ||
-                !decimal.TryParse(txtGiaBan.Text.Replace(",", ""), out giaBan))
+            decimal giaNhap, giaBan;
+
+            if (!KiemTraGiaHopLe(out giaNhap, out giaBan))
             {
-                MessageBox.Show("Giá nhập và Giá bán phải là số hợp lệ!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -230,9 +228,12 @@ namespace GUI
                 return;
             }
 
-            decimal giaNhap = 0, giaBan = 0;
-            decimal.TryParse(txtGiaNhap.Text.Replace(",", ""), out giaNhap);
-            decimal.TryParse(txtGiaBan.Text.Replace(",", ""), out giaBan);
+            decimal giaNhap, giaBan;
+
+            if (!KiemTraGiaHopLe(out giaNhap, out giaBan))
+            {
+                return;
+            }
 
             string trangThaiChon = string.IsNullOrWhiteSpace(cboTrangThai.Text)
                                    ? "Đang kinh doanh"
@@ -500,6 +501,76 @@ namespace GUI
 
             return true;
         }
+        private bool KiemTraGiaHopLe(out decimal giaNhap, out decimal giaBan)
+        {
+            giaNhap = 0;
+            giaBan = 0;
 
+            string giaNhapText = txtGiaNhap.Text.Trim().Replace(",", "");
+            string giaBanText = txtGiaBan.Text.Trim().Replace(",", "");
+
+            if (!decimal.TryParse(giaNhapText, out giaNhap))
+            {
+                MessageBox.Show(
+                    "Giá nhập phải là số hợp lệ.",
+                    "Lỗi nhập liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtGiaNhap.Focus();
+                return false;
+            }
+
+            if (!decimal.TryParse(giaBanText, out giaBan))
+            {
+                MessageBox.Show(
+                    "Giá bán phải là số hợp lệ.",
+                    "Lỗi nhập liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtGiaBan.Focus();
+                return false;
+            }
+
+            if (giaNhap < 0)
+            {
+                MessageBox.Show(
+                    "Giá nhập không được nhỏ hơn 0.",
+                    "Lỗi nhập liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtGiaNhap.Focus();
+                return false;
+            }
+
+            if (giaBan < 0)
+            {
+                MessageBox.Show(
+                    "Giá bán không được nhỏ hơn 0.",
+                    "Lỗi nhập liệu",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtGiaBan.Focus();
+                return false;
+            }
+
+            if (giaBan <= giaNhap)
+            {
+                MessageBox.Show(
+                    "Giá bán phải lớn hơn giá nhập.\n\n" +
+                    "Ví dụ: Giá nhập 10,000 thì giá bán phải lớn hơn 10,000.",
+                    "Giá bán không hợp lệ",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtGiaBan.Focus();
+                return false;
+            }
+
+            return true;
+        }
     }
 }
