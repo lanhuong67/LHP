@@ -1,5 +1,4 @@
 ﻿using DTO;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +11,17 @@ namespace DAL
 
         public NhanVien? Login(string user, string pass)
         {
-            return _db.NhanViens.FirstOrDefault(nv =>
-                nv.TenDangNhap == user &&
-                nv.MatKhau == pass);
+            var nv = _db.NhanViens.FirstOrDefault(x =>
+                x.TenDangNhap == user &&
+                x.MatKhau == pass);
+
+            if (nv == null)
+                return null;
+
+            if (LaTrangThaiNgungHoatDong(nv.TrangThai))
+                return null;
+
+            return nv;
         }
 
         public List<NhanVien> GetAllNhanVien()
@@ -26,8 +33,14 @@ namespace DAL
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(nv.TrangThai))
+                {
+                    nv.TrangThai = "Đang hoạt động";
+                }
+
                 _db.NhanViens.Add(nv);
                 _db.SaveChanges();
+
                 return true;
             }
             catch
@@ -42,21 +55,27 @@ namespace DAL
             {
                 var nvCu = _db.NhanViens.FirstOrDefault(n => n.MaNV == nvUpdate.MaNV);
 
-                if (nvCu != null)
-                {
-                    nvCu.HoTen = nvUpdate.HoTen;
-                    nvCu.SDT = nvUpdate.SDT;
-                    nvCu.Email = nvUpdate.Email;
-                    nvCu.VaiTro = nvUpdate.VaiTro;
-                    nvCu.TenDangNhap = nvUpdate.TenDangNhap;
-                    nvCu.MatKhau = nvUpdate.MatKhau;
-                    nvCu.MaChiNhanh = nvUpdate.MaChiNhanh;
+                if (nvCu == null)
+                    return false;
 
-                    _db.SaveChanges();
-                    return true;
+                nvCu.HoTen = nvUpdate.HoTen;
+                nvCu.SDT = nvUpdate.SDT;
+                nvCu.Email = nvUpdate.Email;
+                nvCu.VaiTro = nvUpdate.VaiTro;
+                nvCu.TenDangNhap = nvUpdate.TenDangNhap;
+                nvCu.MatKhau = nvUpdate.MatKhau;
+                nvCu.MaChiNhanh = nvUpdate.MaChiNhanh;
+
+                // Không tự ý đổi trạng thái khi sửa thông tin.
+                // Tránh trường hợp nhân viên đã Ngừng hoạt động bị sửa xong lại thành Đang hoạt động.
+                if (string.IsNullOrWhiteSpace(nvCu.TrangThai))
+                {
+                    nvCu.TrangThai = "Đang hoạt động";
                 }
 
-                return false;
+                _db.SaveChanges();
+
+                return true;
             }
             catch
             {
@@ -78,7 +97,7 @@ namespace DAL
             {
                 if (string.IsNullOrWhiteSpace(maNV))
                 {
-                    thongBao = "Vui lòng chọn nhân viên cần xóa khỏi danh mục.";
+                    thongBao = "Vui lòng chọn nhân viên cần ngừng hoạt động.";
                     return false;
                 }
 
@@ -90,46 +109,67 @@ namespace DAL
                     return false;
                 }
 
-                if (!string.IsNullOrWhiteSpace(nv.VaiTro) &&
-                    nv.VaiTro.Trim().ToLower() == "admin")
+                if (LaTrangThaiNgungHoatDong(nv.TrangThai))
                 {
-                    int soAdmin = _db.NhanViens
-                        .AsEnumerable()
-                        .Count(x =>
-                            !string.IsNullOrWhiteSpace(x.VaiTro) &&
-                            x.VaiTro.Trim().ToLower() == "admin");
+                    thongBao = "Nhân viên này đã ở trạng thái Ngừng hoạt động.";
+                    return false;
+                }
 
-                    if (soAdmin <= 1)
+                if (LaVaiTroAdmin(nv.VaiTro))
+                {
+                    int soAdminDangHoatDong = _db.NhanViens
+                        .AsEnumerable()
+                        .Count(x => LaVaiTroAdmin(x.VaiTro) && !LaTrangThaiNgungHoatDong(x.TrangThai));
+
+                    if (soAdminDangHoatDong <= 1)
                     {
-                        thongBao = "Không thể xóa tài khoản Admin cuối cùng của hệ thống.";
+                        thongBao = "Không thể ngừng hoạt động tài khoản Admin cuối cùng của hệ thống.";
                         return false;
                     }
                 }
 
-                try
-                {
-                    _db.NhanViens.Remove(nv);
-                    _db.SaveChanges();
+                nv.TrangThai = "Ngừng hoạt động";
+                _db.SaveChanges();
 
-                    thongBao = "Đã xóa nhân viên khỏi danh mục.";
-                    return true;
-                }
-                catch (DbUpdateException)
-                {
-                    _db.Entry(nv).State = EntityState.Unchanged;
+                thongBao =
+                    $"Nhân viên [{nv.HoTen}] đã được chuyển sang trạng thái Ngừng hoạt động.\n\n" +
+                    "Nhân viên này sẽ không thể đăng nhập vào hệ thống, nhưng thông tin vẫn được giữ lại để tra cứu lịch sử hóa đơn, nhập hàng, bảo hành hoặc các nghiệp vụ đã xử lý.";
 
-                    thongBao =
-                        "Nhân viên này đã có dữ liệu nghiệp vụ liên quan nên không thể xóa khỏi danh mục. " +
-                        "Cần giữ lại thông tin nhân viên để tra cứu lịch sử hóa đơn, nhập hàng hoặc các nghiệp vụ đã xử lý.";
-
-                    return false;
-                }
+                return true;
             }
             catch (Exception ex)
             {
-                thongBao = "Không thể xử lý nhân viên này. Chi tiết lỗi: " + ex.Message;
+                thongBao = "Không thể cập nhật trạng thái nhân viên. Chi tiết lỗi: " +
+                           (ex.InnerException?.Message ?? ex.Message);
                 return false;
             }
+        }
+
+        private bool LaVaiTroAdmin(string vaiTro)
+        {
+            if (string.IsNullOrWhiteSpace(vaiTro))
+                return false;
+
+            string value = vaiTro.Trim().ToLower();
+
+            return value == "admin" ||
+                   value == "quản trị" ||
+                   value == "quan tri";
+        }
+
+        private bool LaTrangThaiNgungHoatDong(string trangThai)
+        {
+            if (string.IsNullOrWhiteSpace(trangThai))
+                return false;
+
+            string value = trangThai.Trim().ToLower();
+
+            return value == "ngừng hoạt động" ||
+                   value == "ngưng hoạt động" ||
+                   value == "ngung hoat dong" ||
+                   value == "inactive" ||
+                   value == "false" ||
+                   value == "0";
         }
     }
 }

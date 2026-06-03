@@ -18,7 +18,6 @@ namespace DAL
         public DbSet<ChiTietHoaDon> ChiTietHoaDons { get; set; }
         public DbSet<PhieuBaoHanh> PhieuBaoHanhs { get; set; }
         public DbSet<ChamSocKhachHang> ChamSocKhachHangs { get; set; }
-
         public DbSet<TaiKhoanKhachHang> TaiKhoanKhachHangs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -33,18 +32,32 @@ namespace DAL
         {
             base.OnModelCreating(modelBuilder);
 
+            // ================================
+            // NHÂN VIÊN
+            // ================================
+            modelBuilder.Entity<NhanVien>()
+                .Property(nv => nv.TrangThai)
+                .HasMaxLength(50)
+                .HasDefaultValue("Đang hoạt động");
+
             modelBuilder.Entity<NhanVien>()
                 .HasOne(nv => nv.ChiNhanh)
                 .WithMany()
                 .HasForeignKey(nv => nv.MaChiNhanh)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // ================================
+            // SẢN PHẨM
+            // ================================
             modelBuilder.Entity<SanPham>()
                 .HasOne(sp => sp.ChiNhanh)
                 .WithMany()
                 .HasForeignKey(sp => sp.MaChiNhanh)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // ================================
+            // HÓA ĐƠN
+            // ================================
             modelBuilder.Entity<HoaDon>()
                 .HasOne(hd => hd.ChiNhanh)
                 .WithMany()
@@ -83,6 +96,9 @@ namespace DAL
                 .Property(hd => hd.ThanhTienSauGiam)
                 .HasColumnType("decimal(18,0)");
 
+            // ================================
+            // TÀI KHOẢN KHÁCH HÀNG WEB
+            // ================================
             modelBuilder.Entity<TaiKhoanKhachHang>()
                 .HasIndex(tk => tk.SDT)
                 .IsUnique();

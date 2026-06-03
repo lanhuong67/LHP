@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace DTO
 {
     [Table("NhanVien")]
@@ -36,6 +37,7 @@ namespace DTO
         [Required]
         [StringLength(20)]
         public string MaChiNhanh { get; set; } = string.Empty;
+        public string TrangThai { get; set; } = "Đang hoạt động";
 
         // 2. Thuộc tính điều hướng (Navigation Property) kết nối đến bảng ChiNhanh
         [ForeignKey("MaChiNhanh")]

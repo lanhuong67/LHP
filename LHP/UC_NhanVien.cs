@@ -20,7 +20,7 @@ namespace GUI
         private void UC_NhanVien_Load(object sender, EventArgs e)
         {
             dgvNhanVien.AutoGenerateColumns = false;
-
+            ThemCotTrangThaiNeuChuaCo();
             KhoiTaoComboBoxVaiTro();
             KhoiTaoComboBoxChiNhanh();
 
@@ -398,7 +398,8 @@ namespace GUI
                         VaiTro = vaiTroDaChon,
                         TenDangNhap = txtTaiKhoan.Text.Trim(),
                         MatKhau = txtMatKhau.Text.Trim(),
-                        MaChiNhanh = maChiNhanhDaChon
+                        MaChiNhanh = maChiNhanhDaChon,
+                        TrangThai = "Đang hoạt động"
                     };
 
                     if (_nhanVienBUS.ThemNhanVien(nvMoi))
@@ -491,16 +492,30 @@ namespace GUI
         {
             if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
-                MessageBox.Show("Vui lòng chọn nhân viên cần xóa khỏi danh mục!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Vui lòng chọn nhân viên cần ngừng hoạt động.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             string maNV = txtMaNV.Text.Trim();
             string hoTen = txtHoTen.Text.Trim();
 
+            if (maNV == UserSession.MaNV)
+            {
+                MessageBox.Show(
+                    "Bạn không thể ngừng hoạt động tài khoản đang đăng nhập.",
+                    "Không thể thực hiện",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             DialogResult result = MessageBox.Show(
-                $"Bạn có chắc chắn muốn xóa nhân viên [{hoTen}] khỏi danh mục không?",
+                $"Bạn có chắc chắn muốn chuyển nhân viên [{hoTen}] sang trạng thái Ngừng hoạt động không?\n\n" +
+                "Nhân viên ngừng hoạt động sẽ không thể đăng nhập vào hệ thống, nhưng thông tin vẫn được giữ lại để tra cứu lịch sử nghiệp vụ.",
                 "Xác nhận",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
@@ -512,8 +527,11 @@ namespace GUI
 
             if (_nhanVienBUS.XoaNhanVien(maNV, out thongBao))
             {
-                MessageBox.Show(thongBao,
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    thongBao,
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 LoadData();
                 ClearForm();
@@ -523,8 +541,11 @@ namespace GUI
             }
             else
             {
-                MessageBox.Show(thongBao,
-                    "Không thể xóa nhân viên", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    thongBao,
+                    "Không thể thực hiện",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
 
@@ -606,6 +627,20 @@ namespace GUI
                 (nv.SDT != null && nv.SDT.Contains(keywordUnsign)) ||
                 (nv.VaiTro != null && RemoveDiacritics(nv.VaiTro).ToLower().Contains(keywordUnsign))
             ).ToList();
+        }
+        private void ThemCotTrangThaiNeuChuaCo()
+        {
+            if (dgvNhanVien.Columns["TrangThai"] != null)
+                return;
+
+            DataGridViewTextBoxColumn colTrangThai = new DataGridViewTextBoxColumn();
+            colTrangThai.Name = "TrangThai";
+            colTrangThai.HeaderText = "Trạng thái";
+            colTrangThai.DataPropertyName = "TrangThai";
+            colTrangThai.Width = 130;
+            colTrangThai.ReadOnly = true;
+
+            dgvNhanVien.Columns.Add(colTrangThai);
         }
     }
 }
